@@ -18,16 +18,34 @@ class NeoDriver(object):
 		print(address)
 		self.dv = Graph(address, password=passw)
 
-	def return_by_attributes(elem_name, attributes):
+	def return_by_attributes(self, elem_name, attributes):
 		'''
 		Constructor of return clause based on a list of attributes for neo4j
 		'''
-		non_attributes = set(['label', 'parent', 'child'])
+		non_attributes = set(['label', 'parent', 'child', 'expression'])
 		return_clause = ",".join(['%s.%s as %s.%s' % (elem_name, attr, elem_name, attr) 
 			                       for attr in attributes if attr not in non_attributes])
 		return return_clause
 
-	def query_get_neighbours(self, nodeobj, lvl=1, dist=1):
+	def query_expression(self, nodeobj, exp_id):
+		'''
+		Gets expression value for nodeobj
+		'''
+		query = """
+			MATCH (node:%s)-[r:HAS_EXPRESSION]->(exp:EXPERIMENT)
+			WHERE node.identifier == '%s'
+			AND exp.identifier == '%s'
+			RETURN r.value as expvalue
+		"""
+		results = self.dv.run(query)
+		results = results.data()
+		if results:
+			nodeobj.expression = results[0]['expvalue']
+		else:
+			nodeobj.expression = 'NA'
+
+
+	def query_get_neighbours(self, nodeobj, lvl=1, dist=1, exp_id):
 		'''
 		Gets all nodes and edges connected to nodeobj in lvl graph
 		at distance dist
@@ -42,35 +60,28 @@ class NeoDriver(object):
 		""" % (nodeobj.label, dist, nodeobj.label, nodeobj.identifier, lvl)
 		n_attributes = nodeobj.__dict__().keys()
 		e_attributes = Interaction().__dict__().keys()
-		query = query + return_by_attributes('node1', n_attributes)
-		query = query + return_by_attributes('node2', n_attributes)
-		query = query + return_by_attributes('r', e_attributes)
+		query = query + self.return_by_attributes('node2', n_attributes)
+		query = query + self.return_by_attributes('r', e_attributes)
 		results = self.dv.run(query)
 		results = results.data()
 		if results:
 			for row in results:
-				node1 = Gene(results['node1.identifier'])
-				node1.fill_attributes(
-					dc = results['node1.driver_confidence'],
-					lvl = results['node1.lvl'],
-					gc  = results['node1.gene_cards']
-				)
 				node2 = Gene(results['node2.identifier'])
+				node2.get_expression(exp_id)
 				node2.fill_attributes(
 					dc = results['node2.driver_confidence'],
 					lvl = results['node2.lvl'],
-					gc  = results['node2.gene_cards']
-				)
+					gc  = results['node2.gene_cards'])
 				interaction = Interaction(node1, node2)
 				interaction.fill_attributes(
+					parent=nodeobj,
+					child=node2,
 					inttype=results['inttype'],
 					string=results['string'],
 					biogrid=results['biogrid'],
 					ppaxe=results['ppaxe'],
 					ppaxe_pmid=results['ppaxe_pmid'],
-					lvl=results['lvl']
-				)
-				neighbour_graph.add_gene(node1)
+					lvl=results['lvl'])
 				neighbour_graph.add_gene(node2)
 				neighbour_graph.add_int(interaction)
 			return neighbour_graph
@@ -88,7 +99,7 @@ class NeoDriver(object):
 			WHERE node.identifier = '%s'
 			RETURN 
 		""" % (label, identifier)
-		query = query + return_by_attributes('node', attributes)
+		query = query + self.return_by_attributes('node', attributes)
 		results = self.dv.run(query)	
 		results = results.data()
 		if results:
@@ -155,6 +166,7 @@ class Gene(Node):
 		self.driver_confidence = 0
 		self.lvl = 0
 		self.gene_cards = ''
+		self.expression = 'NA'
 
 	def query(self):
 		'''
@@ -175,26 +187,36 @@ class Gene(Node):
 		self.gene_cards = gene_cards
 
 
-	def get_neighbours(self, lvl, dist):
+	def get_expression(self, exp_id):
 		'''
-		Gets all the neighbours to Gene within lvl interactions and at distance
-		dist at most.
+		Gets desired expression value for Gene
+		'''
+		self.expression = NEO.query_expression(self, exp_id)
+
+	def get_neighbours(self, lvl, dist, exp_id):
+		'''
+		Gets all the neighbours to Gene within 'lvl' interactions and at distance
+		'dist' at most. All child nodes will have expression of 'exp_id'
 		Returns a GraphCyt object
 		'''
-		ngraph = NEO.query_get_neighbours(self, lvl, dist)
+		ngraph = NEO.query_get_neighbours(self, lvl, dist, exp_id)
 		return ngraph
 
 
 
 class GraphCyt(object):
 	'''
-	Gene collection and interactions collection
+	Gene collection and interactions collection.
+	Example for FORM1 (get all genes connected to list of genes in lvl and distance)
+	mygraph = GraphCyt()
+	mygraph.get_genes_by_lvl(identifiers, lvl, dist, exp_id)
+	mygraph.to_json()
 	'''
 	def __init__(self):
 		self.genes = list()
 		self.interactions = list()
 
-	def get_genes_by_lvl(self, identifiers, lvl, dist=1):
+	def get_genes_by_lvl(self, identifiers, lvl, dist=1, exp_id):
 		'''
 		Adds to genes collection all the genes with the specified lvl
 		and matching identifiers
@@ -203,8 +225,9 @@ class GraphCyt(object):
 			gene = Gene(identifier=identifier)
 			try:
 				gene.query()
+				gene.get_expression(exp_id)
 				self.genes.add(gene)
-				self.merge(gene.get_neighbours(lvl, dist))
+				self.merge(gene.get_neighbours(lvl, dist, exp_id))
 			except:
 				continue
 

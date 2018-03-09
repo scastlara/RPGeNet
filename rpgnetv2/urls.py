@@ -6,6 +6,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     # Examples:
+    url(r'^', include('rpform.urls')),
     # url(r'^$', 'rpgnetv2.views.home', name='home'),
     # url(r'^rpgnetv2/', include('rpgnetv2.foo.urls')),
 

@@ -1,7 +1,9 @@
 # Django settings for rpgnetv2 project.
+import os
+import logging
 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -110,7 +112,10 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    BASE_DIR + "rpform/templates",
+    BASE_DIR + "rpform/templates/rpform",
 )
+
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -119,6 +124,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rpform',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

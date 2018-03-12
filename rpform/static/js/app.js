@@ -10,7 +10,7 @@ window.cy;
 /*
  * Changes the click behaviour mode
  */
-changeClickBehaviour = function(mode) {
+changeClickBehaviour = function(this, mode) {
 	$(".behaviour-btn").removeClass("active");
 	$(this).addClass("active");
 	window.clickBehaviour = window.clickBehaviourOpts[mode];

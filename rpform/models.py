@@ -4,7 +4,6 @@ from py2neo import Graph
 # Create your models here.
 
 
-
 class NeoDriver(object):
 	'''
 	Class for the Neo4jDriver
@@ -22,7 +21,7 @@ class NeoDriver(object):
 		'''
 		Constructor of return clause based on a list of attributes for neo4j
 		'''
-		non_attributes = set(['label', 'parent', 'child', 'expression'])
+		non_attributes = set(['label', 'parent', 'child', 'expression', 'gos'])
 		return_clause = ",".join(['%s.%s as %s.%s' % (elem_name, attr, elem_name, attr) 
 			                       for attr in attributes if attr not in non_attributes])
 		return return_clause
@@ -44,6 +43,27 @@ class NeoDriver(object):
 		else:
 			nodeobj.expression = 'NA'
 
+
+	def query_gos(self, nodeobj):
+		'''
+		Gets the GO of the nodeobj Gene
+		'''
+		go_list = list()
+		query = """
+			MATCH (node:%s)-[r:HAS_GO]->(go:GO)
+			WHERE node.identifier == '%s'
+			RETURN go.accession as accession, 
+				   go.description as description, 
+			       go.domain as domain
+		""" % (nodeobj.label, nodeobj.identifier)
+		results = self.dv.run(query)
+		results = results.data()
+		if results:
+			for go in results:
+				go_list.append(GO(accession=go['accession'], 
+								  description=go['description'], 
+								  domain=go['domain']))
+		return go_list
 
 	def query_get_neighbours(self, nodeobj, lvl=1, dist=1, exp_id):
 		'''
@@ -71,7 +91,8 @@ class NeoDriver(object):
 				node2.fill_attributes(
 					dc = results['node2.driver_confidence'],
 					lvl = results['node2.lvl'],
-					gc  = results['node2.gene_cards'])
+					gc  = results['node2.gene_cards'],
+					nvar = results['node2.nvariants'])
 				interaction = Interaction(node1, node2)
 				interaction.fill_attributes(
 					parent=nodeobj,
@@ -87,7 +108,6 @@ class NeoDriver(object):
 			return neighbour_graph
 		else:
 			raise Exception
-
 
 	def query_by_id(self, nodeobj):
 		'''
@@ -125,6 +145,16 @@ class Node(object):
 	def get_neighbours(self, edge_label, attributes):
 		pass
 
+class GO(Node):
+	'''
+	Class for GeneOntology Nodes
+	'''
+	label = "GO"
+	def __init__(self, accession, description, domain):
+		self.accession = accession
+		self.description = description
+		self.domain = domain
+
 class Interaction(object):
 	'''
 	Class for Gene-Gene interactions
@@ -155,18 +185,22 @@ class Interaction(object):
 		self.ppaxe_pmid = ppaxe_pmid
 		self.lvl = lvl
 
+	def to_json_dict(self):
+		pass
 
 class Gene(Node):
 	'''
 	Class for gene nodes on neo4j
 	'''
+	label = "GENE"
 	def __init__(self, identifier):
-		label = "GENE"
 		super(Node, self).__init__(identifier, label)
 		self.driver_confidence = 0
 		self.lvl = 0
 		self.gene_cards = ''
 		self.expression = 'NA'
+		self.nvariants = 0
+		self.gos = list()
 
 	def query(self):
 		'''
@@ -176,15 +210,17 @@ class Gene(Node):
 		self.fill_attributes(
 			results['node.driver_confidence'], 
 			results['node.lvl'], 
-			results['node.gene_cards'])
+			results['node.gene_cards'],
+			results['node.nvariants'])
 
-	def fill_attributes(self, dc, lvl, gc):
+	def fill_attributes(self, dc, lvl, gc, nvar):
 		'''
 		Fills the attributes of the object. Avoids querying db
 		'''
 		self.driver_confidence = dc
 		self.lvl = lvl
 		self.gene_cards = gene_cards
+		self.nvariants = nvar
 
 
 	def get_expression(self, exp_id):
@@ -202,6 +238,15 @@ class Gene(Node):
 		ngraph = NEO.query_get_neighbours(self, lvl, dist, exp_id)
 		return ngraph
 
+	def get_go(self):
+		'''
+		Gets GeneOntologies of the gene
+		'''
+		self.gos = NEO.query_gos(self)
+
+
+	def to_json_dict(self):
+		pass
 
 
 class GraphCyt(object):
@@ -240,6 +285,8 @@ class GraphCyt(object):
 		if graph.interactions:
 			self.interactions.add(graph.interactions)
 
+	def to_json(self):
+		pass
 
 
 

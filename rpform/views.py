@@ -8,6 +8,13 @@ def index_view(request):
 	return render(request, 'rpform/index.html', response)
 
 def explorer(request):
+	'''
+	mygraph = GraphCyt()
+	mygraph.get_genes_by_lvl(identifiers, lvl, dist, exp_id)
+	response = dict()
+	response['jsongraph'] = mygraph.to_json()
+	return render(request, 'rpform/explorer.html', response)
+	'''
 	pass
 
 '''

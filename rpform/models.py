@@ -1,7 +1,6 @@
 from django.db import models
 from py2neo import Graph
-
-# Create your models here.
+import json
 
 
 class NeoDriver(object):
@@ -14,7 +13,6 @@ class NeoDriver(object):
 		self.user = user
 		self.passw = passw
 		address = "http://%s:%s/db/data/" % (ip, port)
-		print(address)
 		self.dv = Graph(address, password=passw)
 
 	def return_by_attributes(self, elem_name, attributes):
@@ -25,6 +23,28 @@ class NeoDriver(object):
 		return_clause = ",".join(['%s.%s as %s.%s' % (elem_name, attr, elem_name, attr) 
 			                       for attr in attributes if attr not in non_attributes])
 		return return_clause
+
+	def query_by_id(self, nodeobj):
+		'''
+		Gets ONE node object of class 
+		'''
+		attributes = nodeobjs.__dict__().keys()
+		query = """
+			MATCH (node:%s)
+			WHERE node.identifier = '%s'
+			RETURN 
+		""" % (label, identifier)
+		query = query + self.return_by_attributes('node', attributes)
+		results = self.dv.run(query)	
+		results = results.data()
+		if results:
+			nodeobj.fill_attributes(
+			results['node.driver_confidence'], 
+			results['node.lvl'], 
+			results['node.gene_cards'],
+			results['node.nvariants'])
+		else:
+			raise NodeNotFound(self.identifier, self.label)
 
 	def query_expression(self, nodeobj, exp_id):
 		'''
@@ -42,7 +62,6 @@ class NeoDriver(object):
 			nodeobj.expression = results[0]['expvalue']
 		else:
 			nodeobj.expression = 'NA'
-
 
 	def query_gos(self, nodeobj):
 		'''
@@ -109,24 +128,6 @@ class NeoDriver(object):
 		else:
 			raise Exception
 
-	def query_by_id(self, nodeobj):
-		'''
-		Gets ONE node object of class o
-		'''
-		attributes = nodeobjs.__dict__().keys()
-		query = """
-			MATCH (node:%s)
-			WHERE node.identifier = '%s'
-			RETURN 
-		""" % (label, identifier)
-		query = query + self.return_by_attributes('node', attributes)
-		results = self.dv.run(query)	
-		results = results.data()
-		if results:
-			return results	
-		else:
-			raise NodeNotFound(self.identifier, self.label)
-		
 
 class Node(object):
 	'''
@@ -136,14 +137,12 @@ class Node(object):
 		self.identifier = identifier
 		self.label = label
 
-	def query(self):
+	def check(self):
 		'''
 		Queries the node
 		'''
 		pass
 
-	def get_neighbours(self, edge_label, attributes):
-		pass
 
 class GO(Node):
 	'''
@@ -154,6 +153,7 @@ class GO(Node):
 		self.accession = accession
 		self.description = description
 		self.domain = domain
+
 
 class Interaction(object):
 	'''
@@ -184,9 +184,23 @@ class Interaction(object):
 		self.ppaxe = ppaxe
 		self.ppaxe_pmid = ppaxe_pmid
 		self.lvl = lvl
+	
+	def to_json_dict(self):
+		'''
+		Returns dictionary ready to convert to json
+		'''
+		element = dict()
+		element['id'] = self.parent.identifier + self.child.identifier
+		element['source'] = self.parent.identifier
+		element['target'] = self.child.identifier
+		return element
 
 	def to_json_dict(self):
 		pass
+
+	def __hash__(self):
+		return hash((self.parent.identifier, self.child.identifier, self.lvl, self.type))
+
 
 class Gene(Node):
 	'''
@@ -202,16 +216,12 @@ class Gene(Node):
 		self.nvariants = 0
 		self.gos = list()
 
-	def query(self):
+	def check(self):
 		'''
-		Queries Gene on neo4j and fills the attributes
+		Queries Gene on neo4j and fills the attributes.
+		If not in database: NodeNotFound
 		'''
-		results = NEO.query_by_id(self)
-		self.fill_attributes(
-			results['node.driver_confidence'], 
-			results['node.lvl'], 
-			results['node.gene_cards'],
-			results['node.nvariants'])
+		NEO.query_by_id(self)
 
 	def fill_attributes(self, dc, lvl, gc, nvar):
 		'''
@@ -221,7 +231,6 @@ class Gene(Node):
 		self.lvl = lvl
 		self.gene_cards = gene_cards
 		self.nvariants = nvar
-
 
 	def get_expression(self, exp_id):
 		'''
@@ -244,9 +253,22 @@ class Gene(Node):
 		'''
 		self.gos = NEO.query_gos(self)
 
-
 	def to_json_dict(self):
-		pass
+		'''
+		Returns dictionary ready to convert to json
+		'''
+		element = dict()
+		element['id'] = self.identifier
+		element['name'] = self.identifier
+		element['lvl'] = self.lvl
+		element['exp'] = self.expression
+		element['driver_confidence'] = self.driver_confidence
+		element['nvariants'] = self.nvariants
+		element['gos'] = self.gos
+		return element
+
+	def __hash__(self):
+		return hash((self.identifier, self.driver_confidence))
 
 
 class GraphCyt(object):
@@ -258,10 +280,10 @@ class GraphCyt(object):
 	mygraph.to_json()
 	'''
 	def __init__(self):
-		self.genes = list()
-		self.interactions = list()
+		self.genes = set()
+		self.interactions = set()
 
-	def get_genes_by_lvl(self, identifiers, lvl, dist=1, exp_id):
+	def get_genes_in_lvl(self, identifiers, lvl, dist=1, exp_id):
 		'''
 		Adds to genes collection all the genes with the specified lvl
 		and matching identifiers
@@ -269,7 +291,7 @@ class GraphCyt(object):
 		for identifier in identifiers:
 			gene = Gene(identifier=identifier)
 			try:
-				gene.query()
+				gene.check()
 				gene.get_expression(exp_id)
 				self.genes.add(gene)
 				self.merge(gene.get_neighbours(lvl, dist, exp_id))
@@ -278,17 +300,23 @@ class GraphCyt(object):
 
 	def merge(self, graph):
 		'''
-		Merges two GraphCyt objects
+		Merges self with GraphCyt object
 		'''
 		if graph.genes:
 			self.genes.add(graph.genes)
 		if graph.interactions:
 			self.interactions.add(graph.interactions)
 
-	def to_json(self):
-		pass
-
-
+    def to_json(self):
+        """
+        Converts the graph to a json string to add it to cytoscape.js
+        """
+        graphelements = {
+            'nodes': [gene .to_jsondict() for gene in self.genes],
+            'edges': [edge.to_jsondict() for edge in self.interactions]
+        }
+        graphelements = json.dumps(graphelements)
+        return graphelements
 
 
 NEO = NeoDriver('127.0.0.1', '7474', 'neo4j', '5961')

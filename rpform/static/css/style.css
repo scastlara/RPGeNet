@@ -1,0 +1,166 @@
+#title-div {
+	margin-top: 40px;
+	width: 100%;
+	height: 120px;
+	text-align: center;
+}
+
+#title-container {
+	display: inline-block;
+	width: 620px;
+}
+
+#title-text {
+	padding-left: 40px;
+	text-align: left;
+	font-size: 70px;
+}
+
+#app-logo {
+	width: 100px;
+}
+
+#app-logo:hover {
+	opacity: 0.8;
+}
+
+.version {
+	font-size: 50px;
+	color: #6589D1;
+}
+
+.content {
+	margin-top: 1.5%;
+	margin-left: 15%;
+	margin-right: 15%;
+}
+
+.app-panel-container {
+}
+
+.app-label {
+	font-size: 12px !important;
+}
+
+.app-spacing {
+	display: inline-block;
+	float: left;
+	width: 30px !important;
+}
+
+.app-panel-container {
+	width: 100%;
+	margin: auto;
+	text-align: center;
+}
+
+.app-panel-container .row {
+	display: inline-block;
+}
+
+.app-panel {
+	padding: 2%;
+	height: 285px;
+	text-align: left !important;
+	width: 520px !important;
+	background-image: url('/static/Images/app-panel.png') !important;
+	border-radius: 10px;
+}
+
+.btn-f1 {
+	background-color: #8DC842 !important;
+	color: white !important;
+}
+
+.btn-f2 {
+	background-color: #4AB0ED !important;
+	color: white !important;
+	width: 140px !important;
+}
+
+.btn-f1:hover {
+	opacity: 0.8;
+}
+
+.btn-f2:hover {
+	opacity: 0.8;
+}
+
+#forms-container-container {
+	text-align: center;
+}
+#forms-container {
+	display: inline-block;
+	text-align: center;
+	margin-top: 5%;
+
+	/*width: 940px;
+	margin-left: 65px;*/
+}
+
+#f1-distance {
+	color: #555;
+	height: 34px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	width: 100%;
+}
+
+#f1-lvl {
+	color: #555;
+	height: 34px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	width: 100%;
+}
+
+#f2-lvl {
+	color: #555;
+	height: 34px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	width: 100%;
+}
+
+input#f1-distance {
+	padding-left: 10px;
+}
+
+input#f1-lvl {
+	padding-left: 10px;
+}
+
+
+.col-md-3.form-group {
+	text-align: left;
+}
+
+.col-md-2.form-group {
+	text-align: left;
+}
+
+tr.spaceUnder>td {
+	font-size: 14px;
+  padding-bottom: 1em;
+
+}
+
+tr.spaceUnder>th {
+	font-size: 14px;
+  padding-bottom: 1em;
+  padding-right: 1em;
+}
+
+.question-badge {
+	color: #F5A73A;
+	font-size: 16px;
+}
+
+.question-badge:hover {
+	opacity: 0.8;
+	cursor: pointer;
+}
+
+.form-group {
+	margin-bottom: 40px !important;
+}

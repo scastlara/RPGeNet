@@ -5,5 +5,6 @@ from django.contrib import admin
 admin.autodiscover()
 urlpatterns = [
     url(r'^$', views.index_view, name='index_view'),
-    url(r'^explorer$', views.explorer, name='explorer')
+    url(r'^explorer$', views.gene_explorer, name='gene_explorer'), 
+    url(r'^pathways$', views.pathway_explorer, name='pathway_explorer')
 ]

@@ -90,7 +90,7 @@ class NeoDriver(object):
         at distance dist
         '''
         neighbour_graph = GraphCyt()
-
+        neighbour_graph.genes.add(nodeobj)
         query = """
             MATCH (node1:%s)-[r:INTERACT_WITH*%s]->(node2:%s)
             WHERE node1.identifier == '%s'
@@ -122,8 +122,8 @@ class NeoDriver(object):
                     ppaxe=results['ppaxe'],
                     ppaxe_pmid=results['ppaxe_pmid'],
                     lvl=results['lvl'])
-                neighbour_graph.add_gene(node2)
-                neighbour_graph.add_int(interaction)
+                neighbour_graph.genes.add(node2)
+                neighbour_graph.interactions.add(interaction)
             return neighbour_graph
         else:
             raise Exception
@@ -235,13 +235,10 @@ class Interaction(object):
         Returns dictionary ready to convert to json
         '''
         element = dict()
-        element['id'] = self.parent.identifier + self.child.identifier
+        element['id'] = self.parent.identifier + '-' + self.child.identifier
         element['source'] = self.parent.identifier
         element['target'] = self.child.identifier
         return element
-
-    def to_json_dict(self):
-        pass
 
     def __hash__(self):
         return hash((self.parent.identifier, self.child.identifier, self.lvl, self.type))
@@ -282,6 +279,7 @@ class Gene(Node):
         Gets desired expression value for Gene
         '''
         self.expression = NEO.query_expression(self, exp_id)
+        return self.expression
 
     def get_neighbours(self, exp_id, lvl, dist):
         '''
@@ -297,6 +295,7 @@ class Gene(Node):
         Gets GeneOntologies of the gene
         '''
         self.gos = NEO.query_gos(self)
+        return self.gos
 
     def to_json_dict(self):
         '''
@@ -373,7 +372,7 @@ class GraphCyt(object):
         Converts the graph to a json string to add it to cytoscape.js
         """
         graphelements = {
-            'nodes': [gene .to_jsondict() for gene in self.genes],
+            'nodes': [gene.to_jsondict() for gene in self.genes],
             'edges': [edge.to_jsondict() for edge in self.interactions]
         }
         graphelements = json.dumps(graphelements)

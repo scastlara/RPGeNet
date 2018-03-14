@@ -10,7 +10,7 @@ def index_view(request):
 def gene_explorer(request):
 	'''
 	mygraph = GraphCyt()
-	mygraph.get_genes_in_lvl(identifiers, lvl, dist, exp_id)
+	mygraph.get_genes_in_lvl(identifiers, exp_id, lvl, dist)
 	response = dict()
 	response['jsongraph'] = mygraph.to_json()
 	return render(request, 'rpform/explorer.html', response)
@@ -18,5 +18,10 @@ def gene_explorer(request):
 	pass
 
 def pathway_explorer(request):
-	
+	'''
+	mygraphs = list()
+	mygene = Gene(identifier=identifier)
+	mygene.check()
+	mygraphs = mygene.path_to_drivers() # list of GraphCytoscape objects
+	'''
 	pass

@@ -133,7 +133,7 @@ class NeoDriver(object):
         Shortest paths to driver genes
         '''
         query = ''
-        if nodeobj.driver_confidence >= 1:
+        if nodeobj.is_driver():
             query = """
                 MATCH  p=(source:Gene)-[r:INTERACT_WITH*]->(target:Gene)
                 WHERE  r.is_path == 1
@@ -154,7 +154,7 @@ class NeoDriver(object):
         results = self.dv.run(query)
         results = results.data()
         for path in results:
-            # Must create GraphCytoscape object here
+            # Must create a list of GraphCytoscape object here
             pass
 
     def query_shortest_path(self, pobj, cobj):
@@ -229,7 +229,8 @@ class Interaction(object):
         self.ppaxe = ppaxe
         self.ppaxe_pmid = ppaxe_pmid
         self.lvl = lvl
-    
+   
+
     def to_json_dict(self):
         '''
         Returns dictionary ready to convert to json
@@ -251,7 +252,7 @@ class Gene(Node):
     label = "GENE"
     def __init__(self, identifier):
         super(Node, self).__init__(identifier, label)
-        self.driver_confidence = 0
+        self.driver_confidence = None
         self.lvl = 0
         self.gene_cards = ''
         self.expression = 'NA'
@@ -273,6 +274,21 @@ class Gene(Node):
         self.lvl = lvl
         self.gene_cards = gene_cards
         self.nvariants = nvar
+
+    def is_driver(self):
+        '''
+        Checks if gene is driver or not
+        '''  
+        if self.driver_confidence is None:
+            try:
+                self.check()
+            except:
+                return False
+        else:
+            if self.driver_confidence == 0:
+                return False
+            else:
+                return True
 
     def get_expression(self, exp_id):
         '''
@@ -313,7 +329,7 @@ class Gene(Node):
 
     def path_to_drivers(self):
         '''
-        Returns a GraphCytoscape object with all shortest paths to all drivers
+        Returns a list of GraphCytoscape object with all shortest paths to all drivers
         '''
         paths = NEO.query_path_to_drivers(self)
         return paths

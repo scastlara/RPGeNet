@@ -1,4 +1,11 @@
+/*==================================================
+app.js - Main script for the basic functionality of 
+         Netengine graph visualizations.
+==================================================*/
+
+
 // GLOBALS
+//==================================================
 window.clickBehaviourOpts = {"addition":1, "deletion":2, "properties":3}
 window.clickBehaviour = window.clickBehaviourOpts.addition;
 Object.freeze(window.clickBehaviourOpts);
@@ -6,6 +13,7 @@ window.cy;
 
 
 // FUNCTIONS
+//==================================================
 
 /*
  * Changes the click behaviour mode
@@ -76,6 +84,7 @@ exportJSON = function(cy) {
 }
 
 // BUTTON EVENTS
+//==================================================
 $("#node-addition-btn").on("click", changeClickBehaviour(this, "addition"));
 $("#node-deletion-btn").on("click", changeClickBehaviour(this, "deletion"));
 $("#node-properties-btn").on("click", changeClickBehaviour(this, "properties"))

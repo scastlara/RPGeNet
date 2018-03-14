@@ -23,6 +23,67 @@
 
 	</div>
 
+			<!-- HELP DIALOGS -->
+		<div id="inputgenes">
+			<h2>INPUT GENES</h2>
+			<hr>
+			<p>Here you can input the <em>retinitis pigmentosa</em> related driver gene (RP/LCA genes), for which you want to see the main interactors. <br />You can search for any other gene, yet remember that this is a network built around RP/LCA causative genes and little info can be found for genes outside their scope.<br /><br />
+				You can make queries for <b>single (i)</b> or <b>multiple genes (ii)</b>:<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b> i)</b> Gene1<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <b>ii)</b> gene1,Gene2, GeNe3,...<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (case-insensitive, with or without spaces after the comma)<br /><br><br>
+				See also tutorial <a href="{% url tutorial %}" target="_blank">page</a>.
+			</p>
+		</div>
+
+		<div id="genedistance">
+			<h2>NEIGHBOURHOOD GENES</h2>
+			<hr>
+			<p>
+				Here you can specify how many "neighbours" your query gene/s in the network shoud have. 
+				This just means that starting from your query gene/s you can just "travel" to another node with a distance equal to the value that you specified.
+			</p>
+			<p>
+				For example, when searching for <i>CEP290</i> and the "neighbours" is set to 1 (this is the default value), this set of genes can be obtained: <i>OFD1</i>, <i>RPGR</i>, <i>ANAPC2</i>, <i>ATF4</i>, <i>IQCB1</i>. This means that from <i>CEP290</i> one can only travel to nodes (say here genes) at distance 1. If "neighbours" is set to 2,further genes are retrieved apart from the previous ones, and now one can travel a distance of 2 to other genes.
+				<br><br>
+				See also tutorial page.
+			</p>
+		</div>
+
+		<div id="intlvl">
+			<h2>INTERACTION LEVEL</h2>
+			<p>Here you can specify what interaction file to be used.<br /><br />There are <b>4</b> interaction files describing the level of interaction: level 1, level 2, level 3 and level 4 (we choose the interaction file just by putting the number of the level, i.e 1, 2, 3 or 4). Levels above 2 may take too much to render as many nodes can be included in the drawn subnetwork. <br /><br />
+				There is also a level 0 (based on skeleton network), which represents the interactions found from network shortest paths between all pairs of RP/LCA driver genes, used as "seed" to build all the other levels.<br /><br />
+			</p>
+			See also tutorial <a href="{% url tutorial %}" target="_blank">page</a>.
+		</div>
+
+		<div id="intlvl2">
+			<h2>INTERACTION LEVEL</h2>
+			<p>Here you can specify what interaction file to be used.<br /><br />There are <b>4</b> interaction files describing the level of interaction: level 1, level 2, level 3 and level 4 (we choose the interaction file just by putting the number of the level, i.e 1, 2, 3 or 4). Levels above 2 may take too much to render as many nodes can be included in the drawn subnetwork. <br /><br />
+				There is also a level 0 (based on skeleton network), which represents the interactions found from network shortest paths between all pairs of RP/LCA driver genes, used as "seed" to build all the other levels.<br /><br />
+			</p>
+			See also tutorial <a href="{% url tutorial %}" target="_blank">page</a>.
+		</div>
+
+		<div id="genexp">
+			<h1>GENE EXPRESSION</h1>
+			<p>
+				Here you can specify how to visualize the color gradients related to gene-expression levels used to color-fill the node shapes.<br /><br />
+				You can choose between <b>Relative</b> and <b>Absolute</b>. <br /><br />"Relative" gene-expression is based in the expression fold-change in retina versus the average expression on all tissues for each gene. This fold-change goes from -3 to +3, ranging from dark yellow (-3, more expressed in other tissues than in retina), white (0, no changes), to dark blue (+3, more expressed in retina than in other tissues).<br /><br />"Absolute" gene-expression considers levels on retina only, and range from null expression in retina (dark yellow) to the highest expression level in retina (darkblue).<br /><br />
+			</p>
+			See also tutorial <a href="{% url tutorial %}" target="_blank">page</a>.
+		</div>
+
+		<div id="genexp2">
+			<h1>GENE EXPRESSION</h1>
+			<p>
+				Here you can specify how to visualize the color gradients related to gene-expression levels used to color-fill the node shapes.<br /><br />
+				You can choose between <b>Relative</b> and <b>Absolute</b>. <br /><br />"Relative" gene-expression is based in the expression fold-change in retina versus the average expression on all tissues for each gene. This fold-change goes from -3 to +3, ranging from dark yellow (-3, more expressed in other tissues than in retina), white (0, no changes), to dark blue (+3, more expressed in retina than in other tissues).<br /><br />"Absolute" gene-expression considers levels on retina only, and range from null expression in retina (dark yellow) to the highest expression level in retina (darkblue).<br /><br />
+			</p>
+			See also tutorial <a href="{% url tutorial %}" target="_blank">page</a>.
+		</div>
+
 
 	<div class="content">
 		<div class=" app-panel-container">
@@ -59,26 +120,27 @@
 		</div>
 
 
+
 		<div id="forms-container-container">
 			<div id="forms-container">
 
 
 				<form id="f1" action="{% url gene_explorer %}">
 					<div class="col-md-3 form-group">
-						<label for="f1-genename">Gene/s <span class="glyphicon glyphicon-question-sign question-badge"></span></label>
+						<label for="f1-genename">Gene/s <span id="inputgenes-btn" class="glyphicon glyphicon-question-sign question-badge"></span></label>
 						<input type="text" name="gene" id="f1-genename" class="form-control" placeholder="CERKL"/>
 					</div>
 					<div class="col-md-2 form-group">
-						<label for="f1-distance">Gene distance <span class="glyphicon glyphicon-question-sign question-badge"></span></label>
+						<label for="f1-distance">Gene distance <span id="genedistance-btn" class="glyphicon glyphicon-question-sign question-badge"></span></label>
 						<input type="number" name="dist" id="f1-distance" value="1" min="1" max="5" step="1" />
 					</div>
 					<div class="col-md-2 form-group">
-						<label for="f1-lvl">Interaction level <span class="glyphicon glyphicon-question-sign question-badge"></span></label>
+						<label for="f1-lvl">Interaction level <span id="intlvl-btn" class="glyphicon glyphicon-question-sign question-badge"></span></label>
 						<input type="number" name="lvl" id="f1-lvl" value="1" min="1" max="5" step="1" />
 					</div>
 
 					<div class="col-md-2 form-group align-center">
-						<label for="f1-expression">Expression <span class="glyphicon glyphicon-question-sign question-badge"></span></label>
+						<label for="f1-expression">Expression <span id="genexp-btn" class="glyphicon glyphicon-question-sign question-badge"></span></label>
 						<select name="exp" class="form-control" id="f1-expression">
 							<option>Experiment-1</option>
 							<option>Experiment-2</option>
@@ -102,12 +164,12 @@
 						<input type="text" name="gene" id="f2-genename" class="form-control" placeholder="RHO"/>
 					</div>
 					<div class="col-md-2 form-group">
-						<label for="f2-lvl">Interaction level <span class="glyphicon glyphicon-question-sign question-badge"></span><br></label>
+						<label for="f2-lvl">Interaction level <span id="intlvl-btn2" class="glyphicon glyphicon-question-sign question-badge"></span><br></label>
 						<input type="number" name="lvl" id="f2-lvl" value="1" min="1" max="5" step="1" />
 					</div>
 
 					<div class="col-md-2 form-group align-center">
-						<label for="f2-expression">Expression <span class="glyphicon glyphicon-question-sign question-badge"></span></label>
+						<label for="f2-expression">Expression <span id="genexp-btn2" class="glyphicon glyphicon-question-sign question-badge"></span></label>
 						<select name="exp" class="form-control" id="f2-expression">
 							<option>Experiment-1</option>
 							<option>Experiment-2</option>
@@ -167,6 +229,44 @@
 	</div>
 	<script src="{% static 'js/jquery-min.js' %}"></script>
 	<script src="{% static 'js/bootstrap-min.js' %}"></script>
+	<script src="{% static 'js/stoopidoverlay.js' %}"></script>
+	<script>
+		var options = {
+        container: 'inputgenes',
+        openContainer: 'inputgenes-btn',
+        scroll: false,
+        align: 'center',
+        width: '35%',
+        background: "white", 
+        closeBackground: "white",
+        padding: "2%"
+      }
+      // Gene Overlay
+      var overlayGenes      = new StoopidOverlay(options);
+      // Distance Overlay
+      options.container     = 'genedistance';
+      options.openContainer = 'genedistance-btn';
+      var overlayDist       = new StoopidOverlay(options);
+	  // Intlvl Overlay
+      options.container     = 'intlvl';
+      options.openContainer = 'intlvl-btn';
+      var overlayDist       = new StoopidOverlay(options);
+      options.container     = 'intlvl2';
+	  options.openContainer = 'intlvl-btn2';
+	  var overlayDist2      = new StoopidOverlay(options);
+
+	  // Genexp Overlay
+	  // Intlvl Overlay
+      options.container     = 'genexp';
+      options.openContainer = 'genexp-btn';
+      var overlayGexp       = new StoopidOverlay(options);
+      options.container     = 'genexp2';
+	  options.openContainer = 'genexp-btn2';
+	  var overlayGexp2      = new StoopidOverlay(options);
+      //options.container = 'genedistance';
+      //options.openContainer = 'genedistance-btn';
+      //var myOverlay2 = new StoopidOverlay(options);
+  	</script>
 </body>
 
 

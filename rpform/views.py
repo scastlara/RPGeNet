@@ -25,3 +25,9 @@ def pathway_explorer(request):
 	mygraphs = mygene.path_to_drivers() # list of GraphCytoscape objects
 	'''
 	pass
+
+def tutorial(request):
+	'''
+	TUTO HERE
+	'''
+	pass

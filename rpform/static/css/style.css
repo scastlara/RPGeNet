@@ -55,7 +55,7 @@ body 			{ font-size: 12px;}
 .footer-left {
 	float: left;
 	width: 500px;
-	margin-left: 50px;
+	margin-left: 80px;
 	margin-top: 50px;
 }
 
@@ -80,17 +80,17 @@ body 			{ font-size: 12px;}
 .footer-right {
 	float: right;
 	width: 600px;
-	margin-right: 50px;
+	margin-right: 80px;
 	margin-top: 50px;
 }
 
-.cgl-logo-footer     { width: 100px; }
-.logo-title          { font-size: 14px;  }
-.logo-container      { margin-top: 20px; }
-.ub-logo-footer      { width: 180px;     }
-.ciberer-logo-footer { width: 180px;     }
-.ibub-logo-footer    { width: 180px;     }
-img[class *='-logo-footer']:hover { opacity: 0.8; }
+.cgl-logo-footer                  { width: 100px;     }
+.logo-title                       { font-size: 14px;  }
+.logo-container                   { margin-top: 20px; }
+.ub-logo-footer                   { width: 180px;     }
+.ciberer-logo-footer              { width: 180px;     }
+.ibub-logo-footer                 { width: 180px;     }
+img[class *='-logo-footer']:hover { opacity: 0.8;     }
 
 
 /* BODY

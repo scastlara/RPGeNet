@@ -36,6 +36,19 @@
 			</p>
 		</div>
 
+		<div id="inputgenes2">
+			<h2>INPUT GENES</h2>
+			<hr>
+			<p>Here you can input the <em>retinitis pigmentosa</em> related driver gene (RP/LCA genes), for which you want to see the main interactors. <br />You can search for any other gene, yet remember that this is a network built around RP/LCA causative genes and little info can be found for genes outside their scope.<br /><br />
+				You can make queries for <b>single (i)</b> or <b>multiple genes (ii)</b>:<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b> i)</b> Gene1<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <b>ii)</b> gene1,Gene2, GeNe3,...<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (case-insensitive, with or without spaces after the comma)<br /><br><br>
+				See also tutorial <a href="{% url tutorial %}" target="_blank">page</a>.
+			</p>
+		</div>
+
+
 		<div id="genedistance">
 			<h2>NEIGHBOURHOOD GENES</h2>
 			<hr>
@@ -114,6 +127,9 @@
 						<tr class="spaceUnder"> <th> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </th> <th align="right">Single Genes:  </th> <td align="left">CERKL</td> </tr>
 						<tr class="spaceUnder"> <th> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </th> <th align="right">Multiple Genes:</th> <td align="left">EYS, RHO, cerkl,RP1</td> </tr>
 					</table>
+					<a href="{% url tutorial %}">
+						<span class="label label-danger app-label-right">Go to Tutorial</span><br><br>
+					</a>
 				</div>
 
 			</div>
@@ -150,7 +166,7 @@
 						</select>
 					</div>
 
-					<div class="col-md-2 form-group align-center">
+					<div class="col-md-3 form-group align-center">
 						<label for="created_at_lt">&nbsp;</label>
 						<input type="submit" value="Explore Network" class="btn btn-f1 form-control" />
 					</div>
@@ -160,7 +176,7 @@
 				<form id="f2" action="{% url pathway_explorer %}">
 
 					<div class="col-md-3 form-group">
-						<label for="f2-genename">Gene/s <span class="glyphicon glyphicon-question-sign question-badge"></span></label>
+						<label for="f2-genename">Gene/s <span id="inputgenes-btn2" class="glyphicon glyphicon-question-sign question-badge"></span></label>
 						<input type="text" name="gene" id="f2-genename" class="form-control" placeholder="RHO"/>
 					</div>
 					<div class="col-md-2 form-group">
@@ -179,9 +195,9 @@
 						</select>
 					</div>
 
-					<div class="col-md-2 form-group align-center">
+					<div class="col-md-3 form-group align-center">
 						<label for="created_at_lt">&nbsp;</label>
-						<input type="submit" value="Get Path to Genes" class="btn btn-f2 form-control" />
+						<input type="submit" value="Get Path Genes" class="btn btn-f2 form-control" />
 					</div>
 				</form>
 
@@ -243,6 +259,9 @@
       }
       // Gene Overlay
       var overlayGenes      = new StoopidOverlay(options);
+      options.container     = 'inputgenes2';
+      options.openContainer = 'inputgenes-btn2';
+      var overlayDist       = new StoopidOverlay(options);
       // Distance Overlay
       options.container     = 'genedistance';
       options.openContainer = 'genedistance-btn';

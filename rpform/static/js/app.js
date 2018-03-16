@@ -48,6 +48,19 @@ changeClickBehaviour = function() {
     cy.fit();
  };
 
+ /*
+ * ChangeDrag
+ */
+ changeDrag = function(cy, event, elem) {
+    event.preventDefault;
+    if (elem.hasClass('active')) {
+        elem.removeClass('active');
+    } else {
+        elem.addClass('active');
+    }
+ };
+
+
 /*
  * Exports graph as a TBL file
  */
@@ -85,8 +98,9 @@ exportJSON = function(cy) {
 // BUTTON EVENTS
 //==================================================
 $('#behaviour-form').on("change", changeClickBehaviour);
-$("#layout").on("change", function() { changeLayout($(this).val())});
-$("#fitscreen-btn").on("click", fitScreen(window.cy));
-$("#save-img").on("click", saveImg(window.cy, $('#save-image-link')));
-$("#export-tbl").on("click", exportTBL(window.cy));
-$("#export-json").on("click", exportJSON(window.cy));
+$("#layout").on("change", function() { changeLayout(window.cy, $(this).val())});
+$("#fitscreen-btn").on("click", function() { fitScreen(window.cy) });
+$("#save-img").on("click", function() { saveImg(window.cy, $('#save-image-link')) });
+$("#export-tbl").on("click", function() { exportTBL(window.cy) });
+$("#export-json").on("click", function() { exportJSON(window.cy) });
+$('#drag-btn').on("click", function(event) { changeDrag(window.cy, event, $(this)) });

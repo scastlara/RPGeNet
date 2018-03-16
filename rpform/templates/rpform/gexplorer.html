@@ -76,12 +76,65 @@
 			<div class="row bsize-container-parent">
 				<div class="bsize-container col-sm-1"></div>
 				<div class="bsize-container col-sm-8">
-					<input type="range" name="bsize" id="bsize" value="1" min="1" max="15" step="1" oninput="bsizeOutput.value = bsize.value"/>
+					<input type="range" name="bsize" id="bsize" value="5" min="1" max="15" step="1" oninput="bsizeOutput.value = bsize.value"/>
 				</div>
 				<div class="bsize-container col-sm-2">
-					<output name="bsizeOutput" id="bsizeOutput">1</output>
+					<output name="bsizeOutput" id="bsizeOutput">5</output>
 				</div>
 				<div class="bsize-container col-sm-1"></div>
+			</div>
+		</div>
+
+		<!-- Additional Buttons -->
+		<div class="cyt-controls-block">
+			<span class="cyt-controls-title">Controls</span><br>
+			<div class="gexplorer-row row">
+				<div class="gexplorer-col col-sm-3"> </div>
+				<div class="gexplorer-col col-sm-3">
+					<div id="fitscreen-btn" class="gexplorer-btn btn btn-default">
+						<span class="glyphicon glyphicon-fullscreen"></span>
+						<br><span class="gexplorer-btn-txt">Fit</span>
+					</div>
+				</div>
+				<div class="gexplorer-col col-sm-3">
+					<div id="drag-btn" class="gexplorer-btn btn btn-default">
+						<img class="glyphicon-grab" src="{% static 'Images/grab.png' %}">
+						<br>Drag
+					</div>
+				</div>
+				<div class="gexplorer-col col-sm-3"> </div>
+			</div>
+			<div class="gexplorer-row row">
+				<div class="gexplorer-col col-sm-3"> </div>
+				<div class="gexplorer-col col-sm-2">
+					<div id="export-tbl" class="gexplorer-btn btn btn-default">
+						<span class="glyphicon glyphicon-download-alt"></span>
+						<br><span class="gexplorer-btn-txt">Export</span>
+					</div>
+				</div>
+				<div class="gexplorer-col col-sm-2">
+					<div id="export-json" class="gexplorer-btn btn btn-default">
+						<span class="glyphicon glyphicon-floppy-disk"></span>
+						<br><span class="gexplorer-btn-txt">Save</span>
+					</div>
+				</div>
+				<div class="gexplorer-col col-sm-2">
+					<div id="save-img" class="gexplorer-btn btn btn-default">
+						<span class="glyphicon glyphicon-picture"></span>
+						<br><span class="gexplorer-btn-txt">Image</span>
+					</div>
+				</div>
+				<div class="gexplorer-col col-sm-3"> </div>
+			</div>
+			<div class="gexplorer-row row">
+				<div class="gexplorer-col col-sm-3"> </div>
+				<div class="gexplorer-col col-sm-6">
+					<div class="gexplorer-btn btn btn-default ">
+						<span class="glyphicon glyphicon-cloud-upload"></span>
+						<br><span class="gexplorer-btn-txt">Upload</span>
+					</div>
+				</div>
+				<div class="col-sm-3"> </div>
 			</div>
 		</div>
 

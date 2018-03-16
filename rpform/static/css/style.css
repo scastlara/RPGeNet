@@ -106,6 +106,9 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 	font-size: 12px !important;
 }
 
+.app-label-right { float: right; }
+.app-label-right:hover { opacity: 0.8; cursor: pointer; }
+
 .app-spacing {
 	display: inline-block;
 	float: left;
@@ -135,12 +138,14 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 	background-color: #8DC842 !important;
 	color: white !important;
 	width: 140px !important;
+	margin-top: 25px;
 }
 
 .btn-f2 {
 	background-color: #4AB0ED !important;
 	color: white !important;
 	width: 140px !important;
+	margin-top: 25px;
 }
 
 .btn-f1:hover {
@@ -231,7 +236,7 @@ tr.spaceUnder>th {
 }
 
 input[type=number]::-webkit-inner-spin-button {
-    opacity: 1
+    opacity: 1;
 }
 
 
@@ -281,3 +286,7 @@ input[type=number]::-webkit-inner-spin-button {
 .bsize-container         { margin-top: 10px; }
 .bsize-container         { height: 20px !important; }
 #bsizeOutput             { font-size: 18px; line-height: 20px; padding-top: 0px !important; }
+.gexplorer-btn           { display: inline-block; width: 90%; height: 50px; }
+.gexplorer-col           { text-align:center; padding: 0 !important; }
+.gexplorer-row           { margin-bottom: 10px; }
+.glyphicon-grab          { display:inline-block; width: 14px; height: 16px; }

@@ -13,9 +13,10 @@ def gene_explorer(request):
 	mygraph.get_genes_in_lvl(identifiers, exp_id, lvl, dist)
 	response = dict()
 	response['jsongraph'] = mygraph.to_json()
-	return render(request, 'rpform/explorer.html', response)
+	return render(request, 'rpform/gexplorer.html', response)
 	'''
-	pass
+	response = dict()
+	return render(request, 'rpform/gexplorer.html', response)
 
 def pathway_explorer(request):
 	'''

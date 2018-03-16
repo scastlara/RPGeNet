@@ -108,10 +108,10 @@ class NeoDriver(object):
                 node2 = Gene(results['node2.identifier'])
                 node2.get_expression(exp_id)
                 node2.fill_attributes(
-                    dc = results['node2.driver_confidence'],
-                    lvl = results['node2.lvl'],
-                    gc  = results['node2.gene_cards'],
-                    nvar = results['node2.nvariants'])
+                    dc=results['node2.driver_confidence'],
+                    lvl=results['node2.lvl'],
+                    gc=results['node2.gene_cards'],
+                    nvar=results['node2.nvariants'])
                 interaction = Interaction(node1, node2)
                 interaction.fill_attributes(
                     parent=nodeobj,

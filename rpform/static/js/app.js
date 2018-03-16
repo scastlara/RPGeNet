@@ -6,7 +6,7 @@ app.js - Main script for the basic functionality of
 
 // GLOBALS
 //==================================================
-window.clickBehaviourOpts = {"addition":1, "deletion":2, "properties":3}
+window.clickBehaviourOpts = {"properties":1, "addition":2, "deletion":3 }
 window.clickBehaviour = window.clickBehaviourOpts.addition;
 Object.freeze(window.clickBehaviourOpts);
 window.cy;
@@ -16,13 +16,12 @@ window.cy;
 //==================================================
 
 /*
- * Changes the click behaviour mode
+ * Change Click Behaviour
  */
-changeClickBehaviour = function(this, mode) {
-	$(".behaviour-btn").removeClass("active");
-	$(this).addClass("active");
-	window.clickBehaviour = window.clickBehaviourOpts[mode];
-};
+changeClickBehaviour = function() {
+    var behaviour = $('input[name=behaviour]:checked', '#behaviour-form').val();
+    window.clickBehaviour = window.clickBehaviourOpts[behaviour];
+}
 
 /*
  * Change Layout
@@ -85,10 +84,8 @@ exportJSON = function(cy) {
 
 // BUTTON EVENTS
 //==================================================
-$("#node-addition-btn").on("click", changeClickBehaviour(this, "addition"));
-$("#node-deletion-btn").on("click", changeClickBehaviour(this, "deletion"));
-$("#node-properties-btn").on("click", changeClickBehaviour(this, "properties"))
-$("#change-layout li").on("click", changeLayout(window.cy, $(this).text().toLowerCase()));
+$('#behaviour-form').on("change", changeClickBehaviour);
+$("#layout").on("change", function() { changeLayout($(this).val())});
 $("#fitscreen-btn").on("click", fitScreen(window.cy));
 $("#save-img").on("click", saveImg(window.cy, $('#save-image-link')));
 $("#export-tbl").on("click", exportTBL(window.cy));

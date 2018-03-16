@@ -233,3 +233,51 @@ tr.spaceUnder>th {
 input[type=number]::-webkit-inner-spin-button {
     opacity: 1
 }
+
+
+/* GEXPLORER
+================================== */
+#cyt {
+	float: left;
+	width: 75%;
+	height: 100%;
+	background-color: #FAFAFA;
+}
+
+#cyt-controls {
+	padding-right: 30px;
+	padding-left: 30px;
+	text-align: center;
+	float: left;
+	width: 25%;
+	height: 100%;
+	background-color: #FAFAFA;
+	box-shadow: -2px 2px 8px 2px #E1E1E1;
+	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;            
+  	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;    
+}
+
+#gexplorer-topbtns { margin-top: 10px; }
+#gexplorer-logo    { width: 60px; }
+#gexplorer-logo-container {
+	display: inline-block;
+	margin-top: 40px;
+}
+
+#gexplorer-title {
+	margin-top: 20px;
+	margin-left: 8px;
+	font-size: 28px;
+}
+
+.behaviour-btn       { min-height: 30px; }
+.behaviour-btn:hover { cursor: pointer; }
+.behaviour-btn-text  { line-height: 30px; }
+.cyt-controls-block  { margin-top: 30px; }
+.cyt-controls-title  { font-size: 20px; color: #707070; }
+.lvl-btn { width: 100%; }
+.gexplorer-lvl-container { margin-top: 10px; }
+.layout-dropdown         { margin-top: 10px; }
+.bsize-container         { margin-top: 10px; }
+.bsize-container         { height: 20px !important; }
+#bsizeOutput             { font-size: 18px; line-height: 20px; padding-top: 0px !important; }

@@ -27,6 +27,7 @@ changeClickBehaviour = function() {
  * Change Layout
  */
  changeLayout = function(cy, layout) {
+    layout = layout.toLowerCase();
  	cy.layout( { name: layout } );
  }
 

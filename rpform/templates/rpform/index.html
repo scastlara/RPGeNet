@@ -197,7 +197,7 @@
 
 					<div class="col-md-3 form-group align-center">
 						<label for="created_at_lt">&nbsp;</label>
-						<input type="submit" value="Get Path Genes" class="btn btn-f2 form-control" />
+						<input type="submit" value="Get Path to Genes" class="btn btn-f2 form-control" />
 					</div>
 				</form>
 
@@ -246,46 +246,7 @@
 	<script src="{% static 'js/jquery-min.js' %}"></script>
 	<script src="{% static 'js/bootstrap-min.js' %}"></script>
 	<script src="{% static 'js/stoopidoverlay.js' %}"></script>
-	<script>
-		var options = {
-        container: 'inputgenes',
-        openContainer: 'inputgenes-btn',
-        scroll: false,
-        align: 'center',
-        width: '35%',
-        background: "white", 
-        closeBackground: "white",
-        padding: "2%"
-      }
-      // Gene Overlay
-      var overlayGenes      = new StoopidOverlay(options);
-      options.container     = 'inputgenes2';
-      options.openContainer = 'inputgenes-btn2';
-      var overlayDist       = new StoopidOverlay(options);
-      // Distance Overlay
-      options.container     = 'genedistance';
-      options.openContainer = 'genedistance-btn';
-      var overlayDist       = new StoopidOverlay(options);
-	  // Intlvl Overlay
-      options.container     = 'intlvl';
-      options.openContainer = 'intlvl-btn';
-      var overlayDist       = new StoopidOverlay(options);
-      options.container     = 'intlvl2';
-	  options.openContainer = 'intlvl-btn2';
-	  var overlayDist2      = new StoopidOverlay(options);
-
-	  // Genexp Overlay
-	  // Intlvl Overlay
-      options.container     = 'genexp';
-      options.openContainer = 'genexp-btn';
-      var overlayGexp       = new StoopidOverlay(options);
-      options.container     = 'genexp2';
-	  options.openContainer = 'genexp-btn2';
-	  var overlayGexp2      = new StoopidOverlay(options);
-      //options.container = 'genedistance';
-      //options.openContainer = 'genedistance-btn';
-      //var myOverlay2 = new StoopidOverlay(options);
-  	</script>
+	<script src="{% static 'js/overlays.js' %}"></script>
 </body>
 
 

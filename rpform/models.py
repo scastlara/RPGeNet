@@ -236,9 +236,10 @@ class Interaction(object):
         Returns dictionary ready to convert to json
         '''
         element = dict()
-        element['id'] = self.parent.identifier + '-' + self.child.identifier
-        element['source'] = self.parent.identifier
-        element['target'] = self.child.identifier
+        element['data'] = dict()
+        element['data']['id'] = self.parent.identifier + '-' + self.child.identifier
+        element['data']['source'] = self.parent.identifier
+        element['data']['target'] = self.child.identifier
         return element
 
     def __hash__(self):
@@ -318,13 +319,16 @@ class Gene(Node):
         Returns dictionary ready to convert to json
         '''
         element = dict()
-        element['id'] = self.identifier
-        element['name'] = self.identifier
-        element['lvl'] = self.lvl
-        element['exp'] = self.expression
-        element['driver_confidence'] = self.driver_confidence
-        element['nvariants'] = self.nvariants
-        element['gos'] = self.gos
+        element['data'] = dict()
+        element['data']['id'] = self.identifier
+        element['data']['name'] = self.identifier
+        element['data']['lvl'] = self.lvl
+        element['data']['exp'] = self.expression
+        element['data']['driver_confidence'] = self.driver_confidence
+        element['data']['nvariants'] = self.nvariants
+        element['data']['gos'] = self.gos
+        if self.is_driver():
+            element['classes'] = "driver"
         return element
 
     def path_to_drivers(self):

@@ -31,13 +31,42 @@ changeClickBehaviour = function() {
  	cy.layout( { name: layout } );
  }
 
+/*
+ * Converts base64 img to Blob
+ */
+function b64ToBlob(b64Data, contentType, sliceSize) {
+  contentType = contentType || '';
+  sliceSize = sliceSize || 512;
+
+  var byteCharacters = atob(b64Data);
+  var byteArrays = [];
+
+  for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    var byteNumbers = new Array(slice.length);
+    for (var i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    var byteArray = new Uint8Array(byteNumbers);
+
+    byteArrays.push(byteArray);
+  }
+
+  var blob = new Blob(byteArrays, {type: contentType});
+  return blob;
+}
+
 
 /*
  * Save Image of Graph
  */
  saveImg = function(cy, link) {
-	var graph_png = cy.png();
-	link.attr('href', graph_png);
+    var b64key = 'base64,';
+    var b64 = cy.png().substring( cy.png().indexOf(b64key) + b64key.length );
+    var imgBlob = b64ToBlob( b64, 'image/png' );
+    saveAs( imgBlob, 'graph.png' );
  };
 
 
@@ -55,8 +84,12 @@ changeClickBehaviour = function() {
  changeDrag = function(cy, event, elem) {
     event.preventDefault;
     if (elem.hasClass('active')) {
+        // Disable drag, enable boxselection
+        cy.boxSelectionEnabled( true );
         elem.removeClass('active');
     } else {
+        // Disable boxselection, enable drag
+        cy.boxSelectionEnabled( false );
         elem.addClass('active');
     }
  };
@@ -96,6 +129,19 @@ exportJSON = function(cy) {
     saveAs(blob, "graph-export.json");
 }
 
+/*
+ * Initializes graph
+ */
+ initGraph = function(cy, withpos) {
+    cy.add(window.jsongraph);
+    if (! withpos) {
+        cy.layout({ name:  $("#layout").val().toLowerCase() });
+    }
+    window.jsongraph = {};
+ }
+
+
+
 // BUTTON EVENTS
 //==================================================
 $('#behaviour-form').on("change", changeClickBehaviour);
@@ -105,3 +151,7 @@ $("#save-img").on("click", function() { saveImg(window.cy, $('#save-image-link')
 $("#export-tbl").on("click", function() { exportTBL(window.cy) });
 $("#export-json").on("click", function() { exportJSON(window.cy) });
 $('#drag-btn').on("click", function(event) { changeDrag(window.cy, event, $(this)) });
+
+// INITIALIZING CYTOSCAPE GRAPH
+//==================================================
+initGraph(window.cy, window.withpos);

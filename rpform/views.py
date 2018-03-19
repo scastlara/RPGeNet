@@ -1,5 +1,6 @@
 # Create your views here.
 from django.shortcuts import render, render_to_response
+import re
 
 def index_view(request):
 	response = dict()
@@ -26,6 +27,16 @@ def pathway_explorer(request):
 	mygraphs = mygene.path_to_drivers() # list of GraphCytoscape objects
 	'''
 	pass
+
+def upload_graph(request):
+	'''
+	upload graph to gene_explorer
+	'''
+
+	response = dict()
+	response['upload_json'] = request.FILES['myfile'].read()
+	response['upload_json'] = response['upload_json'].replace("\xef\xbb\xbf", "")
+	return render(request, 'rpform/gexplorer.html', response)
 
 def tutorial(request):
 	'''

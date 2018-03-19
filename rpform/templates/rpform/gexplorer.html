@@ -7,6 +7,19 @@
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 	<link rel="stylesheet" href="{% static 'css/bootstrap-min.css' %}">
 	<link rel="stylesheet" href="{% static 'css/toggle-switch.css' %}">
+	{% if upload_json %}
+	<!-- Uploaded json, positions included -->
+        <script>
+            window.jsongraph = {{ upload_json|safe }};
+            window.withpos   = true;
+        </script></script>
+    {% else %}
+    <!-- Graph from normal form request, without positions -->
+    	<script>
+            window.jsongraph = {{ jsongraph|safe }};
+            window.withpos   = false;
+        </script></script>
+    {% endif %}
 </head>
 
 <body>
@@ -52,7 +65,7 @@
 			<span class="cyt-controls-title">Layout</span>
 			<select name="layout" class="layout-dropdown form-control" id="layout">
 				<option>Dagre</option>
-				<option>Cola</option>
+				<option>Cose</option>
 				<option>Grid</option>
 				<option>Circle</option>
 				<option>Concentric</option>
@@ -87,7 +100,8 @@
 
 		<!-- Additional Buttons -->
 		<div class="cyt-controls-block">
-			<span class="cyt-controls-title">Controls</span><br>
+			<span class="cyt-controls-title">Controls</span>
+			<br><br>
 			<div class="gexplorer-row row">
 				<div class="gexplorer-col col-sm-3"> </div>
 				<div class="gexplorer-col col-sm-3">
@@ -119,20 +133,27 @@
 					</div>
 				</div>
 				<div class="gexplorer-col col-sm-2">
-					<div id="save-img" class="gexplorer-btn btn btn-default">
-						<span class="glyphicon glyphicon-picture"></span>
-						<br><span class="gexplorer-btn-txt">Image</span>
-					</div>
+					<a href="#" id="save-image-link">
+						<div id="save-img" class="gexplorer-btn btn btn-default">
+							<span class="glyphicon glyphicon-picture"></span>
+							<br><span class="gexplorer-btn-txt">Image</span>
+						</div>
+					</a>
 				</div>
 				<div class="gexplorer-col col-sm-3"> </div>
 			</div>
 			<div class="gexplorer-row row">
 				<div class="gexplorer-col col-sm-3"> </div>
 				<div class="gexplorer-col col-sm-6">
-					<div class="gexplorer-btn btn btn-default ">
-						<span class="glyphicon glyphicon-cloud-upload"></span>
-						<br><span class="gexplorer-btn-txt">Upload</span>
-					</div>
+					<form enctype="multipart/form-data" method="post" action="{% url upload_graph %}" id="upload-form">
+						{% csrf_token %}
+
+						<label for="myfile" id="upload-json" class="gexplorer-btn btn btn-default ">
+							<span class="glyphicon glyphicon-cloud-upload"></span>
+							<br><span class="gexplorer-btn-txt">Upload</span>
+						</label>
+						<input style="display:none" type="file" onchange="this.form.submit()" name="myfile" id="myfile" class="upload" style="box-sizing:border-box;">
+					</form>
 				</div>
 				<div class="col-sm-3"> </div>
 			</div>
@@ -140,11 +161,13 @@
 
 	</div>
 
+	<!-- JAVASCRIPT FILES -->
 	<script src="{% static 'js/jquery-min.js' %}"></script>
 	<script src="{% static 'js/bootstrap-min.js' %}"></script>
 	<script src="{% static 'js/stoopidoverlay.js' %}"></script>
 	<script src="{% static 'js/FileSaver.js' %}"></script>
 	<script src="{% static 'js/cytoscape.js' %}"></script>
+	<script src="{% static 'js/cytoscape-dagre.js' %}"></script>
 	<script src="{% static 'js/gexplorer-cytoscape-definition.js' %}"></script>
 	<script src="{% static 'js/app.js' %}"></script>
 </body>

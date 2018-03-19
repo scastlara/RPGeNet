@@ -5,12 +5,13 @@ gexplorer-cytoscape-definition.js -
 
 // Cytoscape style definition
 var stylesheet = cytoscape.stylesheet()
+    
     .selector('node')
         .css({
             'content': 'data(name)',
             'text-valign': 'bottom',
             'text-halign': 'center',
-            'background-color': '#404040',
+            'background-color': 'blue',
             "font-size": 8,
             'text-outline-width': 2,
             "text-outline-color": "#FFFFFF",
@@ -18,6 +19,11 @@ var stylesheet = cytoscape.stylesheet()
             "border-color": "data(colorNODE)",
             "border-width": 2,
             "min-zoomed-font-size": 6,
+        })
+    .selector(':selected')
+        .css({
+            'background-color': 'yellow',
+            'color': 'red',
         })
     .selector('.driver')
         .css({
@@ -39,7 +45,7 @@ var stylesheet = cytoscape.stylesheet()
             'target-arrow-color': 'data(colorEDGE)',
             "min-zoomed-font-size": 6,
         })
-
+    
 
 
 // Cytoscape variable definition
@@ -47,5 +53,6 @@ var cy = cytoscape({
     style: stylesheet,
     layout: { name: 'preset' },
     container: document.getElementById('cyt'),
+    boxSelectionEnabled: true,
     ready: function() {}
 });

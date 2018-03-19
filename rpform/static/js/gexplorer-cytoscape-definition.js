@@ -53,6 +53,6 @@ var cy = cytoscape({
     style: stylesheet,
     layout: { name: 'preset' },
     container: document.getElementById('cyt'),
-    boxSelectionEnabled: true,
+    boxSelectionEnabled: true,  
     ready: function() {}
 });

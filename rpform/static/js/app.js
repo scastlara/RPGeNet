@@ -129,6 +129,15 @@ exportJSON = function(cy) {
     saveAs(blob, "graph-export.json");
 }
 
+
+/*
+ * Change Border size of nodes
+ */
+ changeBsize = function(cy, value) {
+    console.log(value);
+    cy.nodes().css({'border-width': value});
+ }
+
 /*
  * Initializes graph
  */
@@ -151,6 +160,7 @@ $("#save-img").on("click", function() { saveImg(window.cy, $('#save-image-link')
 $("#export-tbl").on("click", function() { exportTBL(window.cy) });
 $("#export-json").on("click", function() { exportJSON(window.cy) });
 $('#drag-btn').on("click", function(event) { changeDrag(window.cy, event, $(this)) });
+$("#bsize").on("change", function() { changeBsize(window.cy, $(this).val())});
 
 // INITIALIZING CYTOSCAPE GRAPH
 //==================================================

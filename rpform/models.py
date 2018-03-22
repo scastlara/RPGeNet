@@ -20,7 +20,7 @@ class NeoDriver(object):
         Constructor of return clause based on a list of attributes for neo4j
         '''
         non_attributes = set(['label', 'parent', 'child', 'expression', 'gos'])
-        return_clause = ",".join(['%s.%s as %s.%s' % (elem_name, attr, elem_name, attr) 
+        return_clause = ",".join(['%s.%s as %s_%s' % (elem_name, attr, elem_name, attr) 
                                    for attr in attributes if attr not in non_attributes])
         return return_clause
 
@@ -28,23 +28,23 @@ class NeoDriver(object):
         '''
         Gets ONE node object of class 
         '''
-        attributes = nodeobjs.__dict__().keys()
+        attributes = nodeobj.__dict__.keys()
         query = """
             MATCH (node:%s)
             WHERE node.identifier = '%s'
             RETURN 
-        """ % (label, identifier)
+        """ % (nodeobj.label, nodeobj.identifier)
         query = query + self.return_by_attributes('node', attributes)
         results = self.dv.run(query)    
         results = results.data()
         if results:
             nodeobj.fill_attributes(
-            results['node.driver_confidence'], 
-            results['node.lvl'], 
-            results['node.gene_cards'],
-            results['node.nvariants'])
+            results['node_driver_confidence'], 
+            results['node_lvl'], 
+            results['node_gene_cards'],
+            results['node_nvariants'])
         else:
-            raise NodeNotFound(self.identifier, self.label)
+            raise NodeNotFound(nodeobj.identifier, nodeobj.label)
 
     def query_expression(self, nodeobj, exp_id):
         '''
@@ -105,13 +105,13 @@ class NeoDriver(object):
         results = results.data()
         if results:
             for row in results:
-                node2 = Gene(results['node2.identifier'])
+                node2 = Gene(results['node2_identifier'])
                 node2.get_expression(exp_id)
                 node2.fill_attributes(
-                    dc=results['node2.driver_confidence'],
-                    lvl=results['node2.lvl'],
-                    gc=results['node2.gene_cards'],
-                    nvar=results['node2.nvariants'])
+                    dc=results['node2_driver_confidence'],
+                    lvl=results['node2_lvl'],
+                    gc=results['node2_gene_cards'],
+                    nvar=results['node2_nvariants'])
                 interaction = Interaction(node1, node2)
                 interaction.fill_attributes(
                     parent=nodeobj,
@@ -192,8 +192,9 @@ class GO(Node):
     '''
     Class for GeneOntology Nodes
     '''
-    label = "GO"
     def __init__(self, accession, description, domain):
+        label = "GO"
+        super(Go, self).__init__(identifier, label)
         self.accession = accession
         self.description = description
         self.domain = domain
@@ -250,9 +251,9 @@ class Gene(Node):
     '''
     Class for gene nodes on neo4j
     '''
-    label = "GENE"
     def __init__(self, identifier):
-        super(Node, self).__init__(identifier, label)
+        label = "GENE"
+        super(Gene, self).__init__(identifier, label)
         self.driver_confidence = None
         self.lvl = 0
         self.gene_cards = ''
@@ -285,11 +286,11 @@ class Gene(Node):
                 self.check()
             except:
                 return False
+                
+        if self.driver_confidence == 0:
+            return False
         else:
-            if self.driver_confidence == 0:
-                return False
-            else:
-                return True
+            return True
 
     def get_expression(self, exp_id):
         '''

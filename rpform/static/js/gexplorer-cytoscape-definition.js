@@ -16,7 +16,7 @@ var stylesheet = cytoscape.stylesheet()
             'text-outline-width': 2,
             "text-outline-color": "#FFFFFF",
             "color": "#404040",
-            "border-color": "data(colorNODE)",
+            "border-color": "#404040",
             "border-width": 2,
             "min-zoomed-font-size": 6,
         })
@@ -27,7 +27,7 @@ var stylesheet = cytoscape.stylesheet()
         })
     .selector('.driver')
         .css({
-            'border-color': '#6785d0',
+            'border-color': '#8D65EC',
         })
     .selector('edge')
         .css({

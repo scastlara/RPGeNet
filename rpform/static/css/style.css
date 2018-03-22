@@ -254,6 +254,7 @@ input[type=number]::-webkit-inner-spin-button {
 	padding-left: 30px;
 	text-align: center;
 	float: left;
+	min-width: 330px;
 	width: 25%;
 	height: 100%;
 	background-color: #FAFAFA;
@@ -290,3 +291,4 @@ input[type=number]::-webkit-inner-spin-button {
 .gexplorer-col           { text-align:center; padding: 0 !important; }
 .gexplorer-row           { margin-bottom: 10px; }
 .glyphicon-grab          { display:inline-block; width: 14px; height: 16px; }
+#drag-btn.active         { background-color: #3A9F88; color: white; }

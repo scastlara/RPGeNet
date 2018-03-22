@@ -171,7 +171,32 @@ exportJSON = function(cy) {
     cy.panzoom(defaults);
  }
 
+ /*
+ * AJAX call to retrieve node interactions in DB
+ */
+expandOnClick = function(cy, node) {
+    //body
+}
 
+/*
+ * Show node properties on click
+ */ 
+propertiesOnClick = function(cy, node) {
+    //body
+}
+
+/*
+ * Defines behaviour when clicking on node
+ */
+onNodeClick = function(cy, node) {
+    if (window.clickBehaviour == window.clickBehaviourOpts.addition) {
+        expandOnClick(cy, node);
+    } else if (window.clickBehaviour == window.clickBehaviourOpts.deletion) {
+        cy.nodes(':selected').remove();
+    } else {
+        propertiesOnClick(cy, node);
+    }
+}
 
 // BUTTON EVENTS
 //==================================================
@@ -183,6 +208,7 @@ $("#export-tbl").on("click", function() { exportTBL(window.cy) });
 $("#export-json").on("click", function() { exportJSON(window.cy) });
 $('#drag-btn').on("click", function(event) { changeDrag(window.cy, event, $(this)) });
 $("#bsize").on("change", function() { changeBsize(window.cy, $(this).val())});
+window.cy.on( 'click', 'node', function() { onNodeClick(window.cy, this) });
 
 // INITIALIZING CYTOSCAPE GRAPH
 //==================================================

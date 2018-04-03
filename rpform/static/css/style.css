@@ -49,7 +49,7 @@ body 			{ font-size: 12px;}
 
 .thenavbar {
 	display: inline-block;
-	width: 25%;
+	width: 306px; /* 4x nav-elem.width */
 }
 
 .navbar-inner {
@@ -60,6 +60,10 @@ body 			{ font-size: 12px;}
 .navbar-inner .nav {
 	float: none;
 	display: inline-block;
+}
+
+.nav-elem {
+	width: 76px;
 }
 
 /* FOOTER

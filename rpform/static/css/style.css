@@ -49,7 +49,7 @@ body 			{ font-size: 12px;}
 
 .thenavbar {
 	display: inline-block;
-	width: 306px; /* 4x nav-elem.width */
+	width: 306px; /* 4x nav-elem.width + 2px */
 }
 
 .navbar-inner {
@@ -317,3 +317,28 @@ input[type=number]::-webkit-inner-spin-button {
 .gexplorer-row           { margin-bottom: 10px; }
 .glyphicon-grab          { display:inline-block; width: 14px; height: 16px; }
 #drag-btn.active         { background-color: #3A9F88; color: white; }
+#no-results-dialog #upload-form             { display: inline-block; }
+#no-results-dialog       { 
+	width: 30%; 
+	height: 195px; 
+	display: none; 
+	position: fixed; 
+	padding: 25px;
+	left: 22.5%;
+	top: 200px;
+	z-index: 3;
+	background-color: #FAFAFA;
+
+}
+#blur-effect {
+	display: none;
+	position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: #000;
+    opacity: 0.5;
+    z-index: 2;
+    filter: alpha(opacity = 50); /* required for opacity to work in IE */
+}

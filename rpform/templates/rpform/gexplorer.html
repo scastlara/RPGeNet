@@ -15,12 +15,18 @@
             window.jsongraph = {{ upload_json|safe }};
             window.withpos   = true;
         </script></script>
-    {% else %}
+    {% elif jsongraph %}
     <!-- Graph from normal form request, without positions -->
     	<script>
             window.jsongraph = {{ jsongraph|safe }};
             window.withpos   = false;
         </script></script>
+
+    {% else %}
+	<!-- No results -->
+		<script type="text/javascript">
+			window.noresults = true;
+		</script> 
     {% endif %}
 </head>
 
@@ -163,6 +169,24 @@
 
 	</div>
 
+	<div id="blur-effect">&nbsp;</div>
+	<div id="no-results-dialog">
+		<h2>No Results</h2>
+		<hr>
+		<a href="{% url index_view %}">
+			<div class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Go Back</div>
+		</a>
+		<form enctype="multipart/form-data" method="post" action="{% url gene_explorer %}" id="upload-form">
+			{% csrf_token %}
+			<label for="myfile" id="upload-json" class="btn btn-default">
+				<span class="glyphicon glyphicon-cloud-upload"></span>
+				<span class="gexplorer-btn-txt">Upload Graph</span>
+			</label>
+			<input style="display:none" type="file" onchange="this.form.submit()" name="myfile" id="myfile" class="upload" style="box-sizing:border-box;">
+		</form>
+	</div>
+
+
 	<!-- JAVASCRIPT FILES -->
 	<script src="{% static 'js/jquery-min.js' %}"></script>
 	<script src="{% static 'js/cytoscape.js' %}"></script>
@@ -174,5 +198,11 @@
 	<script src="{% static 'js/FileSaver.js' %}"></script>
 	<script src="{% static 'js/gexplorer-cytoscape-definition.js' %}"></script>
 	<script src="{% static 'js/app.js' %}"></script>
+	<script type="text/javascript">
+		if (window.noresults) {
+			$("#blur-effect").show();
+			$("#no-results-dialog").show();
+		};
+	</script>
 </body>
 </html>

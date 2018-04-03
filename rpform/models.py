@@ -404,6 +404,17 @@ class GraphCyt(object):
         self.json = json.dumps(graphelements)
         return self.json
 
+    def __bool__(self):
+        if self.genes:
+            return True
+        else:
+            return False
+
+    def __nonzero__(self):
+        if self.genes:
+            return True
+        else:
+            return False
 
 NEO = NeoDriver('127.0.0.1', '7474', 'neo4j', '5961')
 

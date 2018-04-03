@@ -30,7 +30,8 @@ def gene_explorer(request):
 		genes = [ gene.upper() for gene in genes.split(",") ]
 		wholegraph = GraphCyt()
 		wholegraph.get_genes_in_lvl(genes, lvl, dist, exp_id)
-		response['jsongraph'] = wholegraph.to_json()
+		if wholegraph:
+			response['jsongraph'] = wholegraph.to_json()
 	return render(request, 'rpform/gexplorer.html', response)
 
 def pathway_explorer(request):

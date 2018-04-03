@@ -11,10 +11,24 @@
 
 <body>
 	
+	{% if pathways %}
 
+		{% for path in pathways %}
 
+			<div class="panel">
+				<div class="panel-heading">
+					<h3>Pathway #{{ forloop.counter }}</h3>
+				</div>
+				<div class="panel-body">
+					<div id="path-{{ forloop.counter }}" class="pcontainer" value="{{ path|safe }}">
+						<!-- Will contain cytoscape graph -->
+					</div>
+				</div>
+			</div>
 
+		{% endfor %}
 
+	{% endif %}
 
 	<!-- JAVASCRIPT FILES -->
 	<script src="{% static 'js/jquery-min.js' %}"></script>
@@ -25,5 +39,33 @@
 	<script src="{% static 'js/stoopidoverlay.js' %}"></script>
 	<script src="{% static 'js/FileSaver.js' %}"></script>
 	<script src="{% static 'js/pexplorer-cytoscape-definition.js' %}"></script>
+
+{% if pathways %}
+    {% for path in pathways %}
+            <script>
+                $(document).ready(function(){
+                    var cy = cytoscape({
+                        style: stylesheet,
+                        layout: { name: 'preset' },
+                        container: document.getElementById('path-{{ forloop.counter }}'),
+                        ready: function() {}
+                    });
+                    var elements = {{ path|safe }};
+                    cy.load(elements)
+                    cy.layout({
+                        name: 'grid',
+                        maxSimulationTime: 3000,
+                        fit: true,
+                        directed: true,
+                        padding: 40
+                    });
+
+                    // Define graph behaviour here (?)
+
+                });
+            </script>
+        {% endfor %}
+    {% endif %}
+
 </body>
 </html>

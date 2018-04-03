@@ -365,6 +365,7 @@ class GraphCyt(object):
     def __init__(self):
         self.genes = set()
         self.interactions = set()
+        self.json = ""
 
     def get_genes_in_lvl(self, identifiers, lvl=1, dist=1, exp_id="ABSOLUTE"):
         '''
@@ -400,8 +401,8 @@ class GraphCyt(object):
             'nodes': [gene.to_jsondict() for gene in self.genes],
             'edges': [edge.to_jsondict() for edge in self.interactions]
         }
-        graphelements = json.dumps(graphelements)
-        return graphelements
+        self.json = json.dumps(graphelements)
+        return self.json
 
 
 NEO = NeoDriver('127.0.0.1', '7474', 'neo4j', '5961')

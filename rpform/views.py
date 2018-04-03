@@ -40,7 +40,21 @@ def pathway_explorer(request):
 	mygene.check()
 	mygraphs = mygene.path_to_lvl(lvl) # list of GraphCytoscape objects
 	'''
+	gene = request.GET['gene']
+	lvl = request.GET['path-to']
+	exp_id = request.GET['exp']
+	print ("%s and %s and %s" % (gene, lvl, exp_id))
 	response = dict()
+	mygraphs = list()
+	mygene = Gene(identifier=gene)
+	try:
+		mygene.check()
+	except NodeNotFound:
+		pass
+	mygraphs = mygene.path_to_lvl(lvl) # list of GraphCytoscape objects
+	if mygraphs:
+		jsongraphs = [ graph.to_json() for graph in mygraphs ]
+		response['pathways'] = jsongraphs
 	return render(request, 'rpform/pexplorer.html', response)
 
 def tutorial(request):

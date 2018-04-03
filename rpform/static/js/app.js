@@ -168,6 +168,7 @@ exportJSON = function(cy) {
     zoomOutIcon: 'glyphicon glyphicon-minus',
     resetIcon: 'glyphicon glyphicon-fullscreen'
     });
+    cy.navigator({});
     cy.panzoom(defaults);
  }
 

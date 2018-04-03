@@ -1,6 +1,6 @@
 .cytoscape-navigator{
 	position: fixed;
-	border: 1px solid #000;
+	border: 1px solid #555;
 	background: #fff;
 	z-index: 99999;
 	width: 200px;

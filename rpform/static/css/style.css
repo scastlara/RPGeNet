@@ -41,6 +41,27 @@ body 			{ font-size: 12px;}
 	color: #2ca089;
 }
 
+.navbar-container {
+	text-align: center;
+	width: 100%;
+
+}
+
+.thenavbar {
+	display: inline-block;
+	width: 25%;
+}
+
+.navbar-inner {
+	width: 100%;
+	text-align: center !important;
+}
+
+.navbar-inner .nav {
+	float: none;
+	display: inline-block;
+}
+
 /* FOOTER
 ================================== */
 #footer {

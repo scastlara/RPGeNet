@@ -84,7 +84,7 @@ class NeoDriver(object):
                                   domain=go['domain']))
         return go_list
 
-    def query_get_neighbours(self, nodeobj, exp_id, lvl=1, dist=1):
+    def query_get_neighbours(self, nodeobj, lvl=1, dist=1, exp_id="ABSOLUTE"):
         '''
         Gets all nodes and edges connected to nodeobj in lvl graph
         at distance dist
@@ -92,7 +92,7 @@ class NeoDriver(object):
         neighbour_graph = GraphCyt()
         neighbour_graph.genes.add(nodeobj)
         query = """
-            MATCH (node1:%s)-[r:INTERACT_WITH*%s]->(node2:%s)
+            MATCH (node1:%s)-[r:INTERACT_WITH*1..%s]->(node2:%s)
             WHERE node1.identifier == '%s'
             AND r.lvl >= '%s'
             RETURN 
@@ -128,10 +128,14 @@ class NeoDriver(object):
         else:
             raise Exception
 
+    def query_path_to_lvl(self, nodeobj, lvl):
+        '''
+        Shortest paths between 'node' and any node in lvl 'lvl'
+        '''
+        pass
+    '''
     def query_path_to_drivers(self, nodeobj):
-        '''
-        Shortest paths to driver genes
-        '''
+        #Shortest paths to driver genes
         query = ''
         if nodeobj.is_driver():
             query = """
@@ -156,7 +160,7 @@ class NeoDriver(object):
         for path in results:
             # Must create a list of GraphCytoscape object here
             pass
-
+    '''
     def query_shortest_path(self, pobj, cobj):
         '''
         Returns GraphCytoscape with shortest path between pobj and cobj
@@ -286,11 +290,11 @@ class Gene(Node):
                 self.check()
             except:
                 return False
-                
-        if self.driver_confidence == 0:
-            return False
-        else:
+
+        if self.driver_confidence == -1:
             return True
+        else:
+            return False
 
     def get_expression(self, exp_id):
         '''
@@ -299,13 +303,13 @@ class Gene(Node):
         self.expression = NEO.query_expression(self, exp_id)
         return self.expression
 
-    def get_neighbours(self, exp_id, lvl, dist):
+    def get_neighbours(self, lvl, dist, exp_id):
         '''
         Gets all the neighbours to Gene within 'lvl' interactions and at distance
         'dist' at most. All child nodes will have expression of 'exp_id'
-        Returns a GraphCyt object
+        Returns a GraphCyt object.
         '''
-        ngraph = NEO.query_get_neighbours(self, exp_id, lvl, dist)
+        ngraph = NEO.query_get_neighbours(self, lvl, dist, exp_id)
         return ngraph
 
     def get_go(self):
@@ -332,11 +336,11 @@ class Gene(Node):
             element['classes'] = "driver"
         return element
 
-    def path_to_drivers(self):
+    def path_to_lvl(self, lvl):
         '''
         Returns a list of GraphCytoscape object with all shortest paths to all drivers
         '''
-        paths = NEO.query_path_to_drivers(self)
+        paths = NEO.query_path_to_lvl(self, lvl)
         return paths
 
     def path_to_gene(self, cobj):
@@ -362,10 +366,11 @@ class GraphCyt(object):
         self.genes = set()
         self.interactions = set()
 
-    def get_genes_in_lvl(self, identifiers, exp_id, lvl=1, dist=1):
+    def get_genes_in_lvl(self, identifiers, lvl=1, dist=1, exp_id="ABSOLUTE"):
         '''
         Adds to genes collection all the genes with the specified lvl
-        and matching identifiers
+        and matching identifiers with their neighbours at dist=dist within
+        the graph of lvl=lvl
         '''
         for identifier in identifiers:
             gene = Gene(identifier=identifier)
@@ -375,6 +380,7 @@ class GraphCyt(object):
                 self.genes.add(gene)
                 self.merge(gene.get_neighbours(lvl, dist, exp_id))
             except:
+                print("Node %s not found" % identifier)
                 continue
 
     def merge(self, graph):
@@ -385,8 +391,6 @@ class GraphCyt(object):
             self.genes.add(graph.genes)
         if graph.interactions:
             self.interactions.add(graph.interactions)
-
-        pass
 
     def to_json(self):
         """

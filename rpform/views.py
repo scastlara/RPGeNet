@@ -5,8 +5,6 @@ from rpform.models import *
 
 def index_view(request):
 	response = dict()
-	response['variable'] = "value"
-	response['anothervariable'] = "anothervalue"
 	return render(request, 'rpform/index.html', response)
 
 def gene_explorer(request):
@@ -24,8 +22,15 @@ def gene_explorer(request):
 		response['upload_json'] = response['upload_json'].replace("\xef\xbb\xbf", "")
 	else:
 		# Simple search
-		pass
-		
+		# Check form request [HERE]
+		genes = request.GET['gene']
+		lvl = request.GET['lvl']
+		exp_id = request.GET['exp']
+		dist = request.GET['dist']
+		genes = [ gene.upper() for gene in genes.split(",") ]
+		wholegraph = GraphCyt()
+		wholegraph.get_genes_in_lvl(genes, lvl, dist, exp_id)
+		response['jsongraph'] = wholegraph.to_json()
 	return render(request, 'rpform/gexplorer.html', response)
 
 def pathway_explorer(request):
@@ -33,9 +38,10 @@ def pathway_explorer(request):
 	mygraphs = list()
 	mygene = Gene(identifier=identifier)
 	mygene.check()
-	mygraphs = mygene.path_to_drivers() # list of GraphCytoscape objects
+	mygraphs = mygene.path_to_lvl(lvl) # list of GraphCytoscape objects
 	'''
-	pass
+	response = dict()
+	return render(request, 'rpform/pexplorer.html', response)
 
 def tutorial(request):
 	'''

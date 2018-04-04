@@ -9,16 +9,16 @@ var stylesheet = cytoscape.stylesheet()
     .selector('node')
         .css({
             'content': 'data(name)',
-            'text-valign': 'bottom',
+            'text-valign': 'top',
             'text-halign': 'center',
             'background-color': '#2CA089',
-            "font-size": 8,
+            "font-size": 14,
             'text-outline-width': 2,
             "text-outline-color": "#FFFFFF",
             "color": "#404040",
             "border-color": "#CCCCCC",
             "border-width": 8,
-            "min-zoomed-font-size": 6,
+            "min-zoomed-font-size": 3,
         })
     .selector(':selected')
         .css({

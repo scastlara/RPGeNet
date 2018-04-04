@@ -134,7 +134,6 @@ exportJSON = function(cy) {
  * Change Border size of nodes
  */
  changeBsize = function(cy, value) {
-    console.log(value);
     cy.nodes().css({'border-width': value});
  }
 

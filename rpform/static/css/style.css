@@ -122,7 +122,8 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 ================================== */
 
 .content {
-	margin-top: 1.5%;
+	min-height: 40%;
+	margin-top: 0.5%;
 	margin-left: 15%;
 	margin-right: 15%;
 }
@@ -148,6 +149,14 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 
 .app-panel-container .row {
 	display: inline-block;
+}
+
+.news-container {
+	margin-bottom: 1.5%;
+	font-size: 18px;
+	width: 100%;
+	text-align: center;
+	color: #555;
 }
 
 .app-panel {

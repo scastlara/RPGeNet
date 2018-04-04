@@ -62,4 +62,11 @@ def tutorial(request):
 	'''
 	TUTO HERE
 	'''
-	pass
+	return render(request, 'rpform/tutorial.html')
+
+def data(request):
+	return render(request, 'rpform/data.html')
+
+
+def about(request):
+	return render(request, 'rpform/about.html')

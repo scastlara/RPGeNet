@@ -27,15 +27,14 @@
 		<nav class="navbar navbar-default thenavbar">
 			<div class="navbar-inner">
 				<ul class="nav navbar-nav">
-					<li id="navbar-home" class="nav-elem active"><a href="">Home</a></li>
-					<li id="navbar-data" class="nav-elem"><a href="">Data</a></li>
-					<li id="navbar-tutorial" class="nav-elem"><a href="">Tutorial</a></li>
-					<li id="navbar-about" class="nav-elem"><a href="">About</a></li>
+					<li id="navbar-home" class="nav-elem active"><a href="{% url index_view %}">Home</a></li>
+					<li id="navbar-data" class="nav-elem"><a href="{% url data %}">Data</a></li>
+					<li id="navbar-tutorial" class="nav-elem"><a href="{% url tutorial %}">Tutorial</a></li>
+					<li id="navbar-about" class="nav-elem"><a href="{% url about %}">About</a></li>
 				</ul>
 			</div>
 		</nav>
 	</div>
-	<br>
 
 	<!-- HELP DIALOGS -->
 		<div id="inputgenes">
@@ -113,6 +112,12 @@
 
 
 	<div class="content">
+		<div class="news-container">
+			<hr>
+			<span class="glyphicon glyphicon-envelope"></span> &nbsp New version 2.0 of RPGeNet released. See <a href="{% url data %}">update notes.</a>
+			<hr>
+		</div>
+		
 		<div class=" app-panel-container">
 			<div class="row">
 				<div class="col-sm-6 app-panel">

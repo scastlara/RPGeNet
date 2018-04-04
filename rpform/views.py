@@ -4,16 +4,16 @@ import re
 from rpform.models import *
 
 def index_view(request):
+	'''
+	Index view
+	'''
 	response = dict()
 	return render(request, 'rpform/index.html', response)
 
 def gene_explorer(request):
 	'''
-	mygraph = GraphCyt()
-	mygraph.get_genes_in_lvl(identifiers, exp_id, lvl, dist)
-	response = dict()
-	response['jsongraph'] = mygraph.to_json()
-	return render(request, 'rpform/gexplorer.html', response)
+	Look for interactions for your genes in specific levels of the
+	RPGeNet graph
 	'''
 	response = dict()
 	if request.method == "POST":
@@ -36,10 +36,7 @@ def gene_explorer(request):
 
 def pathway_explorer(request):
 	'''
-	mygraphs = list()
-	mygene = Gene(identifier=identifier)
-	mygene.check()
-	mygraphs = mygene.path_to_lvl(lvl) # list of GraphCytoscape objects
+	Find Pathways from your genes to specific levels of the RPGeNet graph
 	'''
 	gene = request.GET['gene']
 	lvl = request.GET['path-to']
@@ -60,13 +57,19 @@ def pathway_explorer(request):
 
 def tutorial(request):
 	'''
-	TUTO HERE
+	Tutorial view
 	'''
 	return render(request, 'rpform/tutorial.html')
 
 def data(request):
+	'''
+	Data view
+	'''
 	return render(request, 'rpform/data.html')
 
 
 def about(request):
+	'''
+	About view
+	'''
 	return render(request, 'rpform/about.html')

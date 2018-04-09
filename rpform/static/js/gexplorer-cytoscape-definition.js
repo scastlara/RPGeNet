@@ -22,7 +22,7 @@ var stylesheet = cytoscape.stylesheet()
         })
     .selector(':selected')
         .css({
-            'background-color': '#FDDB4F',
+            'background-color': 'black',
             'color': 'black',
         })
     .selector('.driver')

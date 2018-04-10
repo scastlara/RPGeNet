@@ -284,6 +284,10 @@ class Gene(Node):
     def is_driver(self):
         '''
         Checks if gene is driver or not
+            # driver_confidence = 0 -> No-driver
+            # driver_confidence = 1 -> Syndromic
+            # driver_confidence = 2 -> Non-syndromic
+            # driver_confidence = 3 -> Both
         '''  
         if self.driver_confidence is None:
             try:
@@ -291,7 +295,7 @@ class Gene(Node):
             except:
                 return False
 
-        if self.driver_confidence == -1:
+        if self.driver_confidence > 0:
             return True
         else:
             return False
@@ -398,8 +402,8 @@ class GraphCyt(object):
         Converts the graph to a json string to add it to cytoscape.js
         """
         graphelements = {
-            'nodes': [gene.to_jsondict() for gene in self.genes],
-            'edges': [edge.to_jsondict() for edge in self.interactions]
+            'nodes': [ gene.to_jsondict() for gene in self.genes ],
+            'edges': [ edge.to_jsondict() for edge in self.interactions ]
         }
         self.json = json.dumps(graphelements)
         return self.json

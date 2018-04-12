@@ -116,7 +116,7 @@ class NeoDriver(object):
                 interaction.fill_attributes(
                     parent=nodeobj,
                     child=node2,
-                    inttype=results['inttype'],
+                    inttype=results['type'],
                     string=results['string'],
                     biogrid=results['biogrid'],
                     ppaxe=results['ppaxe'],
@@ -212,15 +212,18 @@ class Interaction(object):
         '''
         parent = Gene()
         child  = Gene()
+        type = 1 -> genetic
+        type = 2 -> ppi
+        type = 3 -> both
+        type = 4 -> unknown
         '''
         self.parent = parent
         self.child = child
-        self.type = "genetic"
+        self.type = 4 # unknown
         self.string = False
         self.biogrid = False
         self.ppaxe = False
         self.ppaxe_pmid = ""
-        self.is_path = False
         self.lvl = 0
 
     def fill_attributes(self, inttype, string, biogrid, 

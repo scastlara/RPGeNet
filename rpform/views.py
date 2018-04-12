@@ -24,12 +24,12 @@ def gene_explorer(request):
 		# Simple search
 		# Check form request [HERE]
 		genes = request.GET['gene']
-		lvl = request.GET['lvl']
+		level = request.GET['level']
 		exp_id = request.GET['exp']
 		dist = request.GET['dist']
 		genes = [ gene.upper() for gene in genes.split(",") ]
 		wholegraph = GraphCyt()
-		wholegraph.get_genes_in_lvl(genes, lvl, dist, exp_id)
+		wholegraph.get_genes_in_level(genes, level, dist, exp_id)
 		if wholegraph:
 			response['jsongraph'] = wholegraph.to_json()
 	return render(request, 'rpform/gexplorer.html', response)
@@ -39,9 +39,9 @@ def pathway_explorer(request):
 	Find Pathways from your genes to specific levels of the RPGeNet graph
 	'''
 	gene = request.GET['gene']
-	lvl = request.GET['path-to']
+	level = request.GET['path-to']
 	exp_id = request.GET['exp']
-	print ("%s and %s and %s" % (gene, lvl, exp_id))
+	print ("%s and %s and %s" % (gene, level, exp_id))
 	response = dict()
 	mygraphs = list()
 	mygene = Gene(identifier=gene)
@@ -49,7 +49,7 @@ def pathway_explorer(request):
 		mygene.check()
 	except NodeNotFound:
 		pass
-	mygraphs = mygene.path_to_lvl(lvl) # list of GraphCytoscape objects
+	mygraphs = mygene.path_to_level(level) # list of GraphCytoscape objects
 	if mygraphs:
 		jsongraphs = [ graph.to_json() for graph in mygraphs ]
 		response['pathways'] = jsongraphs

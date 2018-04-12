@@ -40,7 +40,7 @@ class NeoDriver(object):
         if results:
             nodeobj.fill_attributes(
             results['node_driver_confidence'], 
-            results['node_lvl'], 
+            results['node_level'], 
             results['node_gene_cards'],
             results['node_nvariants'])
         else:
@@ -84,9 +84,9 @@ class NeoDriver(object):
                                   domain=go['domain']))
         return go_list
 
-    def query_get_neighbours(self, nodeobj, lvl=1, dist=1, exp_id="ABSOLUTE"):
+    def query_get_neighbours(self, nodeobj, level=1, dist=1, exp_id="ABSOLUTE"):
         '''
-        Gets all nodes and edges connected to nodeobj in lvl graph
+        Gets all nodes and edges connected to nodeobj in level graph
         at distance dist
         '''
         neighbour_graph = GraphCyt()
@@ -94,9 +94,9 @@ class NeoDriver(object):
         query = """
             MATCH (node1:%s)-[r:INTERACT_WITH*1..%s]->(node2:%s)
             WHERE node1.identifier == '%s'
-            AND r.lvl >= '%s'
+            AND r.level >= '%s'
             RETURN 
-        """ % (nodeobj.label, dist, nodeobj.label, nodeobj.identifier, lvl)
+        """ % (nodeobj.label, dist, nodeobj.label, nodeobj.identifier, level)
         n_attributes = nodeobj.__dict__().keys()
         e_attributes = Interaction().__dict__().keys()
         query = query + self.return_by_attributes('node2', n_attributes)
@@ -109,28 +109,28 @@ class NeoDriver(object):
                 node2.get_expression(exp_id)
                 node2.fill_attributes(
                     dc=results['node2_driver_confidence'],
-                    lvl=results['node2_lvl'],
+                    level=results['node2_level'],
                     gc=results['node2_gene_cards'],
                     nvar=results['node2_nvariants'])
                 interaction = Interaction(node1, node2)
                 interaction.fill_attributes(
                     parent=nodeobj,
                     child=node2,
-                    inttype=results['type'],
-                    string=results['string'],
-                    biogrid=results['biogrid'],
-                    ppaxe=results['ppaxe'],
-                    ppaxe_pmid=results['ppaxe_pmid'],
-                    lvl=results['lvl'])
+                    inttype=results['r_type'],
+                    string=results['r_string'],
+                    biogrid=results['r_biogrid'],
+                    ppaxe=results['r_ppaxe'],
+                    ppaxe_pmid=results['r_ppaxe_pmid'],
+                    level=results['r_level'])
                 neighbour_graph.genes.add(node2)
                 neighbour_graph.interactions.add(interaction)
             return neighbour_graph
         else:
             raise Exception
 
-    def query_path_to_lvl(self, nodeobj, lvl):
+    def query_path_to_level(self, nodeobj, level):
         '''
-        Shortest paths between 'node' and any node in lvl 'lvl'
+        Shortest paths between 'node' and any node in level 'level'
         '''
         pass
     '''
@@ -224,10 +224,10 @@ class Interaction(object):
         self.biogrid = False
         self.ppaxe = False
         self.ppaxe_pmid = ""
-        self.lvl = 0
+        self.level = 0
 
     def fill_attributes(self, inttype, string, biogrid, 
-                        ppaxe, ppaxe_pmid, lvl):
+                        ppaxe, ppaxe_pmid, level):
         '''
         Fills the attributes of the interaction to avoid querying db
         '''
@@ -236,7 +236,7 @@ class Interaction(object):
         self.biogrid = biogrid
         self.ppaxe = ppaxe
         self.ppaxe_pmid = ppaxe_pmid
-        self.lvl = lvl
+        self.level = level
    
 
     def to_json_dict(self):
@@ -251,18 +251,28 @@ class Interaction(object):
         return element
 
     def __hash__(self):
-        return hash((self.parent.identifier, self.child.identifier, self.lvl, self.type))
+        return hash((self.parent.identifier, self.child.identifier, self.level, self.type))
 
 
 class Gene(Node):
     '''
     Class for gene nodes on neo4j
+    identifier: STRING
+    level: [ 0 | 1 | 2 | 3 | 4 | 5 ]
+    nvariants: INT
+    driver_confidence: 
+        0 (non-driver)
+        1 (Syndromic)
+        2 (Non-Syndromic)
+        3 (Both)
+        4 (Unknown)
+
     '''
     def __init__(self, identifier):
         label = "GENE"
         super(Gene, self).__init__(identifier, label)
         self.driver_confidence = None
-        self.lvl = 0
+        self.level = 0
         self.gene_cards = ''
         self.expression = 'NA'
         self.nvariants = 0
@@ -275,12 +285,12 @@ class Gene(Node):
         '''
         NEO.query_by_id(self)
 
-    def fill_attributes(self, dc, lvl, gc, nvar):
+    def fill_attributes(self, dc, level, gc, nvar):
         '''
         Fills the attributes of the object. Avoids querying db
         '''
         self.driver_confidence = dc
-        self.lvl = lvl
+        self.level = level
         self.gene_cards = gene_cards
         self.nvariants = nvar
 
@@ -310,13 +320,13 @@ class Gene(Node):
         self.expression = NEO.query_expression(self, exp_id)
         return self.expression
 
-    def get_neighbours(self, lvl, dist, exp_id):
+    def get_neighbours(self, level, dist, exp_id):
         '''
-        Gets all the neighbours to Gene within 'lvl' interactions and at distance
+        Gets all the neighbours to Gene within 'level' interactions and at distance
         'dist' at most. All child nodes will have expression of 'exp_id'
         Returns a GraphCyt object.
         '''
-        ngraph = NEO.query_get_neighbours(self, lvl, dist, exp_id)
+        ngraph = NEO.query_get_neighbours(self, level, dist, exp_id)
         return ngraph
 
     def get_go(self):
@@ -334,7 +344,7 @@ class Gene(Node):
         element['data'] = dict()
         element['data']['id'] = self.identifier
         element['data']['name'] = self.identifier
-        element['data']['lvl'] = self.lvl
+        element['data']['level'] = self.level
         element['data']['exp'] = self.expression
         element['data']['driver_confidence'] = self.driver_confidence
         element['data']['nvariants'] = self.nvariants
@@ -343,11 +353,11 @@ class Gene(Node):
             element['classes'] = "driver"
         return element
 
-    def path_to_lvl(self, lvl):
+    def path_to_level(self, level):
         '''
         Returns a list of GraphCytoscape object with all shortest paths to all drivers
         '''
-        paths = NEO.query_path_to_lvl(self, lvl)
+        paths = NEO.query_path_to_level(self, level)
         return paths
 
     def path_to_gene(self, cobj):
@@ -364,9 +374,9 @@ class Gene(Node):
 class GraphCyt(object):
     '''
     Gene collection and interactions collection.
-    Example for FORM1 (get all genes connected to list of genes in lvl and distance)
+    Example for FORM1 (get all genes connected to list of genes in level and distance)
     mygraph = GraphCyt()
-    mygraph.get_genes_by_lvl(identifiers, lvl, dist, exp_id)
+    mygraph.get_genes_by_level(identifiers, level, dist, exp_id)
     mygraph.to_json()
     '''
     def __init__(self):
@@ -374,11 +384,11 @@ class GraphCyt(object):
         self.interactions = set()
         self.json = ""
 
-    def get_genes_in_lvl(self, identifiers, lvl=1, dist=1, exp_id="ABSOLUTE"):
+    def get_genes_in_level(self, identifiers, level=1, dist=1, exp_id="ABSOLUTE"):
         '''
-        Adds to genes collection all the genes with the specified lvl
+        Adds to genes collection all the genes with the specified level
         and matching identifiers with their neighbours at dist=dist within
-        the graph of lvl=lvl
+        the graph of level=level
         '''
         for identifier in identifiers:
             gene = Gene(identifier=identifier)
@@ -386,7 +396,7 @@ class GraphCyt(object):
                 gene.check()
                 gene.get_expression(exp_id)
                 self.genes.add(gene)
-                self.merge(gene.get_neighbours(lvl, dist, exp_id))
+                self.merge(gene.get_neighbours(level, dist, exp_id))
             except:
                 print("Node %s not found" % identifier)
                 continue

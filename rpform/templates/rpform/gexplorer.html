@@ -9,7 +9,12 @@
 	<link rel="stylesheet" href="{% static 'css/cytoscape-panzoom.css' %}">
 	<link rel="stylesheet" href="{% static 'css/bootstrap-min.css' %}">
 	<link rel="stylesheet" href="{% static 'css/toggle-switch.css' %}">
-	{% if upload_json %}
+	{% if not_json %}
+		<!-- Uploaded json, positions included -->
+		<script>
+			window.notjson = true;
+		</script>
+	{% elif upload_json %}
 	<!-- Uploaded json, positions included -->
         <script>
             window.jsongraph = {{ upload_json|safe }};
@@ -21,7 +26,6 @@
             window.jsongraph = {{ jsongraph|safe }};
             window.withpos   = false;
         </script></script>
-
     {% else %}
 	<!-- No results -->
 		<script type="text/javascript">
@@ -173,7 +177,7 @@
 	<!-- NO RESULTS DIALOGS -->
 	<div id="blur-effect">&nbsp;</div>
 	<div id="no-results-dialog">
-		<h2><span class="glyphicon glyphicon-warning-sign text-danger"></span> No Results</h2>
+		<h2 id="no-results-title"><span class="glyphicon glyphicon-warning-sign text-danger"></span> No Results</h2>
 		<hr>
 		<a href="{% url index_view %}">
 			<div class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Go Back</div>

@@ -2,6 +2,7 @@
 from django.shortcuts import render, render_to_response
 import re
 from rpform.models import *
+import json
 
 def index_view(request):
 	'''
@@ -20,6 +21,11 @@ def gene_explorer(request):
 		# Upload graph
 		response['upload_json'] = request.FILES['myfile'].read()
 		response['upload_json'] = response['upload_json'].replace("\xef\xbb\xbf", "")
+		# Check if valid json
+		try:
+			json.loads(response['upload_json'])
+		except ValueError:
+			response['not_json'] = True;
 	else:
 		# Simple search
 		# Check form request [HERE]

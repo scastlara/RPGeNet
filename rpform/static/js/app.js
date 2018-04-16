@@ -58,7 +58,6 @@ function b64ToBlob(b64Data, contentType, sliceSize) {
   return blob;
 }
 
-
 /*
  * Save Image of Graph
  */
@@ -68,7 +67,6 @@ function b64ToBlob(b64Data, contentType, sliceSize) {
     var imgBlob = b64ToBlob( b64, 'image/png' );
     saveAs( imgBlob, 'graph.png' );
  };
-
 
 /*
  * Fit Graph to screen
@@ -93,7 +91,6 @@ function b64ToBlob(b64Data, contentType, sliceSize) {
         elem.addClass('active');
     }
  };
-
 
 /*
  * Exports graph as a TBL file
@@ -129,7 +126,6 @@ exportJSON = function(cy) {
     saveAs(blob, "graph-export.json");
 }
 
-
 /*
  * Change Border size of nodes
  */
@@ -138,38 +134,57 @@ exportJSON = function(cy) {
  }
 
 /*
+ * Shows error message for uploading graph again
+ */
+ jsonError = function() {
+    $("#no-results-title").html("<span class='glyphicon glyphicon-warning-sign text-danger'></span> Not a valid graph file");
+    $("#blur-effect").show();
+    $("#no-results-dialog").show();
+ }
+
+/*
  * Initializes graph
  */
  initGraph = function(cy, withpos) {
-    if (window.jsongraph) {
-        cy.add(window.jsongraph);
-    }
-    if (! withpos) {
-        cy.layout({ name:  $("#layout").val().toLowerCase() });
-    }
-    window.jsongraph = {};
-    var defaults = ({
-        zoomFactor: 0.05, // zoom factor per zoom tick
-        zoomDelay: 45, // how many ms between zoom ticks
-        minZoom: 0.1, // min zoom level
-        maxZoom: 10, // max zoom level
-        fitPadding: 50, // padding when fitting
-        panSpeed: 10, // how many ms in between pan ticks
-        panDistance: 10, // max pan distance per tick
-        panDragAreaSize: 75, // the length of the pan drag box in which the vector for panning is calculated (bigger = finer control of pan speed and direction)
-        panMinPercentSpeed: 0.25, // the slowest speed we can pan by (as a percent of panSpeed)
-        panInactiveArea: 8, // radius of inactive area in pan drag box
-        panIndicatorMinOpacity: 0.5, // min opacity of pan indicator (the draggable nib); scales from this to 1.0
-        autodisableForMobile: true, // disable the panzoom completely for mobile (since we don't really need it with gestures like pinch to zoom)
-        // icon class names
-        sliderHandleIcon: '',
-        zoomInIcon: 'glyphicon glyphicon-plus',
-        zoomOutIcon: 'glyphicon glyphicon-minus',
-        resetIcon: 'glyphicon glyphicon-fullscreen'
-    });
-    if (cy.nodes().length) {
-        cy.navigator({});
-        cy.panzoom(defaults);
+    if (window.notjson) {
+        jsonError();
+    } else {
+        if (window.jsongraph) {
+            // Check that json graph file/data is correct
+            try   { 
+                cy.add(window.jsongraph);
+            } 
+            catch (error) { 
+                jsonError();
+            }
+        }
+        if (! withpos) {
+            cy.layout({ name:  $("#layout").val().toLowerCase() });
+        }
+        window.jsongraph = {};
+        var defaults = ({
+            zoomFactor: 0.05, // zoom factor per zoom tick
+            zoomDelay: 45, // how many ms between zoom ticks
+            minZoom: 0.1, // min zoom level
+            maxZoom: 10, // max zoom level
+            fitPadding: 50, // padding when fitting
+            panSpeed: 10, // how many ms in between pan ticks
+            panDistance: 10, // max pan distance per tick
+            panDragAreaSize: 75, // the length of the pan drag box in which the vector for panning is calculated (bigger = finer control of pan speed and direction)
+            panMinPercentSpeed: 0.25, // the slowest speed we can pan by (as a percent of panSpeed)
+            panInactiveArea: 8, // radius of inactive area in pan drag box
+            panIndicatorMinOpacity: 0.5, // min opacity of pan indicator (the draggable nib); scales from this to 1.0
+            autodisableForMobile: true, // disable the panzoom completely for mobile (since we don't really need it with gestures like pinch to zoom)
+            // icon class names
+            sliderHandleIcon: '',
+            zoomInIcon: 'glyphicon glyphicon-plus',
+            zoomOutIcon: 'glyphicon glyphicon-minus',
+            resetIcon: 'glyphicon glyphicon-fullscreen'
+        });
+        if (cy.nodes().length) {
+            cy.navigator({});
+            cy.panzoom(defaults);
+        }
     }
  }
 

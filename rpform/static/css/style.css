@@ -351,3 +351,8 @@ input[type=number]::-webkit-inner-spin-button {
     z-index: 2;
     filter: alpha(opacity = 50); /* required for opacity to work in IE */
 }
+
+
+#gfiltermean {
+	width: 185px;
+}

@@ -39,10 +39,10 @@ class NeoDriver(object):
         results = results.data()
         if results:
             nodeobj.fill_attributes(
-            results['node_driver_confidence'], 
             results['node_level'], 
-            results['node_gene_cards'],
-            results['node_nvariants'])
+            results['node_nvariants'],
+            results['node_driver_confidence'], 
+            results['node_inheritance'])
         else:
             raise NodeNotFound(nodeobj.identifier, nodeobj.label)
 
@@ -62,6 +62,42 @@ class NeoDriver(object):
             nodeobj.expression = results[0]['expvalue']
         else:
             nodeobj.expression = 'NA'
+
+
+    def query_get_connections(self, genelist, level):
+        '''
+        Gets connections for a list of Gene objects
+        '''
+        gene_q_string = str(list([str(gene.identifier) for gene in genelist]))
+        query = """
+            MATCH (n:GENE)-[r:INTERACT_WITH]-(m:GENE)
+            WHERE n.identifier IN %s
+            AND   m.identifier IN %s
+            RETURN n.identifier AS nidientifier,
+                   m.identifeir AS midentifier,
+                   r.level      AS rlevel,
+                   r.type       AS rtype,
+                   r.ppaxe      AS rppaxe,
+                   r.ppaxe_pmid AS rppaxe_pmid,
+                   r.biogrid    AS rbiogrid,
+                   r.string     AS rstring
+        """ % (gene_q_string, gene_q_string)
+        print(query)
+        results = self.dv.run(query)
+        results = results.data()
+        ints = list()
+        if results:
+            for interaction in results:
+                ints.append(Interaction(
+                    parent=Gene(identifier=interaction['nidientifier']),
+                    child=Gene(identifier=interaction['midentifier']),
+                    type=interaction['rtype'],
+                    level=interaction['rlevel'],
+                    ppaxe=interaction['rppaxe'],
+                    ppaxe_pmid=interaction['rppaxe_pmid'],
+                    biogrid=interaction['r.biogrid'],
+                    string=interaction['r.string']))
+        return ints
 
     def query_gos(self, nodeobj):
         '''
@@ -108,10 +144,10 @@ class NeoDriver(object):
                 node2 = Gene(results['node2_identifier'])
                 node2.get_expression(exp_id)
                 node2.fill_attributes(
-                    dc=results['node2_driver_confidence'],
                     level=results['node2_level'],
-                    gc=results['node2_gene_cards'],
-                    nvar=results['node2_nvariants'])
+                    nvar=results['node2_nvariants'],
+                    dc=results['node2_driver_confidence'],
+                    inh=results['node2_inheritance'])
                 interaction = Interaction(node1, node2)
                 interaction.fill_attributes(
                     parent=nodeobj,
@@ -176,6 +212,7 @@ class NeoDriver(object):
         if results:
             path = results[0]
             # Create GraphCytoscape object here
+
 
 class Node(object):
     '''
@@ -273,10 +310,10 @@ class Gene(Node):
         super(Gene, self).__init__(identifier, label)
         self.driver_confidence = None
         self.level = 0
-        self.gene_cards = ''
         self.expression = 'NA'
         self.nvariants = 0
         self.gos = list()
+        self.inheritance = 0
 
     def check(self):
         '''
@@ -285,14 +322,14 @@ class Gene(Node):
         '''
         NEO.query_by_id(self)
 
-    def fill_attributes(self, dc, level, gc, nvar):
+    def fill_attributes(self, level, nvar, dc, inh):
         '''
         Fills the attributes of the object. Avoids querying db
         '''
-        self.driver_confidence = dc
         self.level = level
-        self.gene_cards = gene_cards
         self.nvariants = nvar
+        self.driver_confidence = dc
+        self.inheritance = inh
 
     def is_driver(self):
         '''
@@ -348,10 +385,12 @@ class Gene(Node):
         element['data']['exp'] = self.expression
         element['data']['driver_confidence'] = self.driver_confidence
         element['data']['nvariants'] = self.nvariants
+        element['data']['inheritance'] = self.inheritance
         element['data']['gos'] = self.gos
         if self.is_driver():
             element['classes'] = "driver"
         return element
+
 
     def path_to_level(self, level):
         '''
@@ -359,6 +398,7 @@ class Gene(Node):
         '''
         paths = NEO.query_path_to_level(self, level)
         return paths
+
 
     def path_to_gene(self, cobj):
         '''
@@ -421,6 +461,42 @@ class GraphCyt(object):
         self.json = json.dumps(graphelements)
         return self.json
 
+    def add_gene(self, gene):
+        """
+        Adds Gene to the graph
+        """
+        self.genes.add(gene)
+
+    def get_connections(self, level):
+        """
+        Method that looks for the edges between the nodes in the graph
+        
+        connections = NEO.get_connections_query(self.genes, level)
+        self.interactions.add(connections)
+
+        node_q_string = str(list([str(node.symbol) for node in self.nodes]))
+        query = GET_CONNECTIONS_QUERY % (node_q_string, node_q_string)
+        results = GRAPH.run(query)
+        results = results.data()
+        if results:
+            for row in results:
+                parameters = dict()
+                parameters = {
+                    'int_prob'    : round(float(row['int_prob']), 3),
+                    'path_length' : round(float(row['path_length']), 3),
+                    'cellcom_nto' : round(float(row['cellcom_nto']), 3),
+                    'molfun_nto'  : round(float(row['molfun_nto']), 3),
+                    'bioproc_nto' : round(float(row['bioproc_nto']), 3),
+                    'dom_int_sc'  : round(float(row['dom_int_sc']), 3)
+                }
+                newinteraction = PredInteraction(
+                    database      = row['database'][0],
+                    source_symbol = row['nsymbol'],
+                    target        = PredictedNode(row['msymbol'], row['database'][0], query=False),
+                    parameters    = parameters
+                )
+                self.add_interaction(newinteraction)
+              """
     def __bool__(self):
         if self.genes:
             return True

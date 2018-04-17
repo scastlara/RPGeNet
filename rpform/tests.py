@@ -28,7 +28,7 @@ class GeneTest(TestCase):
 		Tests to json dictionary
 		'''
 		gene = Gene("Identifier")
-		required = set(["id", "name", "lvl", "exp", "driver_confidence", "nvariants", "gos"])
+		required = set(["id", "name", "level", "exp", "driver_confidence", "inheritance", "nvariants", "gos"])
 		assert(set(gene.to_json_dict()['data'].keys()) == required)
 
 	def test_check_fail(self):

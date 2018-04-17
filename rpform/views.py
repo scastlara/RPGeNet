@@ -61,6 +61,22 @@ def pathway_explorer(request):
 		response['pathways'] = jsongraphs
 	return render(request, 'rpform/pexplorer.html', response)
 
+def show_connections(request):
+    """
+    View that handles an AJAX request and, given a list of identifiers, returns
+    all the interactions between those identifiers/nodes.
+    """
+    if request.is_ajax():
+        nodes_including = request.POST['nodes'].split(",")
+        level = request.POST['level']
+        graphelements   = GraphCyt()
+        for symbol in nodes_including:
+            graphelements.add_gene( Gene(identifier=symbol) )
+        graphelements.get_connections(level)
+        return HttpResponse(graphelements, content_type="application/json")
+    else:
+        return render(request, 'rpform/404.html')
+
 def tutorial(request):
 	'''
 	Tutorial view

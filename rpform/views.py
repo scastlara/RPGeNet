@@ -21,6 +21,7 @@ def gene_explorer(request):
 		# Upload graph
 		response['upload_json'] = request.FILES['myfile'].read()
 		response['upload_json'] = response['upload_json'].replace("\xef\xbb\xbf", "")
+		response['level'] = request.POST['upload-level']
 		# Check if valid json
 		try:
 			json.loads(response['upload_json'])
@@ -38,6 +39,9 @@ def gene_explorer(request):
 		wholegraph.get_genes_in_level(genes, level, dist, exp_id)
 		if wholegraph:
 			response['jsongraph'] = wholegraph.to_json()
+		response['level'] = level
+		response['dist']  = dist
+		response['exp_id'] = exp_id
 	return render(request, 'rpform/gexplorer.html', response)
 
 def pathway_explorer(request):

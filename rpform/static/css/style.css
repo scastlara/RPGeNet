@@ -310,6 +310,23 @@ input[type=number]::-webkit-inner-spin-button {
 	font-size: 28px;
 }
 
+#lvl-indicator { 
+	position: fixed;
+	right: 30%;
+	top: 20px;
+	text-align: center;
+	vertical-align: center;
+	font-size: 28px;
+	z-index: 2;
+	width: 120px;
+	height: 50px;
+	padding: 5px;
+	background-color: white;
+	border: 1px solid #ccc;
+	color: #777;
+    border-radius: 4px;
+}
+
 .behaviour-btn       { min-height: 30px; }
 .behaviour-btn:hover { cursor: pointer; }
 .behaviour-btn-text  { line-height: 30px; }
@@ -326,19 +343,29 @@ input[type=number]::-webkit-inner-spin-button {
 .gexplorer-row           { margin-bottom: 10px; }
 .glyphicon-grab          { display:inline-block; width: 14px; height: 16px; }
 #drag-btn.active         { background-color: #3A9F88; color: white; }
-#no-results-dialog #upload-form             { display: inline-block; }
+#no-results-dialog #upload-form             { display: inline-block; width: 100%; }
 #no-results-dialog       { 
-	width: 30%; 
+	width: 40%; 
 	height: 195px; 
 	display: none; 
 	position: fixed; 
 	padding: 25px;
-	left: 22.5%;
+	left: 17.5%;
 	top: 200px;
 	z-index: 3;
 	background-color: #FAFAFA;
 
 }
+
+.vertical-line{
+      width: 1px; /* Line width */
+      background-color: #AFAFAF; /* Line color */
+      height: 50px; /* Override in-line if you want specific height. */
+      float: left; /* Causes the line to float to left of content. 
+        You can instead use position:absolute or display:inline-block
+        if this fits better with your design */
+    }
+
 #blur-effect {
 	display: none;
 	position: absolute;

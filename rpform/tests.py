@@ -15,6 +15,7 @@ class SimpleTest(TestCase):
         """
         self.assertEqual(1 + 1, 2)
 
+
 class GeneTest(TestCase):
 	def test_init(self):
 		'''
@@ -40,7 +41,7 @@ class GeneTest(TestCase):
 			gene.check()
 			self.fail("NodeNotFound not raised")
 		except NodeNotFound:
-			pass
+			assert(1 == 1)
 
 
 class NeoDriverTest(TestCase):

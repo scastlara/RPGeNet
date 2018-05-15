@@ -41,7 +41,7 @@ class NeoDriver(object):
             nodeobj.fill_attributes(
             results['node_level'], 
             results['node_nvariants'],
-            results['node_driver_confidence'], 
+            results['node_gene_disease'], 
             results['node_inheritance'])
         else:
             raise NodeNotFound(nodeobj.identifier, nodeobj.label)
@@ -146,7 +146,7 @@ class NeoDriver(object):
                 node2.fill_attributes(
                     level=results['node2_level'],
                     nvar=results['node2_nvariants'],
-                    dc=results['node2_driver_confidence'],
+                    dc=results['node2_gene_disease'],
                     inh=results['node2_inheritance'])
                 interaction = Interaction(node1, node2)
                 interaction.fill_attributes(
@@ -178,7 +178,7 @@ class NeoDriver(object):
                 MATCH  p=(source:Gene)-[r:INTERACT_WITH*]->(target:Gene)
                 WHERE  r.is_path == 1
                 AND    source.identifier == '%s'
-                AND    target.driver_confidence >= 1
+                AND    target.gene_disease >= 1
                 RETURN p
                 ORDER BY LENGTH(p) DESC
             """ % nodeobj.identifier
@@ -186,7 +186,7 @@ class NeoDriver(object):
             query = """
                 MATCH  p=allShortestPaths((source:Gene)-[r:INTERACT_WITH*]->(target:Gene))
                 WHERE  source.identifier == '%s'
-                AND    target.driver_confidence >= 1
+                AND    target.gene_disease >= 1
                 RETURN p
                 ORDER BY LENGTH(p) DESC
             """ % nodeobj.identifier
@@ -297,7 +297,7 @@ class Gene(Node):
     identifier: STRING
     level: [ 0 | 1 | 2 | 3 | 4 | 5 ]
     nvariants: INT
-    driver_confidence: 
+    gene_disease: 
         0 (non-driver)
         1 (Syndromic)
         2 (Non-Syndromic)
@@ -308,7 +308,7 @@ class Gene(Node):
     def __init__(self, identifier):
         label = "GENE"
         super(Gene, self).__init__(identifier, label)
-        self.driver_confidence = None
+        self.gene_disease = None
         self.level = 0
         self.expression = 'NA'
         self.nvariants = 0
@@ -328,27 +328,24 @@ class Gene(Node):
         '''
         self.level = level
         self.nvariants = nvar
-        self.driver_confidence = dc
+        self.gene_disease = dc
         self.inheritance = inh
 
     def is_driver(self):
         '''
         Checks if gene is driver or not
-            # driver_confidence = 0 -> No-driver
-            # driver_confidence = 1 -> Syndromic
-            # driver_confidence = 2 -> Non-syndromic
-            # driver_confidence = 3 -> Both
+            # gene_disease = 0 -> No-driver
+            # gene_disease = 1 -> Syndromic
+            # gene_disease = 2 -> Non-syndromic
+            # gene_disease = 3 -> Both
         '''  
-        if self.driver_confidence is None:
+        if self.gene_disease is None:
             try:
                 self.check()
             except:
                 return False
 
-        if self.driver_confidence > 0:
-            return True
-        else:
-            return False
+        return not bool(self.gene_disease)
 
     def get_expression(self, exp_id):
         '''
@@ -383,7 +380,7 @@ class Gene(Node):
         element['data']['name'] = self.identifier
         element['data']['level'] = self.level
         element['data']['exp'] = self.expression
-        element['data']['driver_confidence'] = self.driver_confidence
+        element['data']['gene_disease'] = self.gene_disease
         element['data']['nvariants'] = self.nvariants
         element['data']['inheritance'] = self.inheritance
         element['data']['gos'] = self.gos
@@ -408,7 +405,7 @@ class Gene(Node):
         return path
 
     def __hash__(self):
-        return hash((self.identifier, self.driver_confidence))
+        return hash((self.identifier, self.gene_disease))
 
 
 class GraphCyt(object):

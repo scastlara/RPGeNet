@@ -9,6 +9,7 @@ app.js - Main script for the basic functionality of
 window.clickBehaviourOpts = {"properties":1, "addition":2, "deletion":3 }
 window.clickBehaviour = window.clickBehaviourOpts.addition;
 Object.freeze(window.clickBehaviourOpts);
+window.drag = false;
 window.cy;
 
 
@@ -83,10 +84,14 @@ function b64ToBlob(b64Data, contentType, sliceSize) {
     event.preventDefault;
     if (elem.hasClass('active')) {
         // Disable drag, enable boxselection
+        window.drag = false;
+        document.getElementById("cyt").style.cursor = 'auto';
         cy.boxSelectionEnabled( true );
         elem.removeClass('active');
     } else {
         // Disable boxselection, enable drag
+        window.drag = true;
+        document.getElementById("cyt").style.cursor = 'all-scroll';
         cy.boxSelectionEnabled( false );
         elem.addClass('active');
     }
@@ -212,7 +217,7 @@ onNodeClick = function(cy, node) {
         if (cy.nodes(':selected').intersection(node).length) {
             cy.nodes(':selected').remove();
         } else {
-            document.body.style.cursor = 'not-allowed';
+            document.getElementById("cyt").style.cursor = 'not-allowed';
         }
     } else {
         propertiesOnClick(cy, node);
@@ -225,8 +230,18 @@ onNodeClick = function(cy, node) {
  onNodeMouseOver = function(cy, node) {
     if (window.clickBehaviour == window.clickBehaviourOpts.deletion) {
         if (cy.nodes(':selected').intersection(node).length) {
-            document.body.style.cursor = 'not-allowed';
+            document.getElementById("cyt").style.cursor = 'not-allowed';
+        } else {
+            document.getElementById("cyt").style.cursor = 'auto';
         }
+    } else if (window.clickBehaviour == window.clickBehaviourOpts.properties) {
+        if (cy.nodes(':selected').intersection(node).length == 0) {
+            document.getElementById("cyt").style.cursor = 'context-menu';
+        } else {
+            document.getElementById("cyt").style.cursor = 'auto';
+        }
+    } else {
+        document.getElementById("cyt").style.cursor = 'auto';
     }
  }
 
@@ -234,7 +249,11 @@ onNodeClick = function(cy, node) {
  * Defines behaviour when out-hovering on node
  */
  onNodeMouseOut = function(cy, node) {
-    document.body.style.cursor = 'auto';
+    if (window.drag) {
+        document.getElementById("cyt").style.cursor = 'all-scroll';
+    } else {
+        document.getElementById("cyt").style.cursor = 'auto';
+    }
  }
 
 // BUTTON EVENTS

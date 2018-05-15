@@ -209,11 +209,33 @@ onNodeClick = function(cy, node) {
     if (window.clickBehaviour == window.clickBehaviourOpts.addition) {
         expandOnClick(cy, node);
     } else if (window.clickBehaviour == window.clickBehaviourOpts.deletion) {
-        cy.nodes(':selected').remove();
+        if (cy.nodes(':selected').intersection(node).length) {
+            cy.nodes(':selected').remove();
+        } else {
+            document.body.style.cursor = 'not-allowed';
+        }
     } else {
         propertiesOnClick(cy, node);
     }
 }
+
+/*
+ * Defines behaviour when hovering on node
+ */
+ onNodeMouseOver = function(cy, node) {
+    if (window.clickBehaviour == window.clickBehaviourOpts.deletion) {
+        if (cy.nodes(':selected').intersection(node).length) {
+            document.body.style.cursor = 'not-allowed';
+        }
+    }
+ }
+
+ /*
+ * Defines behaviour when out-hovering on node
+ */
+ onNodeMouseOut = function(cy, node) {
+    document.body.style.cursor = 'auto';
+ }
 
 // BUTTON EVENTS
 //==================================================
@@ -226,6 +248,8 @@ $("#export-json").on("click", function() { exportJSON(window.cy) });
 $('#drag-btn').on("click", function(event) { changeDrag(window.cy, event, $(this)) });
 $("#bsize").on("change", function() { changeBsize(window.cy, $(this).val())});
 window.cy.on( 'click', 'node', function() { onNodeClick(window.cy, this) });
+window.cy.on('mouseover', 'node', function() { onNodeMouseOver(window.cy, this)});
+window.cy.on('mouseout', 'node', function() {onNodeMouseOut(window.cy, this)});
 
 // INITIALIZING CYTOSCAPE GRAPH
 //==================================================

@@ -240,8 +240,8 @@ onNodeClick = function(cy, node) {
         } else {
             document.getElementById("cyt").style.cursor = 'auto';
         }
-    } else {
-        document.getElementById("cyt").style.cursor = 'auto';
+    } else if (window.clickBehaviour == window.clickBehaviourOpts.addition) {
+        document.getElementById("cyt").style.cursor = 'pointer';
     }
  }
 

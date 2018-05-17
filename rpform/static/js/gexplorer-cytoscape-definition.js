@@ -19,6 +19,8 @@ var stylesheet = cytoscape.stylesheet()
             "border-color": "#CCCCCC",
             "border-width": 8,
             "min-zoomed-font-size": 3,
+            'width': 'mapData(nvariants, 1, 500, 25, 200)',
+            'height': 'mapData(nvariants, 1, 500, 25, 200)',
         })
     .selector(':selected')
         .css({
@@ -27,7 +29,8 @@ var stylesheet = cytoscape.stylesheet()
         })
     .selector('.driver')
         .css({
-            'border-color': '#8D65EC',
+            'border-color': '#793d71',
+            'shape': 'diamond'
         })
     .selector('edge')
         .css({
@@ -38,6 +41,22 @@ var stylesheet = cytoscape.stylesheet()
             'target-arrow-color': '#4F8ABA',
             'target-arrow-shape': 'triangle',
             "min-zoomed-font-size": 6,
+            "width": "data(width)"
+        })
+    .selector('.physical')
+        .css({
+            'line-color': '#FF8A8A',
+            'target-arrow-color': '#FF8A8A',
+        })
+    .selector('.genetic')
+        .css({
+            'line-color': '#6885d0',
+            'target-arrow-color': '#6885d0',
+        })
+    .selector('.unknown')
+        .css({
+            'line-color': '#5B5B5B',
+            'target-arrow-color': '#5B5B5B',
         })
     
 

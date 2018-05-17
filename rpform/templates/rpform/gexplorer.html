@@ -42,6 +42,16 @@
 	<!-- INTERACTION LVL INDICATOR -->
 	{% if level %}
 		<div id="lvl-indicator">Level: {{ level }}</div>
+		<script>
+			window.level = {{ level }};
+		</script>
+	{% endif %}
+
+	<!-- EXPERIMENT IDENTIFIER -->
+	{% if exp_id %}
+		<script>
+			window.expId = "{{ exp_id }}";
+		</script>
 	{% endif %}
 
 	<!-- CYTOSCAPE CONTROLS -->

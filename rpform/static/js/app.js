@@ -197,6 +197,32 @@ exportJSON = function(cy) {
  * AJAX call to retrieve node interactions in DB
  */
 expandOnClick = function(cy, node) {
+    $.ajax({
+        type: "GET",
+        url: "/add_neighbours",
+        cache: true,
+        data: {
+            'gene': node.data().name,
+            'level': window.level,
+            'exp': window.expId,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        beforeSend: function() {
+            
+        },
+        success : function(data) {
+            cy.add(data);
+            cy.layout( { name: 'cose' } );
+        }, 
+        statusCode: {
+            404: function() {
+
+            },
+        },
+        error: function() {
+            alert("ERROR");
+        }
+    });
     //body
 }
 

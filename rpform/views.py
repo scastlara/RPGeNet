@@ -1,5 +1,6 @@
 # Create your views here.
 from django.shortcuts import render, render_to_response
+from django.http      import HttpResponse
 import re
 from rpform.models import *
 import json
@@ -31,6 +32,7 @@ def gene_explorer(request):
 		# Simple search
 		# Check form request [HERE]
 		genes = request.GET['gene']
+		genes = re.sub(r'\s', '', genes)
 		level = request.GET['level']
 		exp_id = request.GET['exp']
 		dist = request.GET['dist']
@@ -43,6 +45,29 @@ def gene_explorer(request):
 		response['dist']  = dist
 		response['exp_id'] = exp_id
 	return render(request, 'rpform/gexplorer.html', response)
+
+
+def add_neighbours(request):
+	'''
+	Returns json from AJAX request to add neighbours to clicked nodes on gexplorer
+	'''
+	if request.is_ajax():
+		response = dict()
+		if 'gene' in request.GET and 'level' in request.GET and 'exp' in request.GET:
+			gene = request.GET['gene']
+			level = request.GET['level']
+			exp_id = request.GET['exp']
+			print(gene)
+			dist = 1 # Always distance 1
+			wholegraph = GraphCyt()
+			wholegraph.get_genes_in_level([gene], level, dist, exp_id)
+			json_data = wholegraph.to_json()
+			return HttpResponse(json_data, content_type="application/json")
+		else:
+			return HttpResponse(json.dumps(json_data), content_type="application/json")
+	else:
+		return render(request, 'rpform/404.html')
+
 
 def pathway_explorer(request):
 	'''

@@ -54,6 +54,15 @@
 		</script>
 	{% endif %}
 
+	<!-- Get info Card on click -->
+    <!-- Gene Card -->
+    <div id="button-container">
+        <div class="close-overlay" title="Close card">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </div>
+    </div>
+    <div class="card-overlay" id="card-overlay"></div>
+
 	<!-- CYTOSCAPE CONTROLS -->
 	<div id="cyt-controls">
 
@@ -75,12 +84,18 @@
 			<fieldset>
 				<div class="switch-toggle switch-candy behaviour-div">
 					<form action="" id="behaviour-form">
-						<input id="radio-props" value="properties" name="behaviour" type="radio">
-						<label class="behaviour-btn" for="radio-props" onclick=""><span class="behaviour-btn-text">Node Properties</span></label>
-						<input id="radio-add" name="behaviour" type="radio" value="addition" checked>
-						<label class="behaviour-btn" for="radio-add" onclick=""><span class="behaviour-btn-text">Node Addition</span></label>
+						<input id="radio-props" value="properties" name="behaviour" type="radio" checked>
+						<label class="behaviour-btn" for="radio-props" onclick="">
+							<span class="behaviour-btn-text">Show Properties</span>
+						</label>
+						<input id="radio-add" name="behaviour" type="radio" value="addition">
+						<label class="behaviour-btn" for="radio-add" onclick="">
+							<span class="behaviour-btn-text">Node Addition</span>
+						</label>
 						<input id="radio-delete" value="deletion" name="behaviour" type="radio">
-						<label class="behaviour-btn" for="radio-delete" onclick=""><span class="behaviour-btn-text">Node Deletion</span></label>
+						<label class="behaviour-btn" for="radio-delete" onclick="">
+							<span class="behaviour-btn-text">Node Deletion</span>
+						</label>
 						<a></a>
 					</form>
 				</div>
@@ -101,7 +116,7 @@
 
 		<!-- Change level -->
 		<div class="cyt-controls-block">
-			<div class="btn btn-default"><img width="40px" src="{% static 'Images/connect-icon.png' %}"> Connect Genes</div>
+			<div id="get-connections" class="btn btn-default"><img width="40px" src="{% static 'Images/connect-icon.png' %}"> Connect Genes</div>
 		</div>
 
 		<!-- Border size -->
@@ -231,6 +246,7 @@
 	<script src="{% static 'js/FileSaver.js' %}"></script>
 	<script src="{% static 'js/gexplorer-cytoscape-definition.js' %}"></script>
 	<script src="{% static 'js/app.js' %}"></script>
+	<script src="{% static 'js/card-overlay.js' %}"></script>
 	<script type="text/javascript">
 		if (window.noresults) {
 			$("#blur-effect").show();

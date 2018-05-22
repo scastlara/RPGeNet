@@ -1,0 +1,96 @@
+{% load staticfiles %}
+<html>
+
+<h2>{{ gene.identifier }} {% if gene.gene_disease > 0 %} <span class="driver-title">[driver]</span> {% endif %}</h2>
+<hr>
+
+<table class="table table-bordered">
+	<tr>
+		<td><b>Type</b></td>
+		<td>
+			{% if gene.gene_disease == 0 %}
+				None
+			{% elif gene.gene_disease == 1 %}
+				Syndromic
+			{% elif gene.gene_disease == 2 %}
+				Non-syndromic
+			{% elif gene.gene_disease == 3 %}
+				Syndromic + Non-syndromic
+			{% else %}
+				Unknown
+			{% endif %}
+		</td>
+	<tr>
+		<td><b>Level</b></td>
+        <td>{{ gene.level }}</td>
+    </tr>
+	<tr>
+        <td><b>Number of variants</b></td>
+        <td>{{ gene.nvariants }}</td>
+    </tr>
+</table>
+
+
+<br>
+<h3>Expression Data</h3>
+<hr>
+<table class="table table-bordered">
+	<tr>
+		<td>
+			<b>Absolute</b>
+		</td>
+		<td>
+			Num
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>Relative</b>
+		</td>
+		<td>
+			Num
+		</td>
+	</tr>
+</table>
+
+<br>
+<h3>Gene Ontology</h3>
+<hr>
+<table class="table table-bordered">
+	{% if not gene.gos %} None {% endif %}
+	{% for go in gene.gos %}
+		<tr>
+			<td class="{{ go.domain }}">{{ go.domain }}</td>
+			<td>{{ go.accession }}</td>
+			<td>{{ go.description }}</td>
+		</tr>
+	{% endfor %}
+</table>
+
+<br>
+<h3>External links</h3>
+<hr>
+<table class="table table-bordered">
+	<tr>
+		<td>
+			<a target="_blank" href="https://www.genecards.org/cgi-bin/carddisp.pl?gene={{ gene.identifier }}">GeneCards</a>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<a target="_blank" href='http://www.uniprot.org/uniprot/?query={{ gene.identifier }}&fil=organism%3A%22Homo+sapiens+%28Human%29+[9606]%22&sort=score'>UniProt</a>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<a target="_blank" href="http://www.omim.org/search/?index=entry&start=1&limit=10&search={{ gene.identifier }}">OMIM</a>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<a target="_blank" href="https://sph.uth.edu/retnet/sum-dis.htm#A-genes={{ gene.identifier }}">RetNet</a>
+		</td>
+	</tr>
+</table>
+
+</html>

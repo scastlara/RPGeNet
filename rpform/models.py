@@ -19,7 +19,7 @@ class NeoDriver(object):
         '''
         Constructor of return clause based on a list of attributes for neo4j
         '''
-        non_attributes = set(['label', 'parent', 'child', 'expression', 'gos'])
+        non_attributes = set(['label', 'parent', 'child', 'expression', 'gos', 'int_type'])
         return_clause = ",".join(['%s.%s as %s_%s' % (elem_name, attr, elem_name, attr) 
                                    for attr in attributes if attr not in non_attributes])
         return return_clause
@@ -46,6 +46,35 @@ class NeoDriver(object):
         else:
             raise NodeNotFound(nodeobj.identifier, nodeobj.label)
 
+    def query_by_int(self, intobj):
+        '''
+        Queries the interaction using parent-child identifiers
+        and fills the attributes of the interaction
+        '''
+        query = """
+            MATCH (n:GENE)-[rel:INTERACTS_WITH]->(m:GENE)
+            WHERE n.identifier = '%s'
+            AND   m.identifier = '%s'
+        """ % (intobj.parent.identifier, intobj.child.identifier)
+        query += 'RETURN ' + self.return_by_attributes('rel', intobj.__dict__.keys()) 
+        results = self.dv.run(query)
+        results = results.data()
+        if results:
+            interaction = results[0]
+            intobj.fill_attributes(
+                level=interaction['rel_level'], 
+                string=interaction['rel_string'], 
+                biogrid=interaction['rel_biogrid'], 
+                ppaxe=interaction['rel_ppaxe'], 
+                ppaxe_score=interaction['rel_ppaxe_score'],
+                ppaxe_pubmedid=interaction['rel_ppaxe_pubmedid'], 
+                biogrid_pubmedid=interaction['rel_biogrid_pubmedid'], 
+                genetic_interaction=interaction['rel_genetic_interaction'], 
+                physical_interaction=interaction['rel_physical_interaction'], 
+                unknown_interaction=interaction['rel_unknown_interaction'])
+        else:
+            raise InteractionNotFound(intobj.parent.identifier, intobj.child.identifier)
+
     def query_expression(self, nodeobj, exp_id):
         '''
         Gets expression value for nodeobj
@@ -68,35 +97,40 @@ class NeoDriver(object):
         '''
         Gets connections for a list of Gene objects
         '''
+        connections_graph = GraphCyt()
+        for gene in genelist:
+            connections_graph.add_gene(Gene(identifier=gene.identifier))
         gene_q_string = str(list([str(gene.identifier) for gene in genelist]))
         query = """
-            MATCH (n:GENE)-[r:INTERACTS_WITH]-(m:GENE)
-            WHERE n.identifier IN %s
-            AND   m.identifier IN %s
+            MATCH (n:GENE)-[rel:INTERACTS_WITH]->(m:GENE)
+            WHERE  n.identifier IN %s
+            AND    m.identifier IN %s
+            AND    rel.level <= %s
             RETURN n.identifier AS nidientifier,
-                   m.identifeir AS midentifier,
-                   r.level      AS rlevel,
-                   r.type       AS rtype,
-                   r.ppaxe      AS rppaxe,
-                   r.ppaxe_pmid AS rppaxe_pmid,
-                   r.biogrid    AS rbiogrid,
-                   r.string     AS rstring
-        """ % (gene_q_string, gene_q_string)
+                   m.identifier AS midentifier,
+        """ % (gene_q_string, gene_q_string, level)
+        e_attributes = Interaction().__dict__.keys()
+        query += self.return_by_attributes('rel', e_attributes)
         results = self.dv.run(query)
         results = results.data()
-        ints = list()
         if results:
             for interaction in results:
-                ints.append(Interaction(
+                intobj = Interaction(
                     parent=Gene(identifier=interaction['nidientifier']),
-                    child=Gene(identifier=interaction['midentifier']),
-                    type=interaction['rtype'],
-                    level=interaction['rlevel'],
-                    ppaxe=interaction['rppaxe'],
-                    ppaxe_pmid=interaction['rppaxe_pmid'],
-                    biogrid=interaction['r.biogrid'],
-                    string=interaction['r.string']))
-        return ints
+                    child=Gene(identifier=interaction['midentifier']))
+                intobj.fill_attributes(
+                    level=interaction['rel_level'], 
+                    string=interaction['rel_string'], 
+                    biogrid=interaction['rel_biogrid'], 
+                    ppaxe=interaction['rel_ppaxe'], 
+                    ppaxe_score=interaction['rel_ppaxe_score'],
+                    ppaxe_pubmedid=interaction['rel_ppaxe_pubmedid'], 
+                    biogrid_pubmedid=interaction['rel_biogrid_pubmedid'], 
+                    genetic_interaction=interaction['rel_genetic_interaction'], 
+                    physical_interaction=interaction['rel_physical_interaction'], 
+                    unknown_interaction=interaction['rel_unknown_interaction'])
+                connections_graph.add_interaction(intobj)
+        return connections_graph
 
     def query_gos(self, nodeobj):
         '''
@@ -105,7 +139,7 @@ class NeoDriver(object):
         go_list = list()
         query = """
             MATCH (node:%s)-[r:HAS_GO]->(go:GO)
-            WHERE node.identifier == '%s'
+            WHERE node.identifier = '%s'
             RETURN go.accession as accession, 
                    go.description as description, 
                    go.domain as domain
@@ -262,6 +296,7 @@ class Interaction(object):
         '''
         self.parent = parent
         self.child = child
+        self.int_type = None
         self.level = 0
         self.string = False
         self.biogrid = False
@@ -272,6 +307,21 @@ class Interaction(object):
         self.genetic_interaction = 0
         self.physical_interaction = 0
         self.unknown_interaction = 0
+
+    def check(self):
+        '''
+        Queries the interaction on the DB and fills all the attributes
+        '''
+        NEO.query_by_int(self)
+
+    def restrict_type(self, int_type):
+        '''
+        Makes the interaction refer to only a particular type of interaction
+        between parent and child: physical, genetic or inknown
+        '''
+        if int_type not in set(['physical', 'genetic', 'unknown']):
+            raise Exception("Type %s not allowed in interaction!" % (int_type))
+        self.int_type = int_type
 
     def fill_attributes(self, level, string, biogrid, 
                         ppaxe, ppaxe_score, ppaxe_pubmedid, biogrid_pubmedid, 
@@ -413,8 +463,8 @@ class Gene(Node):
         element['data']['exp'] = self.expression
         element['data']['gene_disease'] = self.gene_disease
         element['data']['nvariants'] = self.nvariants
+        element['data']['go'] = self.gos
         element['data']['inheritance_pattern'] = self.inheritance_pattern
-        element['data']['gos'] = self.gos
         if self.is_driver():
             element['classes'] = "driver"
         return element
@@ -506,36 +556,19 @@ class GraphCyt(object):
         """
         self.genes.add(gene)
 
+    def add_interaction(self, interaction):
+        """
+        Adds Gene to the graph
+        """
+        self.interactions.add(interaction)
+
     def get_connections(self, level):
         """
         Method that looks for the edges between the nodes in the graph
-        
-        connections = NEO.get_connections_query(self.genes, level)
-        self.interactions.add(connections)
+        """
+        connections = NEO.query_get_connections(self.genes, level)
+        return connections
 
-        node_q_string = str(list([str(node.symbol) for node in self.nodes]))
-        query = GET_CONNECTIONS_QUERY % (node_q_string, node_q_string)
-        results = GRAPH.run(query)
-        results = results.data()
-        if results:
-            for row in results:
-                parameters = dict()
-                parameters = {
-                    'int_prob'    : round(float(row['int_prob']), 3),
-                    'path_length' : round(float(row['path_length']), 3),
-                    'cellcom_nto' : round(float(row['cellcom_nto']), 3),
-                    'molfun_nto'  : round(float(row['molfun_nto']), 3),
-                    'bioproc_nto' : round(float(row['bioproc_nto']), 3),
-                    'dom_int_sc'  : round(float(row['dom_int_sc']), 3)
-                }
-                newinteraction = PredInteraction(
-                    database      = row['database'][0],
-                    source_symbol = row['nsymbol'],
-                    target        = PredictedNode(row['msymbol'], row['database'][0], query=False),
-                    parameters    = parameters
-                )
-                self.add_interaction(newinteraction)
-              """
     def __bool__(self):
         if self.genes:
             return True
@@ -558,3 +591,10 @@ class NodeNotFound(Exception):
         self.label = label
     def __str__(self):
         return "Identifier %s not found in label %s." % (self.identifier, self.label)
+
+class InteractionNotFound(Exception):
+    """Exception raised when a node is not found on the db"""
+    def __init__(self, parent, child):
+        self.identifier   = parent + "-" + child
+    def __str__(self):
+        return "Interaction not found %s." % (self.identifier)

@@ -19,7 +19,7 @@ var stylesheet = cytoscape.stylesheet()
             "border-color": "#CCCCCC",
             "border-width": 8,
             "min-zoomed-font-size": 3,
-            'width': 'mapData(nvariants, 1, 500, 25, 200)',
+            'width':  'mapData(nvariants, 1, 500, 25, 200)',
             'height': 'mapData(nvariants, 1, 500, 25, 200)',
         })
     .selector(':selected')
@@ -30,17 +30,13 @@ var stylesheet = cytoscape.stylesheet()
     .selector('.driver')
         .css({
             'border-color': '#793d71',
-            'shape': 'diamond'
         })
     .selector('edge')
         .css({
-            'font-size': 6,
-            'width': 1,
             'color': "#4F8ABA",
             'line-color': '#4F8ABA',
             'target-arrow-color': '#4F8ABA',
             'target-arrow-shape': 'triangle',
-            "min-zoomed-font-size": 6,
             "width": "data(width)"
         })
     .selector('.physical')

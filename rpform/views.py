@@ -46,6 +46,33 @@ def gene_explorer(request):
 		response['exp_id'] = exp_id
 	return render(request, 'rpform/gexplorer.html', response)
 
+def get_properties(request):
+	'''
+	Returns information about a particular gene when clicked
+	'''
+	if request.is_ajax():
+		response = dict()
+		template = ''
+		if 'gene' in request.GET:
+			# Requesting gene
+			gene = request.GET['gene']
+			gene_obj = Gene(identifier=gene)
+			gene_obj.check()
+			#gene_obj.get_go()
+			template = 'rpform/gene_properties.html'
+			response['gene'] = gene_obj
+		else:
+			# Requesting interaction
+			interaction = request.GET['interaction']
+			inta, intb, int_type = interaction.split('-')
+			int_obj = Interaction(parent=Gene(inta), child=Gene(intb))
+			int_obj.restrict_type(int_type)
+			int_obj.check()
+			template = 'rpform/int_properties.html'
+			response['interaction'] = int_obj
+		return render(request, template, response)
+	else:
+		return render(request, 'rpform/404.html')
 
 def add_neighbours(request):
 	'''
@@ -57,7 +84,6 @@ def add_neighbours(request):
 			gene = request.GET['gene']
 			level = request.GET['level']
 			exp_id = request.GET['exp']
-			print(gene)
 			dist = 1 # Always distance 1
 			wholegraph = GraphCyt()
 			wholegraph.get_genes_in_level([gene], level, dist, exp_id)
@@ -101,8 +127,9 @@ def show_connections(request):
         graphelements   = GraphCyt()
         for symbol in nodes_including:
             graphelements.add_gene( Gene(identifier=symbol) )
-        graphelements.get_connections(level)
-        return HttpResponse(graphelements, content_type="application/json")
+        connections = graphelements.get_connections(level)
+        connections = connections.to_json()
+        return HttpResponse(connections, content_type="application/json")
     else:
         return render(request, 'rpform/404.html')
 

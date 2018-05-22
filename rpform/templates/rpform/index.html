@@ -166,12 +166,12 @@
 						<input type="text" name="gene" id="f1-genename" class="form-control" placeholder="CERKL"/>
 					</div>
 					<div class="col-md-2 form-group">
-						<label for="f1-distance">Gene distance <span id="genedistance-btn" class="glyphicon glyphicon-question-sign question-badge"></span></label>
-						<input type="number" name="dist" id="f1-distance" value="1" min="1" max="5" step="1" />
-					</div>
-					<div class="col-md-2 form-group">
 						<label for="f1-lvl">Interaction level <span id="intlvl-btn" class="glyphicon glyphicon-question-sign question-badge"></span></label>
 						<input type="number" name="level" id="f1-lvl" value="0" min="0" max="5" step="1" />
+					</div>
+					<div class="col-md-2 form-group">
+						<label for="f1-distance">Gene distance <span id="genedistance-btn" class="glyphicon glyphicon-question-sign question-badge"></span></label>
+						<input type="number" name="dist" id="f1-distance" value="1" min="1" max="2" step="1" />
 					</div>
 
 					<div class="col-md-2 form-group align-center">
@@ -275,6 +275,20 @@
 	<script src="{% static 'js/bootstrap-min.js' %}"></script>
 	<script src="{% static 'js/stoopidoverlay.js' %}"></script>
 	<script src="{% static 'js/overlays.js' %}"></script>
+	<script>
+		// DISABLE DISTANCE WHEN LEVEL > 0
+		$("#f1-lvl").on("change", function() {
+			if ($("#f1-lvl").val() > 0) {
+				$("#f1-distance").val(1);
+				$("#f1-distance").prop('readonly', true);
+				$("#f1-distance").addClass('disabled');
+			} else {
+				$("#f1-distance").prop('readonly', false);
+				$("#f1-distance").removeClass('disabled');
+			}
+		});
+
+	</script>
 </body>
 
 

@@ -1,0 +1,45 @@
+{% load staticfiles %}
+<html>
+
+<h2>Interaction <span class="int-{{ interaction.int_type }}">[{{ interaction.int_type }}]</span></h2>
+<hr>
+
+<table class="table table-bordered table-int">
+	<tr>
+		<td>{{ interaction.parent.identifier }}</td>
+		<td><img class="arrow" src="{% static 'Images/arrow.png' %}"></td>
+		<td>{{ interaction.child.identifier }}</td>
+	</tr>
+</table>
+
+<br>
+<h3>Sources</h3>
+<hr>
+	{% if interaction.biogrid %}
+	<table class="table table-bordered">
+		<tr>
+			<td><b>BioGrid</b></td>
+			{% if interaction.biogrid_pubmedid != 'NA' %}
+				<td><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ interaction.biogrid_pubmedid }}" target="_blank">PubMed</a> </td>
+			{% endif %}
+		</tr>
+	</table>
+	{% endif %}
+	{% if interaction.string %}
+	<table class="table table-bordered">
+		<tr>
+			<td><b>String</b></td>
+		</tr>
+	</table>
+	{% endif %}
+	{% if interaction.ppaxe %}
+	<table class="table table-bordered">
+		<tr>
+			<td><b>PPaxe</b></td>
+			<td>{{ interaction.ppaxe_score }}</td>
+			<td><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ interaction.ppaxe_pubmedid }}" target="_blank">PubMed</a></td>
+		</tr>
+	</table>
+	{% endif %}
+
+</html>

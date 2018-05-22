@@ -7,8 +7,8 @@ app.js - Main script for the basic functionality of
 // GLOBALS
 //==================================================
 window.clickBehaviourOpts = {"properties":1, "addition":2, "deletion":3 }
-window.clickBehaviour = window.clickBehaviourOpts.addition;
 Object.freeze(window.clickBehaviourOpts);
+window.clickBehaviour = window.clickBehaviourOpts.properties; // Default behaviour
 window.drag = false;
 window.cy;
 
@@ -229,8 +229,72 @@ expandOnClick = function(cy, node) {
 /*
  * Show node properties on click
  */ 
-propertiesOnClick = function(cy, node) {
-    //body
+nPropertiesOnClick = function(cy, node) {
+    $.ajax({
+        type: "GET",
+        url: "/get_properties",
+        cache: true,
+        data: {
+            'gene': node.data().name,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        beforeSend: function() {
+
+        },
+        success : function(data) {
+            $('.card-overlay').html(data);
+            $('.card-overlay').slideToggle(450);
+            $('.close-overlay').slideToggle(450);
+        }, 
+        statusCode: {
+            404: function() {
+
+            },
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText);
+        }
+    });
+}
+
+/*
+ * Show node properties on click
+ */ 
+ePropertiesOnClick = function(cy, edge) {
+    $.ajax({
+        type: "GET",
+        url: "/get_properties",
+        cache: true,
+        data: {
+            'interaction': edge.data().id,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        beforeSend: function() {
+
+        },
+        success : function(data) {
+            $('.card-overlay').html(data);
+            $('.card-overlay').slideToggle(450);
+            $('.close-overlay').slideToggle(450);
+        }, 
+        statusCode: {
+            404: function() {
+
+            },
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText);
+        }
+    });
+}
+
+/*
+ * Defines behaviour when clicking on edge
+ */
+onEdgeClick = function(cy, edge) {
+    if (window.clickBehaviour == window.clickBehaviourOpts.properties) {
+        ePropertiesOnClick(cy, edge);
+    }
 }
 
 /*
@@ -246,7 +310,7 @@ onNodeClick = function(cy, node) {
             document.getElementById("cyt").style.cursor = 'not-allowed';
         }
     } else {
-        propertiesOnClick(cy, node);
+        nPropertiesOnClick(cy, node);
     }
 }
 
@@ -282,7 +346,65 @@ onNodeClick = function(cy, node) {
     }
  }
 
-// BUTTON EVENTS
+/*
+ * Gets csrftoken for AJAX+POST
+ */
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+  /*
+ * Connects genes on visualization
+ */
+ showConnections = function(cy) {
+    var nodes     = cy.nodes();
+    var csrftoken = getCookie('csrftoken');
+    var node_ids  = [];
+    for (var i = 0; i < nodes.length; i++) {
+        node_ids.push( nodes[i].data().name );
+    }
+    node_ids = node_ids.join(",");
+    alert(node_ids);
+    $.ajax({
+        type: "POST",
+        url: "/show_connections",
+        cache: true,
+        data: {
+            'nodes': node_ids,
+            'level': window.level,
+            'csrfmiddlewaretoken': csrftoken
+        },
+        beforeSend: function() {
+
+        },
+        success : function(data) {
+            cy.add(data);
+            cy.layout( { name: 'cose' } );
+        }, 
+        statusCode: {
+            404: function() {
+
+            },
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText);
+        }
+    });
+ }
+
+// BUTTONS AND EVENTS
 //==================================================
 $('#behaviour-form').on("change", changeClickBehaviour);
 $("#layout").on("change", function() { changeLayout(window.cy, $(this).val())});
@@ -291,10 +413,12 @@ $("#save-img").on("click", function() { saveImg(window.cy, $('#save-image-link')
 $("#export-tbl").on("click", function() { exportTBL(window.cy) });
 $("#export-json").on("click", function() { exportJSON(window.cy) });
 $('#drag-btn').on("click", function(event) { changeDrag(window.cy, event, $(this)) });
-$("#bsize").on("change", function() { changeBsize(window.cy, $(this).val())});
+$("#bsize").on("change", function() { changeBsize(window.cy, $(this).val()) });
+$("#get-connections").on('click', function() { showConnections(window.cy) });
 window.cy.on( 'click', 'node', function() { onNodeClick(window.cy, this) });
-window.cy.on('mouseover', 'node', function() { onNodeMouseOver(window.cy, this)});
-window.cy.on('mouseout', 'node', function() {onNodeMouseOut(window.cy, this)});
+window.cy.on( 'click', 'edge', function() { onEdgeClick(window.cy, this) });
+window.cy.on('mouseover', 'node', function() { onNodeMouseOver(window.cy, this) });
+window.cy.on('mouseout', 'node', function() {onNodeMouseOut(window.cy, this) });
 
 // INITIALIZING CYTOSCAPE GRAPH
 //==================================================

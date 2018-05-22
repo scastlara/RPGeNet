@@ -365,7 +365,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-  /*
+/*
  * Connects genes on visualization
  */
  showConnections = function(cy) {
@@ -376,7 +376,6 @@ function getCookie(name) {
         node_ids.push( nodes[i].data().name );
     }
     node_ids = node_ids.join(",");
-    alert(node_ids);
     $.ajax({
         type: "POST",
         url: "/show_connections",
@@ -404,6 +403,22 @@ function getCookie(name) {
     });
  }
 
+/*
+ * Searches gene or genes on visualization
+ */
+ searchNode = function(cy, term) {
+    if (term) {
+        var terms = term.split(",").map(function(x){ return x.toUpperCase() });
+        cy.nodes().filter(function(eidx, ele) {
+            if (terms.indexOf(ele.data("name").toUpperCase()) !== -1) {
+                return true;
+            } else {
+                return false;
+            }
+        }).select();
+    }
+ }
+
 // BUTTONS AND EVENTS
 //==================================================
 $('#behaviour-form').on("change", changeClickBehaviour);
@@ -415,6 +430,8 @@ $("#export-json").on("click", function() { exportJSON(window.cy) });
 $('#drag-btn').on("click", function(event) { changeDrag(window.cy, event, $(this)) });
 $("#bsize").on("change", function() { changeBsize(window.cy, $(this).val()) });
 $("#get-connections").on('click', function() { showConnections(window.cy) });
+$("#search-node-btn").on("click", function(){ searchNode(window.cy, $("#search-node-term").val()) });
+$("#removesearch").on("click", function(){ window.cy.nodes().unselect() });
 window.cy.on( 'click', 'node', function() { onNodeClick(window.cy, this) });
 window.cy.on( 'click', 'edge', function() { onEdgeClick(window.cy, this) });
 window.cy.on('mouseover', 'node', function() { onNodeMouseOver(window.cy, this) });

@@ -208,35 +208,29 @@ class NeoDriver(object):
         '''
         Shortest paths between 'node' and any node in level 'level'
         '''
-        pass
-    '''
-    def query_path_to_drivers(self, nodeobj):
-        #Shortest paths to driver genes
-        query = ''
-        if nodeobj.is_driver():
-            query = """
-                MATCH  p=(source:Gene)-[r:INTERACTS_WITH*]->(target:Gene)
-                WHERE  r.is_path == 1
-                AND    source.identifier == '%s'
-                AND    target.gene_disease >= 1
-                RETURN p
-                ORDER BY LENGTH(p) DESC
-            """ % nodeobj.identifier
-        else:
-            query = """
-                MATCH  p=allShortestPaths((source:Gene)-[r:INTERACTS_WITH*]->(target:Gene))
-                WHERE  source.identifier == '%s'
-                AND    target.gene_disease >= 1
-                RETURN p
-                ORDER BY LENGTH(p) DESC
-            """ % nodeobj.identifier
-
+        query = """
+            MATCH (gene:GENE)-[p:HAS_PATH]->(path:PATHWAY)
+            WHERE gene.identifier = '%s'
+            AND path.to_level = %s
+            WITH path
+            MATCH (gene1:GENE)-[p1:HAS_PATH]->(path),
+                  (gene2:GENE)-[p2:HAS_PATH]->(path),
+                  (gene1)-[i:INTERACTS_WITH]->(gene2)
+            WHERE p1.order = p2.order - 1
+        """ % (nodeobj.identifier, level)
+        n_attributes = nodeobj.__dict__.keys()
+        e_attributes = Interaction().__dict__.keys()
+        query += self.return_by_attributes('gene1', n_attributes)
+        query += self.return_by_attributes('i', e_attributes)
+        query += self.return_by_attributes('gene2', n_attributes)
+        query += " ORDER BY p1.order"
         results = self.dv.run(query)
         results = results.data()
-        for path in results:
-            # Must create a list of GraphCytoscape object here
-            pass
-    '''
+        if results:
+            for interaction in results:
+                pass
+
+
     def query_shortest_path(self, pobj, cobj):
         '''
         Returns GraphCytoscape with shortest path between pobj and cobj
@@ -360,7 +354,7 @@ class Interaction(object):
                 element['data']['id'] = self.parent.identifier + '-' + self.child.identifier + '-' + type_names[type_idx]
                 element['data']['source'] = self.parent.identifier
                 element['data']['target'] = self.child.identifier
-                element['data']['width']  = types[type_idx]
+                element['data']['ewidth']  = int(types[type_idx])
                 element['classes'] = type_names[type_idx]
                 elements.append(element)
                 type_idx += 1
@@ -428,6 +422,30 @@ class Gene(Node):
         else: 
             return True
 
+    def get_gene_disease_class(self):
+        '''
+        Returns gene-disease class string
+        '''
+        gd_class = None
+        if self.gene_disease == 1:
+            gd_class = "syndromic"
+        elif self.gene_disease == 2:
+            gd_class = "non-syndromic"
+        elif self.gene_disease == 3:
+            gd_class = "both"
+        return gd_class
+
+    def level_to_class(self):
+        '''
+        Returns level string for cytoscape class
+        '''
+        level_class = None
+        if self.level == 0:
+            level_class = "skeleton"
+        elif self.level == 1:
+            level_class = "lvl" + str(self.level)
+        return level_class
+
     def get_expression(self, exp_id):
         '''
         Gets desired expression value for Gene
@@ -463,12 +481,14 @@ class Gene(Node):
         element['data']['exp'] = self.expression
         element['data']['gene_disease'] = self.gene_disease
         element['data']['nvariants'] = self.nvariants
-        element['data']['go'] = self.gos
         element['data']['inheritance_pattern'] = self.inheritance_pattern
         if self.is_driver():
             element['classes'] = "driver"
+        else:
+            element['classes'] = self.level_to_class()
+        if self.get_gene_disease_class() is not None:
+            element['classes'] += " " + self.get_gene_disease_class()
         return element
-
 
     def path_to_level(self, level):
         '''

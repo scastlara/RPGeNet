@@ -16,7 +16,6 @@ var stylesheet = cytoscape.stylesheet()
             'text-outline-width': 2,
             "text-outline-color": "#FFFFFF",
             "color": "#404040",
-            "border-color": "#CCCCCC",
             "border-width": 8,
             "min-zoomed-font-size": 3,
             'width':  'mapData(nvariants, 1, 500, 25, 200)',
@@ -31,13 +30,50 @@ var stylesheet = cytoscape.stylesheet()
         .css({
             'border-color': '#793d71',
         })
+    .selector('.syndromic')
+        .css({
+            'shape': 'rectangle',
+        })
+    .selector('.non-syndromic')
+        .css({
+            'shape': 'diamond',
+        })
+    .selector('.both')
+        .css({
+            'shape': 'star',
+        })
+    .selector('.skeleton')
+     .css({
+        "border-color": "#CCCCCC",
+        })
+    .selector('.lvl1')
+     .css({
+        "border-color": "#E0FFE8",
+        })
+    .selector('.lvl2')
+     .css({
+        "border-color": "#86DD9C",
+        })
+    .selector('.lvl3')
+     .css({
+        "border-color": "#59BC72",
+        })
+    .selector('.lvl4')
+     .css({
+        "border-color": "#2C9B48",
+        })
+    .selector('.lvl5')
+     .css({
+        "border-color": "#007A1F",
+    })
     .selector('edge')
         .css({
             'color': "#4F8ABA",
             'line-color': '#4F8ABA',
             'target-arrow-color': '#4F8ABA',
             'target-arrow-shape': 'triangle',
-            "width": "data(width)"
+            "width": "mapData(ewidth, 1, 9, 1, 5)",
+            "opacity": "mapData(ewidth, 1, 9, 0.75, 1)",
         })
     .selector('.physical')
         .css({

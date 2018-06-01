@@ -159,7 +159,8 @@
 		<div id="forms-container-container">
 			<div id="forms-container">
 
-
+				<h3>Network Explorer</h3>
+				<hr>
 				<form id="f1" action="{% url gene_explorer %}">
 					<div class="col-md-3 form-group">
 						<label for="f1-genename">Gene/s <span id="inputgenes-btn" class="glyphicon glyphicon-question-sign question-badge"></span></label>
@@ -187,8 +188,10 @@
 						<input type="submit" value="Explore Network" class="btn btn-f1 form-control" />
 					</div>
 				</form>
-				<div class="col-md-12"><hr></div>
+				<div class="col-md-12"><br><br></div>
 
+				<h3>Pathway to level</h3>
+				<hr>
 				<form id="f2" action="{% url pathway_explorer %}">
 
 					<div class="col-md-3 form-group">
@@ -214,7 +217,36 @@
 
 					<div class="col-md-3 form-group align-center">
 						<label for="created_at_lt">&nbsp;</label>
-						<input type="submit" value="Get Path to Genes" class="btn btn-f2 form-control" />
+						<input type="submit" value="Get Path to Level" class="btn btn-f2 form-control" />
+					</div>
+				</form>
+				<div class="col-md-12"><br><br></div>
+				<br>
+				<br><br>
+				<h3>Shortest Path between Genes</h3>
+				<hr>
+				<form id="f3" action="{% url shortest_path %}">
+
+					<div class="col-md-3 form-group">
+						<label for="f3-genename1">Source gene<span id="inputgenes-btn2" class="glyphicon glyphicon-question-sign question-badge"></span></label>
+						<input type="text" name="gene1" id="f3-genename1" class="form-control" placeholder="CERKL"/>
+					</div>
+					<div class="col-md-3 form-group">
+						<label for="f3-genename2">Target gene<span id="inputgenes-btn2" class="glyphicon glyphicon-question-sign question-badge"></span></label>
+						<input type="text" name="gene2" id="f3-genename2" class="form-control" placeholder="RHO"/>
+					</div>
+
+					<div class="col-md-3 form-group align-center">
+						<label for="f3-expression">Expression <span id="genexp-btn3" class="glyphicon glyphicon-question-sign question-badge"></span></label>
+						<select name="exp" class="form-control" id="f3-expression">
+							<option>Absolute</option>
+							<option>Relative</option>
+						</select>
+					</div>
+
+					<div class="col-md-3 form-group align-center">
+						<label for="created_at_lt">&nbsp;</label>
+						<input type="submit" value="Get Shortest Paths" class="btn btn-f3 form-control" />
 					</div>
 				</form>
 

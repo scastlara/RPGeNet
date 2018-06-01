@@ -1,7 +1,11 @@
 {% load staticfiles %}
 <html>
 
-<h2>Interaction <span class="int-{{ interaction.int_type }}">[{{ interaction.int_type }}]</span></h2>
+<h2>Interaction 
+	{% for type in interaction.int_type %}
+		<span class="int-{{type}}">[{{type}}]</span> 
+	{% endfor %}
+</h2>
 <hr>
 
 <table class="table table-bordered table-int">
@@ -13,12 +17,34 @@
 </table>
 
 <br>
+<h3>Summary</h3>
+<hr>
+<table class="table table-bordered">
+	<tr>
+		<td><b>Level</b></td>
+		<td>{{ interaction.level }}</td>
+	</tr>
+	<tr>
+		<td><b>Genetic interactions</b></td>
+		<td>{{ interaction.genetic_interaction  }}</td>
+	</tr>
+	<tr>
+		<td><b>Physical interactions</b></td>
+		<td>{{ interaction.physical_interaction }}</td>
+	</tr>
+	<tr>
+		<td><b>PPaxe interactions</b></td>
+		<td>{{ interaction.unknown_interaction  }}</td>
+	</tr>
+</table>
+
+<br>
 <h3>Sources</h3>
 <hr>
 	{% if interaction.biogrid %}
 	<table class="table table-bordered">
 		<tr>
-			<td><b>BioGrid</b></td>
+			<td><a href="https://thebiogrid.org/" target="_blank">BioGrid</a></td>
 			{% if interaction.biogrid_pubmedid != 'NA' %}
 				<td><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ interaction.biogrid_pubmedid }}" target="_blank">PubMed</a> </td>
 			{% endif %}
@@ -28,18 +54,21 @@
 	{% if interaction.string %}
 	<table class="table table-bordered">
 		<tr>
-			<td><b>String</b></td>
+			<td><a href="https://string-db.org/" target="_blank">String</a></td>
 		</tr>
 	</table>
 	{% endif %}
 	{% if interaction.ppaxe %}
 	<table class="table table-bordered">
 		<tr>
-			<td><b>PPaxe</b></td>
+			<td><a href="https://compgen.bio.ub.edu/PPaxe" target="_blank">PPaxe</a></td>
 			<td>{{ interaction.ppaxe_score }}</td>
 			<td><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ interaction.ppaxe_pubmedid }}" target="_blank">PubMed</a></td>
 		</tr>
 	</table>
 	{% endif %}
+
+	<br>
+	<br>
 
 </html>

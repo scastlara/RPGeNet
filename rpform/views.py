@@ -58,7 +58,7 @@ def get_properties(request):
 			gene = request.GET['gene']
 			gene_obj = Gene(identifier=gene)
 			gene_obj.check()
-			#gene_obj.get_go()
+			gene_obj.get_go()
 			template = 'rpform/gene_properties.html'
 			response['gene'] = gene_obj
 		else:
@@ -66,7 +66,6 @@ def get_properties(request):
 			interaction = request.GET['interaction']
 			inta, intb, int_type = interaction.split('-')
 			int_obj = Interaction(parent=Gene(inta), child=Gene(intb))
-			int_obj.restrict_type(int_type)
 			int_obj.check()
 			template = 'rpform/int_properties.html'
 			response['interaction'] = int_obj
@@ -84,10 +83,12 @@ def add_neighbours(request):
 			gene = request.GET['gene']
 			level = request.GET['level']
 			exp_id = request.GET['exp']
+			x = request.GET['x']
+			y = request.GET['y']
 			dist = 1 # Always distance 1
 			wholegraph = GraphCyt()
 			wholegraph.get_genes_in_level([gene], level, dist, exp_id)
-			json_data = wholegraph.to_json()
+			json_data = wholegraph.to_json((x,y))
 			return HttpResponse(json_data, content_type="application/json")
 		else:
 			return HttpResponse(json.dumps(json_data), content_type="application/json")
@@ -112,9 +113,35 @@ def pathway_explorer(request):
 		pass
 	mygraphs = mygene.path_to_level(level) # list of GraphCytoscape objects
 	if mygraphs:
-		jsongraphs = [ graph.to_json() for graph in mygraphs ]
-		response['pathways'] = jsongraphs
+		response['pathways'] = [ graph.to_json() for graph in mygraphs ]
 	return render(request, 'rpform/pexplorer.html', response)
+
+
+def shortest_path(request):
+	'''
+	Finds shortest paths between two genes
+	'''
+	response = dict()
+	response['error'] = False
+	gene1 = request.GET['gene'][0]
+	gene2 = request.GET['gene'][1]
+	exp_id = request.GET['exp']
+	try:
+		gene1 = Gene(identifier=gene1)
+		gene1.check()
+	except NodeNotFound as err:
+		response['error'] = err
+	try:
+		gene2 = Gene(identifier=gene2)
+		gene2.check()
+	except NodeNotFound as err:
+		response['error'] = err
+
+	if response['error'] is None:
+		allpaths = gene1.path_to_gene(gene2)
+		response['pathways'] = [ path.to_json() for path in allpaths ]
+	return render(request, 'rpform/pexplorer.html', response)
+
 
 def show_connections(request):
     """

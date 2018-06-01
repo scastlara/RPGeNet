@@ -182,6 +182,13 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 	margin-top: 25px;
 }
 
+.btn-f3 {
+	background-color: #ED654A !important;
+	color: white !important;
+	width: 150px !important;
+	margin-top: 25px;
+}
+
 .btn-f1:hover {
 	opacity: 0.8;
 }
@@ -458,13 +465,16 @@ input[type=number]::-webkit-inner-spin-button {
 	color: #555;
 }
 
-.driver-title {	color: #2ca089; }
-.int-physical {	color: #FF8A8A; }
-.int-genetic  {	color: #6885d0; }
-.int-unknown  {	color: #5B5B5B; }
+.driver-title {	color: #793d71; }
+.int-physical {	font-size: 18px; color: #FF8A8A; }
+.int-genetic  {	font-size: 18px; color: #6885d0; }
+.int-unknown  {	font-size: 18px; color: #5B5B5B; }
 .table-int    { text-align: center }
+.table-go     { max-height: 300px; overflow-y: scroll; }
 .arrow        { width: 50px; }
-
+.molecular_function { background-color: #D5A0E4; padding: 2px; color:white; }
+.cellular_component { background-color: #9DB9E6; padding: 2px; color:white; }
+.biological_process { background-color: #D7A070; padding: 2px; color:white; }
 
 #search-node-container {
   position: fixed;

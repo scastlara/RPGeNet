@@ -56,16 +56,18 @@
 <br>
 <h3>Gene Ontology</h3>
 <hr>
-<table class="table table-bordered">
-	{% if not gene.gos %} None {% endif %}
-	{% for go in gene.gos %}
-		<tr>
-			<td class="{{ go.domain }}">{{ go.domain }}</td>
-			<td>{{ go.accession }}</td>
-			<td>{{ go.description }}</td>
-		</tr>
-	{% endfor %}
-</table>
+<div class="table-go">
+	<table class="table table-bordered">
+		{% if not gene.gos %} None {% endif %}
+		{% for go in gene.gos %}
+			<tr>
+				<td class="{{ go.domain }}">{{ go.domain }}</td>
+				<td><a href="https://www.ebi.ac.uk/QuickGO/GTerm?id={{ go.accession }}" target="_blank" title="Go to A">{{ go.accession }}</a></td>
+				<td>{{ go.description }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+</div>
 
 <br>
 <h3>External links</h3>

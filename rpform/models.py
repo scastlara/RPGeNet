@@ -20,7 +20,7 @@ class NeoDriver(object):
         Constructor of return clause based on a list of attributes for neo4j
         '''
         non_attributes = set(['label', 'parent', 'child', 'expression', 'gos', 'int_type'])
-        return_clause = ",".join(['%s.%s as %s_%s' % (elem_name, attr, elem_name, attr) 
+        return_clause = ", ".join(['%s.%s as %s_%s' % (elem_name, attr, elem_name, attr) 
                                    for attr in attributes if attr not in non_attributes])
         return return_clause
 
@@ -36,8 +36,9 @@ class NeoDriver(object):
         """ % (nodeobj.label, nodeobj.identifier)
         query = query + self.return_by_attributes('node', attributes)
         results = self.dv.run(query)    
-        results = results.data()[0]
+        results = results.data()
         if results:
+            results = results[0]
             nodeobj.fill_attributes(
                 results['node_level'], 
                 results['node_nvariants'],
@@ -72,6 +73,11 @@ class NeoDriver(object):
                 genetic_interaction=interaction['rel_genetic_interaction'], 
                 physical_interaction=interaction['rel_physical_interaction'], 
                 unknown_interaction=interaction['rel_unknown_interaction'])
+            for int_type in ['physical_interaction', 'genetic_interaction', 'unknown_interaction']:
+                if interaction['rel_' + int_type]:
+                    int_type = int_type.split('_')[0] # remove '_interaction'
+                    intobj.int_type.add(int_type)
+            intobj.int_type = sorted(intobj.int_type)
         else:
             raise InteractionNotFound(intobj.parent.identifier, intobj.child.identifier)
 
@@ -80,9 +86,9 @@ class NeoDriver(object):
         Gets expression value for nodeobj
         '''
         query = """
-            MATCH (node:%s)-[r:HAS_EXPRESSION]->(exp:EXPERIMENT)
-            WHERE node.identifier = '%s'
-            AND exp.identifier = '%s'
+            MATCH  (node:%s)-[r:HAS_EXPRESSION]->(exp:EXPERIMENT)
+            WHERE  node.identifier = '%s'
+            AND    exp.identifier = '%s'
             RETURN r.value as expvalue
         """ % (nodeobj.label, nodeobj.identifier, nodeobj.identifier)
         results = self.dv.run(query)
@@ -102,7 +108,7 @@ class NeoDriver(object):
             connections_graph.add_gene(Gene(identifier=gene.identifier))
         gene_q_string = str(list([str(gene.identifier) for gene in genelist]))
         query = """
-            MATCH (n:GENE)-[rel:INTERACTS_WITH]->(m:GENE)
+            MATCH  (n:GENE)-[rel:INTERACTS_WITH]->(m:GENE)
             WHERE  n.identifier IN %s
             AND    m.identifier IN %s
             AND    rel.level <= %s
@@ -138,11 +144,12 @@ class NeoDriver(object):
         '''
         go_list = list()
         query = """
-            MATCH (node:%s)-[r:HAS_GO]->(go:GO)
-            WHERE node.identifier = '%s'
+            MATCH  (node:%s)-[r:HAS_GO]->(go:GO)
+            WHERE  node.identifier = '%s'
             RETURN go.accession as accession, 
                    go.description as description, 
                    go.domain as domain
+            ORDER BY go.domain
         """ % (nodeobj.label, nodeobj.identifier)
         results = self.dv.run(query)
         results = results.data()
@@ -161,45 +168,50 @@ class NeoDriver(object):
         neighbour_graph = GraphCyt()
         neighbour_graph.genes.add(nodeobj)
         query = """
-            MATCH (node1:%s)-[r:INTERACTS_WITH*1..%s]-(node2:%s)
-            WHERE node1.identifier = '%s'
-            AND  ALL(rel in r WHERE rel.level <= %s)
-            RETURN 
-        """ % (nodeobj.label, dist, nodeobj.label, nodeobj.identifier, level)
-        n_attributes = nodeobj.__dict__.keys()
-        e_attributes = Interaction().__dict__.keys()
-        query = query + self.return_by_attributes('node2', n_attributes)
-        query = query + ',' + "r as rel"
+            MATCH  p=(node1:GENE)-[rels:INTERACTS_WITH*1..%s]-(node2:GENE)
+            WHERE  node1.identifier = '%s'
+            AND    all(r IN rels WHERE r.level<=%s)
+            RETURN p as pathway, extract(r IN relationships(p)| startnode(r).identifier) as thestart
+        """ % (dist, nodeobj.identifier, level)
         results = self.dv.run(query)
         results = results.data()
+
         if results:
             # Add genes first
             for row in results:
-                node2 = Gene(row['node2_identifier'])
-                node2.get_expression(exp_id)
-                node2.fill_attributes(
-                    level=row['node2_level'],
-                    nvar=row['node2_nvariants'],
-                    dc=row['node2_gene_disease'],
-                    inh=row['node2_inheritance_pattern'])
-                neighbour_graph.genes.add(node2)
-            for row in results:
-                for interaction in row['rel']:
-                    gene1 = neighbour_graph.return_gene(interaction['gene_1'])
-                    gene2 = neighbour_graph.return_gene(interaction['gene_2'])
-                    interaction_obj = Interaction(parent=gene1, child=gene2)
+                nodes = row['pathway'].nodes()
+                rels  = row['pathway'].relationships()
+                for i in range(0, len(nodes) - 1):
+                    gene1 = Gene(nodes[i]['identifier'])
+                    gene1.fill_attributes(
+                        level=nodes[i]['level'],
+                        nvar=nodes[i]['nvariants'],
+                        dc=nodes[i]['gene_disease'],
+                        inh=nodes[i]['inheritance_pattern'])
+                    gene2 = Gene(nodes[i+1]['identifier'])
+                    gene2.fill_attributes(
+                        level=nodes[i+1]['level'],
+                        nvar=nodes[i+1]['nvariants'],
+                        dc=nodes[i+1]['gene_disease'],
+                        inh=nodes[i+1]['inheritance_pattern'])
+                    neighbour_graph.add_gene(gene1)
+                    neighbour_graph.add_gene(gene2)
+                    if gene1.identifier == row['thestart'][0]:
+                        interaction_obj = Interaction(parent=gene1, child=gene2)
+                    else:
+                        interaction_obj = Interaction(parent=gene2, child=gene1)
                     interaction_obj.fill_attributes(
-                        level=interaction['level'], 
-                        string=interaction['string'], 
-                        biogrid=interaction['biogrid'], 
-                        ppaxe=interaction['ppaxe'], 
-                        ppaxe_score=interaction['ppaxe_score'],
-                        ppaxe_pubmedid=interaction['ppaxe_pubmedid'], 
-                        biogrid_pubmedid=interaction['biogrid_pubmedid'], 
-                        genetic_interaction=interaction['genetic_interaction'], 
-                        physical_interaction=interaction['physical_interaction'], 
-                        unknown_interaction=interaction['unknown_interaction'])
-                    neighbour_graph.interactions.add(interaction_obj)
+                        level=rels[i]['level'], 
+                        string=rels[i]['string'], 
+                        biogrid=rels[i]['biogrid'], 
+                        ppaxe=rels[i]['ppaxe'], 
+                        ppaxe_score=rels[i]['ppaxe_score'],
+                        ppaxe_pubmedid=rels[i]['ppaxe_pubmedid'], 
+                        biogrid_pubmedid=rels[i]['biogrid_pubmedid'], 
+                        genetic_interaction=rels[i]['genetic_interaction'], 
+                        physical_interaction=rels[i]['physical_interaction'], 
+                        unknown_interaction=rels[i]['unknown_interaction'])
+                    neighbour_graph.add_interaction(interaction_obj)
             return neighbour_graph
         else:
             raise Exception
@@ -208,37 +220,71 @@ class NeoDriver(object):
         '''
         Shortest paths between 'node' and any node in level 'level'
         '''
+        pathways = list()
+        
         query = """
             MATCH (gene:GENE)-[p:HAS_PATH]->(path:PATHWAY)
             WHERE gene.identifier = '%s'
-            AND path.to_level = %s
-            WITH path
-            MATCH (gene1:GENE)-[p1:HAS_PATH]->(path),
-                  (gene2:GENE)-[p2:HAS_PATH]->(path),
-                  (gene1)-[i:INTERACTS_WITH]->(gene2)
-            WHERE p1.order = p2.order - 1
+            AND   path.to_level = %s
+            WITH  gene, path
+            MATCH (gene1:GENE)-[p1:IS_IN_PATH]->(path)
+            MATCH (gene2:GENE)-[p2:IS_IN_PATH]->(path)
+            MATCH (gene1)-[inter:INTERACTS_WITH]->(gene2)
+            WHERE toInteger(p1.order) = toInteger(p2.order) - 1
+            RETURN 
         """ % (nodeobj.identifier, level)
         n_attributes = nodeobj.__dict__.keys()
         e_attributes = Interaction().__dict__.keys()
         query += self.return_by_attributes('gene1', n_attributes)
-        query += self.return_by_attributes('i', e_attributes)
-        query += self.return_by_attributes('gene2', n_attributes)
+        query += ", " + self.return_by_attributes('inter', e_attributes)
+        query += ", " + self.return_by_attributes('gene2', n_attributes)
         query += " ORDER BY p1.order"
+        print(query)
         results = self.dv.run(query)
         results = results.data()
         if results:
             for interaction in results:
-                pass
-
+                pathway = GraphCyt()
+                gene1 = Gene(interaction['gene1_identifier'])
+                gene1.fill_attributes(
+                    level=interaction['gene1_level'],
+                    nvar=interaction['gene1_nvariants'],
+                    dc=interaction['gene1_gene_disease'],
+                    inh=interaction['gene1_inheritance_pattern'])
+                gene2 = Gene(interaction['gene1_identifier'])
+                gene2.fill_attributes(
+                    level=interaction['gene2_level'],
+                    nvar=interaction['gene2_nvariants'],
+                    dc=interaction['gene2_gene_disease'],
+                    inh=interaction['gene2_inheritance_pattern'])
+                pathway.add_gene(gene1)
+                pathway.add_gene(gene2)
+                interaction_obj = Interaction(parent=gene1, child=gene2)
+                interaction_obj.fill_attributes(
+                        level=interaction['inter_level'], 
+                        string=interaction['inter_string'], 
+                        biogrid=interaction['inter_biogrid'], 
+                        ppaxe=interaction['inter_ppaxe'], 
+                        ppaxe_score=interaction['inter_ppaxe_score'],
+                        ppaxe_pubmedid=interaction['inter_ppaxe_pubmedid'], 
+                        biogrid_pubmedid=interaction['inter_biogrid_pubmedid'], 
+                        genetic_interaction=interaction['inter_genetic_interaction'], 
+                        physical_interaction=interaction['inter_physical_interaction'], 
+                        unknown_interaction=interaction['inter_unknown_interaction'])
+                pahtway.add_interaction(interaction_obj)
+        else:
+            # Maybe path length == 1
+            # execute second query
+            pass
 
     def query_shortest_path(self, pobj, cobj):
         '''
-        Returns GraphCytoscape with shortest path between pobj and cobj
+        Returns list of GraphCytoscape with shortest path between pobj and cobj
         '''
         query = """
-            MATCH p=shortestPath((s:Gene)-[r:INTERACTS_WITH*]->(t:Gene))
-            WHERE s.identifier == '%s'
-            AND   t.identifier == '%s'
+            MATCH  p=shortestPath((s:Gene)-[r:INTERACTS_WITH*]->(t:Gene))
+            WHERE  s.identifier == '%s'
+            AND    t.identifier == '%s'
             RETURN p
         """ % (pobj.identifier, cobj.identifier)
         results = self.dv.run(query)
@@ -269,7 +315,7 @@ class GO(Node):
     '''
     def __init__(self, accession, description, domain):
         label = "GO"
-        super(Go, self).__init__(identifier, label)
+        super(GO, self).__init__(accession, label)
         self.accession = accession
         self.description = description
         self.domain = domain
@@ -290,7 +336,7 @@ class Interaction(object):
         '''
         self.parent = parent
         self.child = child
-        self.int_type = None
+        self.int_type = set()
         self.level = 0
         self.string = False
         self.biogrid = False
@@ -307,15 +353,6 @@ class Interaction(object):
         Queries the interaction on the DB and fills all the attributes
         '''
         NEO.query_by_int(self)
-
-    def restrict_type(self, int_type):
-        '''
-        Makes the interaction refer to only a particular type of interaction
-        between parent and child: physical, genetic or inknown
-        '''
-        if int_type not in set(['physical', 'genetic', 'unknown']):
-            raise Exception("Type %s not allowed in interaction!" % (int_type))
-        self.int_type = int_type
 
     def fill_attributes(self, level, string, biogrid, 
                         ppaxe, ppaxe_score, ppaxe_pubmedid, biogrid_pubmedid, 
@@ -469,7 +506,7 @@ class Gene(Node):
         self.gos = NEO.query_gos(self)
         return self.gos
 
-    def to_json_dict(self):
+    def to_json_dict(self, positions=None):
         '''
         Returns dictionary ready to convert to json
         '''
@@ -488,6 +525,10 @@ class Gene(Node):
             element['classes'] = self.level_to_class()
         if self.get_gene_disease_class() is not None:
             element['classes'] += " " + self.get_gene_disease_class()
+        if positions is not None:
+            element['position'] = dict()
+            element['position']['x'] = positions[0]
+            element['position']['y'] = positions[1]
         return element
 
     def path_to_level(self, level):
@@ -536,7 +577,6 @@ class GraphCyt(object):
                 self.genes.add(gene)
                 self.merge(gene.get_neighbours(level, dist, exp_id))
             except Exception as err:
-                print(err)
                 print("Node %s not found" % identifier)
                 continue
 
@@ -556,7 +596,7 @@ class GraphCyt(object):
         if graph.interactions:
             self.interactions = self.interactions.union(graph.interactions)
 
-    def to_json(self):
+    def to_json(self, positions=None):
         """
         Converts the graph to a json string to add it to cytoscape.js
         """
@@ -564,7 +604,7 @@ class GraphCyt(object):
         for edge in self.interactions:
             edges.extend(edge.to_json_dict())
         graphelements = {
-            'nodes': [ gene.to_json_dict() for gene in self.genes ],
+            'nodes': [ gene.to_json_dict(positions) for gene in self.genes ],
             'edges': edges
         }
         self.json = json.dumps(graphelements)
@@ -601,8 +641,8 @@ class GraphCyt(object):
         else:
             return False
 
+# NEO4J CONNECTION
 NEO = NeoDriver('192.168.0.2', 8474, 8687, 'neo4j', 'p0tat0+')
-
 
 class NodeNotFound(Exception):
     """Exception raised when a node is not found on the db"""

@@ -205,6 +205,8 @@ expandOnClick = function(cy, node) {
             'gene': node.data().name,
             'level': window.level,
             'exp': window.expId,
+            'x':   node.position('x'),
+            'y':   node.position('y'),
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
         beforeSend: function() {
@@ -212,7 +214,23 @@ expandOnClick = function(cy, node) {
         },
         success : function(data) {
             cy.add(data);
-            cy.layout( { name: 'cose' } );
+            cy.layout({ 
+                name: 'cose',
+                maxSimulationTime: 3000,
+                fit: true,
+                directed: false,
+                padding: 40 
+            });
+            //cy.layout({ 
+            //    name: 'cose',
+            //    animateFilter: function ( node, i ){ 
+            //        if (eles.getElementById(node.data().id)) { 
+            //            return false;
+            //        } else { 
+            //            return false;
+            //        } 
+            //    },
+            //});
         }, 
         statusCode: {
             404: function() {

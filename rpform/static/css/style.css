@@ -198,12 +198,14 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 }
 
 #forms-container-container {
+	padding-left: 2.5%;
 	text-align: center;
 }
 #forms-container {
 	display: inline-block;
 	text-align: center;
 	margin-top: 5%;
+	color: #555;
 
 	/*width: 940px;
 	margin-left: 65px;*/
@@ -274,6 +276,21 @@ tr.spaceUnder>th {
 
 .form-group {
 	margin-bottom: 40px !important;
+}
+
+.field-container {
+	width: 60%;
+	margin-left: 20%;
+}
+
+/*
+.field-container input {
+	margin-bottom: 15px;
+}
+*/
+
+.f-title {
+	text-align: left;
 }
 
 input[type=number]::-webkit-inner-spin-button {
@@ -503,3 +520,12 @@ input[type=number]::-webkit-inner-spin-button {
     height: 40px !important;
     margin-top: -5px;
 }
+
+.presults {
+	width: 80%;
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-top: 5%;
+}
+
+.pcontainer { height: 150px; width: 100%; }

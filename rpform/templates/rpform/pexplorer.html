@@ -10,25 +10,28 @@
 </head>
 
 <body>
-	
-	{% if pathways %}
+	<div class="presults">
+		{% if pathways %}
 
-		{% for path in pathways %}
+			{% for target, path in pathways.items %}
 
-			<div class="panel">
-				<div class="panel-heading">
-					<h3>Pathway #{{ forloop.counter }}</h3>
-				</div>
-				<div class="panel-body">
-					<div id="path-{{ forloop.counter }}" class="pcontainer" value="{{ path|safe }}">
-						<!-- Will contain cytoscape graph -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3>Pathway #{{ forloop.counter }}</h3>
+						Target: {{ target }}
+
+					</div>
+					<div class="panel-body">
+						<div id="path-{{ forloop.counter }}" class="pcontainer" value='{{ path|safe }}'>
+							<!-- Will contain cytoscape graph -->
+						</div>
 					</div>
 				</div>
-			</div>
 
-		{% endfor %}
+			{% endfor %}
 
-	{% endif %}
+		{% endif %}
+	</div>
 
 	<!-- JAVASCRIPT FILES -->
 	<script src="{% static 'js/jquery-min.js' %}"></script>
@@ -41,12 +44,14 @@
 	<script src="{% static 'js/pexplorer-cytoscape-definition.js' %}"></script>
 
 {% if pathways %}
-    {% for path in pathways %}
+    {% for target, path in pathways.items %}
             <script>
+            	var path = {{ path|safe }};
+            	var plen = path['nodes'].length;
                 $(document).ready(function(){
                     var cy = cytoscape({
                         style: stylesheet,
-                        layout: { name: 'preset' },
+                        layout: { name: 'grid' },
                         container: document.getElementById('path-{{ forloop.counter }}'),
                         ready: function() {}
                     });
@@ -54,9 +59,10 @@
                     cy.load(elements)
                     cy.layout({
                         name: 'grid',
-                        maxSimulationTime: 3000,
                         fit: true,
-                        directed: true,
+                        rows: plen, // force num of rows in the grid
+  						cols: 1, // force num of columns in the grid
+                        //directed: true,
                         padding: 40
                     });
 

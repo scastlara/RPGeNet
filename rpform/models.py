@@ -220,7 +220,7 @@ class NeoDriver(object):
         '''
         Shortest paths between 'node' and any node in level 'level'
         '''
-        pathways = list()
+        pathways = dict()
         
         query = """
             MATCH (gene:GENE)-[p:HAS_PATH]->(path:PATHWAY)
@@ -238,27 +238,43 @@ class NeoDriver(object):
         query += self.return_by_attributes('gene1', n_attributes)
         query += ", " + self.return_by_attributes('inter', e_attributes)
         query += ", " + self.return_by_attributes('gene2', n_attributes)
-        query += " ORDER BY p1.order"
-        print(query)
+        query += ", " + "path.target AS target"
+        query += " ORDER BY path.target, p1.order"
         results = self.dv.run(query)
         results = results.data()
+        gene_order = 0
         if results:
             for interaction in results:
-                pathway = GraphCyt()
-                gene1 = Gene(interaction['gene1_identifier'])
-                gene1.fill_attributes(
-                    level=interaction['gene1_level'],
-                    nvar=interaction['gene1_nvariants'],
-                    dc=interaction['gene1_gene_disease'],
-                    inh=interaction['gene1_inheritance_pattern'])
-                gene2 = Gene(interaction['gene1_identifier'])
-                gene2.fill_attributes(
-                    level=interaction['gene2_level'],
-                    nvar=interaction['gene2_nvariants'],
-                    dc=interaction['gene2_gene_disease'],
-                    inh=interaction['gene2_inheritance_pattern'])
-                pathway.add_gene(gene1)
-                pathway.add_gene(gene2)
+                if interaction['target'] not in pathways:
+                    pathways[interaction['target']] = GraphCyt()
+                    gene_order = 0
+
+                if pathways[interaction['target']].return_gene(interaction['gene1_identifier']):
+                    gene1 = pathways[interaction['target']].return_gene(interaction['gene1_identifier'])
+                else:
+                    gene1 = Gene(interaction['gene1_identifier'])
+                    gene1.fill_attributes(
+                        level=interaction['gene1_level'],
+                        nvar=interaction['gene1_nvariants'],
+                        dc=interaction['gene1_gene_disease'],
+                        inh=interaction['gene1_inheritance_pattern'])
+                    pathways[interaction['target']].add_gene(gene1)
+                    pathways[interaction['target']].set_order(gene1, gene_order)
+                    gene_order += 1
+                if pathways[interaction['target']].return_gene(interaction['gene2_identifier']):
+                    gene2 = pathways[interaction['target']].return_gene(interaction['gene2_identifier'])
+                else:
+                    gene2 = Gene(interaction['gene2_identifier'])
+                    gene2.fill_attributes(
+                        level=interaction['gene2_level'],
+                        nvar=interaction['gene2_nvariants'],
+                        dc=interaction['gene2_gene_disease'],
+                        inh=interaction['gene2_inheritance_pattern'])
+                    pathways[interaction['target']].add_gene(gene2)
+                    pathways[interaction['target']].set_order(gene2, gene_order)
+                    gene_order += 1
+
+                # Adding interaction here
                 interaction_obj = Interaction(parent=gene1, child=gene2)
                 interaction_obj.fill_attributes(
                         level=interaction['inter_level'], 
@@ -271,11 +287,12 @@ class NeoDriver(object):
                         genetic_interaction=interaction['inter_genetic_interaction'], 
                         physical_interaction=interaction['inter_physical_interaction'], 
                         unknown_interaction=interaction['inter_unknown_interaction'])
-                pahtway.add_interaction(interaction_obj)
+                pathways[interaction['target']].add_interaction(interaction_obj)
         else:
             # Maybe path length == 1
             # execute second query
             pass
+        return pathways
 
     def query_shortest_path(self, pobj, cobj):
         '''
@@ -533,7 +550,8 @@ class Gene(Node):
 
     def path_to_level(self, level):
         '''
-        Returns a list of GraphCytoscape object with all shortest paths to all drivers
+        Returns a dictionary of GraphCytoscape object with all shortest paths to all drivers
+        Key = target gene identifier
         '''
         paths = NEO.query_path_to_level(self, level)
         return paths
@@ -561,6 +579,7 @@ class GraphCyt(object):
     def __init__(self):
         self.genes = set()
         self.interactions = set()
+        self.order = dict()
         self.json = ""
 
     def get_genes_in_level(self, identifiers, level=1, dist=1, exp_id="ABSOLUTE"):
@@ -584,8 +603,15 @@ class GraphCyt(object):
         '''
         Returns a Gene Object with a matching identifier
         '''
-        gene_to_return = [ gene for gene in self.genes if gene.identifier == identifier ]
-        return gene_to_return[0]
+        if self.genes:
+            gene_to_return = [ gene for gene in self.genes if gene.identifier == identifier ]
+            if gene_to_return:
+                gene_to_return = gene_to_return[0]
+            else:
+                gene_to_return = None
+        else:
+            gene_to_return = None
+        return gene_to_return
 
     def merge(self, graph):
         '''
@@ -603,8 +629,12 @@ class GraphCyt(object):
         edges = list()
         for edge in self.interactions:
             edges.extend(edge.to_json_dict())
+        if self.order:
+            genes = sorted(self.genes, key=lambda x: self.order[x.identifier])
+        else:
+            genes = self.genes
         graphelements = {
-            'nodes': [ gene.to_json_dict(positions) for gene in self.genes ],
+            'nodes': [ gene.to_json_dict(positions) for gene in genes ],
             'edges': edges
         }
         self.json = json.dumps(graphelements)
@@ -628,6 +658,12 @@ class GraphCyt(object):
         """
         connections = NEO.query_get_connections(self.genes, level)
         return connections
+
+    def set_order(self, gene, order):
+        """
+        Sets order of gene to order Useful for grid layout
+        """
+        self.order[gene.identifier] = order
 
     def __bool__(self):
         if self.genes:

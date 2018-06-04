@@ -113,7 +113,7 @@ def pathway_explorer(request):
 		pass
 	mygraphs = mygene.path_to_level(level) # list of GraphCytoscape objects
 	if mygraphs:
-		response['pathways'] = [ graph.to_json() for graph in mygraphs ]
+		response['pathways'] = { target: graph.to_json() for target, graph in mygraphs.iteritems() }
 	return render(request, 'rpform/pexplorer.html', response)
 
 

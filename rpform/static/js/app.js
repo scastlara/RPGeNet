@@ -197,6 +197,9 @@ exportJSON = function(cy) {
  * AJAX call to retrieve node interactions in DB
  */
 expandOnClick = function(cy, node) {
+    if (! window.expId) {
+        window.expId = "Absolute";
+    }
     $.ajax({
         type: "GET",
         url: "/add_neighbours",
@@ -237,8 +240,8 @@ expandOnClick = function(cy, node) {
 
             },
         },
-        error: function() {
-            alert("ERROR");
+        error: function(request, status, error) {
+            alert(request.responseText);
         }
     });
     //body

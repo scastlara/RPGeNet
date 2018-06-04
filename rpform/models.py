@@ -1,5 +1,5 @@
 from django.db import models
-from py2neo import Graph
+from py2neo import Graph, walk
 import json
 
 
@@ -299,16 +299,64 @@ class NeoDriver(object):
         Returns list of GraphCytoscape with shortest path between pobj and cobj
         '''
         query = """
-            MATCH  p=shortestPath((s:Gene)-[r:INTERACTS_WITH*]->(t:Gene))
-            WHERE  s.identifier == '%s'
-            AND    t.identifier == '%s'
+            MATCH  p=allShortestPaths((s:GENE)-[r:INTERACTS_WITH*]->(t:GENE))
+            WHERE  s.identifier = '%s'
+            AND    t.identifier = '%s'
             RETURN p
         """ % (pobj.identifier, cobj.identifier)
         results = self.dv.run(query)
         results = results.data()
+        pathways = list()
         if results:
-            path = results[0]
-            # Create GraphCytoscape object here
+            for path in results:
+                pathway = GraphCyt()
+                i = 0
+                order = 0
+                g1, g2 = None, None
+                for elem in walk(path['p']):
+                    if i % 2 != 0:
+                        rel = elem
+                    else:
+                        if not g1:
+                            # Gene 1
+                            g1 = Gene(elem['identifier'])
+                            g1.fill_attributes(
+                                level=elem['level'],
+                                nvar=elem['nvariants'],
+                                dc=elem['gene_disease'],
+                                inh=elem['inheritance_pattern'])
+                        else:
+                            g2 = Gene(elem['identifier'])
+                            g2.fill_attributes(
+                                level=elem['level'],
+                                nvar=elem['nvariants'],
+                                dc=elem['gene_disease'],
+                                inh=elem['inheritance_pattern'])
+                            if g1 and g2:
+                                interaction_obj = Interaction(parent=g1, child=g2)
+                                interaction_obj.fill_attributes(
+                                    level=rel['level'], 
+                                    string=rel['string'], 
+                                    biogrid=rel['biogrid'], 
+                                    ppaxe=rel['ppaxe'], 
+                                    ppaxe_score=rel['ppaxe_score'],
+                                    ppaxe_pubmedid=rel['ppaxe_pubmedid'], 
+                                    biogrid_pubmedid=rel['biogrid_pubmedid'], 
+                                    genetic_interaction=rel['genetic_interaction'], 
+                                    physical_interaction=rel['physical_interaction'], 
+                                    unknown_interaction=rel['unknown_interaction'])
+                                pathway.add_gene(g1)
+                                pathway.add_gene(g2)
+                                pathway.set_order(g1, order)
+                                order += 1
+                                pathway.set_order(g2, order)
+                                order += 1
+                                pathway.add_interaction(interaction_obj)
+                                g1 = g2
+                                g2 = None
+                    i += 1
+                pathways.append(pathway)
+        return pathways
 
 
 class Node(object):
@@ -409,6 +457,7 @@ class Interaction(object):
                 element['data']['source'] = self.parent.identifier
                 element['data']['target'] = self.child.identifier
                 element['data']['ewidth']  = int(types[type_idx])
+                element['data']['level'] = self.level
                 element['classes'] = type_names[type_idx]
                 elements.append(element)
                 type_idx += 1
@@ -496,7 +545,7 @@ class Gene(Node):
         level_class = None
         if self.level == 0:
             level_class = "skeleton"
-        elif self.level == 1:
+        else:
             level_class = "lvl" + str(self.level)
         return level_class
 

@@ -20,8 +20,16 @@ def gene_explorer(request):
 	response = dict()
 	if request.method == "POST":
 		# Upload graph
-		response['upload_json'] = request.FILES['myfile'].read()
-		response['upload_json'] = response['upload_json'].replace("\xef\xbb\xbf", "")
+		if 'myfile' in request.FILES:
+			# Uploaded file
+			response['upload_json'] = request.FILES['myfile'].read()
+			response['upload_json'] = response['upload_json'].replace("\xef\xbb\xbf", "")
+			response['with_pos'] = True
+		else:
+			# From Path to level 'Explore Network'
+			response['upload_json'] = request.POST['myfile']
+			response['exp_id'] = request.POST['exp_id']
+			response['with_pos'] = False # No positions specified in json
 		response['level'] = request.POST['upload-level']
 		# Check if valid json
 		try:
@@ -101,10 +109,15 @@ def pathway_explorer(request):
 	Find Pathways from your genes to specific levels of the RPGeNet graph
 	'''
 	gene = request.GET['gene']
-	level = request.GET['path-to']
+	level = int(request.GET['path-to'])
 	exp_id = request.GET['exp']
-	print ("%s and %s and %s" % (gene, level, exp_id))
 	response = dict()
+	response['gene'] = gene
+	response['level'] = "Drivers"
+	if level == 0:
+		response['level'] = "Skeleton"
+	response['exp'] = exp_id
+	response['appname'] = "Pathway to Level"
 	mygraphs = list()
 	mygene = Gene(identifier=gene)
 	try:
@@ -113,6 +126,8 @@ def pathway_explorer(request):
 		pass
 	mygraphs = mygene.path_to_level(level) # list of GraphCytoscape objects
 	if mygraphs:
+		response['plen'] = len(mygraphs[mygraphs.keys()[0]].interactions)
+		response['numpaths'] = len(mygraphs.keys())
 		response['pathways'] = { target: graph.to_json() for target, graph in mygraphs.iteritems() }
 	return render(request, 'rpform/pexplorer.html', response)
 
@@ -123,9 +138,13 @@ def shortest_path(request):
 	'''
 	response = dict()
 	response['error'] = False
-	gene1 = request.GET['gene'][0]
-	gene2 = request.GET['gene'][1]
+	response['appname'] = "Shortest Paths"
+	gene1 = request.GET['gene1']
+	gene2 = request.GET['gene2']
 	exp_id = request.GET['exp']
+	response['source'] = gene1
+	response['target'] = gene2
+	response['exp'] = exp_id
 	try:
 		gene1 = Gene(identifier=gene1)
 		gene1.check()
@@ -137,9 +156,11 @@ def shortest_path(request):
 	except NodeNotFound as err:
 		response['error'] = err
 
-	if response['error'] is None:
+	if response['error'] is False:
 		allpaths = gene1.path_to_gene(gene2)
-		response['pathways'] = [ path.to_json() for path in allpaths ]
+		response['plen'] = len(allpaths[0].interactions)
+		response['numpaths'] = len(allpaths)
+		response['pathways'] = { idx:allpaths[idx].to_json() for idx in range(0, len(allpaths)) }
 	return render(request, 'rpform/pexplorer.html', response)
 
 

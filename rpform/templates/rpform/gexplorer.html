@@ -18,7 +18,11 @@
 	<!-- Uploaded json, positions included -->
         <script>
             window.jsongraph = {{ upload_json|safe }};
-            window.withpos   = true;
+            {% if withpos %}
+            	window.withpos   = true;
+            {% else %}
+            	window.withpos   = false;
+            {% endif %}
         </script></script>
     {% elif jsongraph %}
     <!-- Graph from normal form request, without positions -->

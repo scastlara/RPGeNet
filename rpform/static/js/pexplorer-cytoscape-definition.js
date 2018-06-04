@@ -57,12 +57,17 @@ var stylesheet = cytoscape.stylesheet()
     })
     .selector('edge')
         .css({
-            'color': "#4F8ABA",
+            "content": "data(level)",
+            'font-size': 14,
+            'color': "#555555",
+            "text-valign": "center",
+            "text-background-color": "white",
+            "text-background-opacity" : 1,
             'line-color': '#4F8ABA',
             'target-arrow-color': '#4F8ABA',
             'target-arrow-shape': 'triangle',
             "width": "mapData(ewidth, 1, 9, 1, 5)",
-            "opacity": "mapData(ewidth, 1, 9, 0.75, 1)",
+            "line-opacity": "mapData(ewidth, 1, 9, 0.75, 1)",
         })
     .selector('.physical')
         .css({

@@ -36,6 +36,10 @@ body 			{ font-size: 12px;}
 	opacity: 0.8;
 }
 
+.app-title {
+	color: #555555;
+}
+
 .version {
 	font-size: 50px;
 	color: #2ca089;
@@ -167,6 +171,8 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 	background-image: url('/static/Images/app-panel.png') !important;
 	border-radius: 10px;
 }
+
+.label-rp {background-color: #3A9F88}
 
 .btn-f1 {
 	background-color: #8DC842 !important;
@@ -522,10 +528,121 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .presults {
+	background-color: #FAFAFA;
+	box-shadow: -2px 2px 8px 2px #E1E1E1;
+	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;            
+  	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;    
+  	padding: 2%;
+	width: 80%;
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
+.botton-btns-container {
+	width: 100%;
+	text-align: center;
+}
+
+.botton-btns {
+	display: inline-block;
+	background-color: #FAFAFA;
+	box-shadow: -2px 2px 8px 2px #E1E1E1;
+	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;            
+  	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;    
+  	padding: 2%;
+	width: 250px;
+	margin-top: 25px;
+}
+
+.app-title-container .app-title {
+	font-size: 38px;
+}
+
+.app-title-container {
+	background-color: #FAFAFA;
+	box-shadow: -2px 2px 8px 2px #E1E1E1;
+	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;            
+  	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;    
+  	padding: 2%;
 	width: 80%;
 	margin-left: 10%;
 	margin-right: 10%;
 	margin-top: 5%;
 }
 
+.allpaths-container { width: 80%; }
 .pcontainer { height: 150px; width: 100%; }
+
+
+
+/* BACK TO TOP THINGS */
+.cd-top.cd-is-visible {
+  /* the button becomes visible */
+  visibility: visible;
+  opacity: 1;
+}
+.cd-top.cd-fade-out {
+  /* if the user keeps scrolling down, the button is out of focus and becomes less visible */
+  opacity: .5;
+}
+
+.cd-top {
+  display: inline-block;
+  height: 70px;
+  width: 70px;
+  background-size: 40px 40px;
+  position: fixed;
+  bottom: 100px;
+  right: 10px;
+  /* image replacement properties */
+  overflow: hidden;
+  text-indent: 100%;
+  white-space: nowrap;
+  background: url(../Images/back_to_top.png) no-repeat center 50%;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: opacity .3s 0s, visibility 0s .3s;
+  -moz-transition: opacity .3s 0s, visibility 0s .3s;
+  transition: opacity .3s 0s, visibility 0s .3s;
+}
+
+
+.cd-top.cd-is-visible, .cd-top.cd-fade-out, .no-touch .cd-top:hover {
+  -webkit-transition: opacity .3s 0s, visibility 0s 0s;
+  -moz-transition: opacity .3s 0s, visibility 0s 0s;
+  transition: opacity .3s 0s, visibility 0s 0s;
+}
+.cd-top.cd-is-visible {
+  /* the button becomes visible */
+  visibility: visible;
+  opacity: 1;
+}
+.cd-top.cd-fade-out {
+  /* if the user keeps scrolling down, the button is out of focus and becomes less visible */
+  opacity: .5;
+}
+.no-touch .cd-top:hover {
+  background-color: #e86256;
+  opacity: 1;
+}
+@media only screen and (min-width: 768px) {
+  .cd-top {
+    right: 20px;
+    bottom: 60px;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .cd-top {
+    height: 60px;
+    width: 60px;
+    right: 30px;
+    bottom: 65px;
+  }
+}
+/* END OF BACK TO TOP */
+
+
+.path-right-btns {
+	height: 50px;
+	padding: 25px;
+}

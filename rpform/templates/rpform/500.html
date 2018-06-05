@@ -1,0 +1,99 @@
+{% load staticfiles %}
+<html>
+<head>
+	<title>RPGeNet v2.0 - Retinitis Pigmentosa Gene Network</title>
+	<meta name="description" content="RPGeNet v2.0 - Retinitis Pigmentosa Gene Network: interacting with the network of genes related to retinitis pigmentosa genes.">
+	<meta name="keywords" content="RPGeNet,retinitis pigmentosa,RP,interaction network,retinal disease,driver genes">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'css/bootstrap-min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/toggle-switch.css' %}">
+</head>
+
+<body>
+
+	<div id="title-div">
+		<div id="title-container" class="row">
+			<div class="col-sm-2" id="app-logo-div">
+				<a href="{% url index_view %}"><img id="app-logo" src="{% static 'Images/logo.png' %}"></a>
+			</div>
+			<div class="col-sm-10" id="title-text"> RPGeNet <span class="version">v2.0</span> </div>
+		</div>
+
+
+	</div>
+
+	<div class="navbar-container">
+		<nav class="navbar navbar-default thenavbar">
+			<div class="navbar-inner">
+				<ul class="nav navbar-nav">
+					<li id="navbar-home" class="nav-elem"><a href="{% url index_view %}">Home</a></li>
+					<li id="navbar-data" class="nav-elem"><a href="{% url data %}">Data</a></li>
+					<li id="navbar-tutorial" class="nav-elem"><a href="{% url tutorial %}">Tutorial</a></li>
+					<li id="navbar-about" class="nav-elem"><a href="{% url about %}">About</a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+
+	<div class="body-card">
+		<div class="centered">
+			<span id="title-404">500 - Internal Server Error</span>
+		</div>
+
+	</div>
+
+	<div class="botton-btns-container">
+		<div class="botton-btns">
+			<a href="{% url index_view %}">
+				<div class="btn btn-default"><span class="glyphicon glyphicon-home"> </span> Home</div>
+			</a>
+			<a href="{% url tutorial %}"><div class="btn btn-default">
+				<span class="glyphicon glyphicon-question-sign"> </span> Tutorial</div>
+			</a>
+		</div>
+	</div>
+
+
+
+<div id="footer">
+		<div class="footer-left">
+			<div class="cgl-logo-footer-container">
+				<a target="_blank" href="https://compgen.bio.ub.edu">
+					<img class="cgl-logo-footer" src="{% static 'Images/compgen-logo.png' %}">
+				</a>
+			</div>
+			<div class="cgl-links-footer">
+				<a target="_blank" href="https://compgen.bio.ub.edu">Home</a> · 
+				<a target="_blank" href="https://compgen.bio.ub.edu/Research">Research</a> · 
+				<a target="_blank" href="https://compgen.bio.ub.edu/Acknowledgements">Acknowledgements</a> · 
+				<a target="_blank" href="https://compgen.bio.ub.edu/contact">Contact</a> 
+				<p class="copyright">Computational Genomics Lab © 2015-2018</p>
+			</div>
+		</div>
+		<div class="footer-right">
+			<div class="logo-container row">
+				<div class="col-sm-4">
+					<a target="_blank" href="http://www.ub.edu/web/ub/en/index.html?">
+						<img class="ub-logo-footer" src="{% static 'Images/ub-logo.png' %}">
+					</a>
+				</div>
+				<div class="col-sm-4">
+					<a target="_blank" href="http://www.ub.edu/ibub/en/index.html">
+						<img class="ibub-logo-footer" src="{% static 'Images/ibub-logo.png' %}">
+					</a>
+				</div>
+				<div class="col-sm-4">			
+					<a target="_blank"  href="http://www.ciberer.es/en">
+						<img class="ciberer-logo-footer" src="{% static 'Images/ciberer-logo.png' %}">
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="{% static 'js/back-to-top.js' %}"></script>
+	<a href="#0" class="cd-top" title="Back to Top">Top</a>
+
+</body>
+</html>

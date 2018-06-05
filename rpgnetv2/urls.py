@@ -4,6 +4,10 @@ from django.conf.urls import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
+
+handler500 = "rpform.views.handler500"
+handler404 = "rpform.views.handler404"
+
 urlpatterns = patterns('',
     # Examples:
     url(r'^', include('rpform.urls')),

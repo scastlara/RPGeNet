@@ -1,6 +1,7 @@
 # Create your views here.
 from django.shortcuts import render, render_to_response
 from django.http      import HttpResponse
+from django.template import RequestContext
 import re
 from rpform.models import *
 import json
@@ -12,13 +13,17 @@ def index_view(request):
 	response = dict()
 	return render(request, 'rpform/index.html', response)
 
-def gene_explorer(request):
+
+def upload_graph(request):
 	'''
-	Look for interactions for your genes in specific levels of the
-	RPGeNet graph
+	Uploads graph and sends it to gexplorer template
 	'''
 	response = dict()
+	template = 'rpform/404.html'
+
 	if request.method == "POST":
+		template = 'rpform/gexplorer.html'
+
 		# Upload graph
 		if 'myfile' in request.FILES:
 			# Uploaded file
@@ -26,17 +31,27 @@ def gene_explorer(request):
 			response['upload_json'] = response['upload_json'].replace("\xef\xbb\xbf", "")
 			response['with_pos'] = True
 		else:
-			# From Path to level 'Explore Network'
+			# From Path to level 'Explore Network' button
 			response['upload_json'] = request.POST['myfile']
 			response['exp_id'] = request.POST['exp_id']
 			response['with_pos'] = False # No positions specified in json
 		response['level'] = request.POST['upload-level']
+
 		# Check if valid json
 		try:
 			json.loads(response['upload_json'])
 		except ValueError:
 			response['not_json'] = True;
-	else:
+	return render(request, template, response)
+		
+
+def gene_explorer(request):
+	'''
+	Look for interactions for your genes in specific levels of the
+	RPGeNet graph
+	'''
+	response = dict()
+	if request.method == "GET":
 		# Simple search
 		# Check form request [HERE]
 		genes = request.GET['gene']
@@ -53,6 +68,7 @@ def gene_explorer(request):
 		response['dist']  = dist
 		response['exp_id'] = exp_id
 	return render(request, 'rpform/gexplorer.html', response)
+
 
 def get_properties(request):
 	'''
@@ -80,6 +96,7 @@ def get_properties(request):
 		return render(request, template, response)
 	else:
 		return render(request, 'rpform/404.html')
+
 
 def add_neighbours(request):
 	'''
@@ -199,3 +216,23 @@ def about(request):
 	About view
 	'''
 	return render(request, 'rpform/about.html')
+
+
+def handler404(request):
+    """
+    Handler for error 404, doesn't work.
+    """
+    response = render_to_response('rpform/404.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
+
+
+def handler500(request):
+    """
+    Handler for error 500 (internal server error), doesn't work.
+    """
+    response = render_to_response('rpform/500.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 500
+    return response

@@ -38,7 +38,7 @@
 	<div class="app-title-container">
 		<span class="app-title">{{ appname }}</span>
 	</div>
-	<div class="presults">
+	<div class="body-card">
 
 		<div class="row">
 			<div class="col-sm-3">
@@ -90,7 +90,7 @@
 
 							<div class="path-right-btns col-sm-2">
 								<a href="#" class="info-tooltip" title="View on NetExplorer">
-                                    <form class="explore-network-form" method="POST" action="{% url gene_explorer %}" target="_blank"> {% csrf_token %}
+                                    <form class="explore-network-form" method="POST" action="{% url upload_graph %}" target="_blank"> {% csrf_token %}
                                         <input type="hidden" name="myfile" value='{{ path|safe }}' />
                                         <input type="hidden" name="upload-level" value='5'/>
                                         <input type="hidden" name="exp_id" value='{{ exp }}'/>

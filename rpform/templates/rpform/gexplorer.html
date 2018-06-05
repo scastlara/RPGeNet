@@ -205,7 +205,7 @@
 			<div class="gexplorer-row row">
 				<div class="gexplorer-col col-sm-3"> </div>
 				<div class="gexplorer-col col-sm-6">
-					<form enctype="multipart/form-data" method="post" action="{% url gene_explorer %}" id="upload-form">
+					<form enctype="multipart/form-data" method="post" action="{% url upload_graph %}" id="upload-form">
 						{% csrf_token %}
 						<!-- FILE UPLOAD -->
 						<label for="myfile" id="upload-json" class="gexplorer-btn btn btn-default ">
@@ -217,6 +217,18 @@
 					</form>
 				</div>
 				<div class="col-sm-3"> </div>
+			</div>
+
+			<hr>
+			<div class="gexplorer-row row">
+				<div class="col-sm-2"> </div>
+				<div class="col-sm-8">
+					<div id="show-legend-btn" class="gexplorer-btn btn btn-default">
+						<span class="glyphicon glyphicon-question-sign"></span>
+						Show Legend
+					</div>
+				</div>
+				<div class="col-sm-2"> </div>
 			</div>
 		</div>
 
@@ -236,7 +248,7 @@
 			</div>
 			<div class="vertical-line"></div>
 			<div class="col-sm-8">
-				<form enctype="multipart/form-data" method="post" action="{% url gene_explorer %}" id="upload-form2">
+				<form enctype="multipart/form-data" method="post" action="{% url upload_graph %}" id="upload-form2">
 					{% csrf_token %}
 					<div class="col-sm-5">
 						<label for="myfile2" id="upload-json" class="btn btn-default">
@@ -255,6 +267,27 @@
 					</div>
 				</form>
 			</div>
+		</div>
+	</div>
+
+	<div id="legend-dialog">
+		<h2>Legend</h2>
+		<hr>
+
+		<ul>
+			<li><img class="legend-img" src="{% static 'Images/syndromic.png' %}"> Syndromic driver</li>
+			<li><img class="legend-img" src="{% static 'Images/non-syndromic.png' %}"> Non-Syndromic driver</li>
+			<li><img class="legend-img" src="{% static 'Images/both.png' %}"> Syndromic+Non-Syndromic driver</li>
+		</ul>
+		<hr>
+		<ul>
+			<li><img class="legend-img" src="{% static 'Images/physical.png' %}"> Physical interaction</li>
+			<li><img class="legend-img" src="{% static 'Images/genetic.png' %}"> Genetic interaction</li>
+			<li><img class="legend-img" src="{% static 'Images/unknown.png' %}"> Unknown interaction</li>
+		</ul>
+
+		<div id="close-legend-btn" class="btn btn-danger">
+			<span class="glyphicon glyphicon-remove"></span>
 		</div>
 	</div>
 
@@ -278,6 +311,16 @@
 			$("#blur-effect").show();
 			$("#no-results-dialog").show();
 		};
+
+		$('#show-legend-btn').on("click", function(){
+			$("#legend-dialog").show();
+			$("#blur-effect").show();
+		});
+
+		$('#close-legend-btn').on("click", function(){
+			$("#legend-dialog").hide();
+			$("#blur-effect").hide();
+		});
 	</script>
 </body>
 </html>

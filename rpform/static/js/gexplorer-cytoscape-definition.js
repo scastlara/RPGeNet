@@ -9,7 +9,7 @@ var stylesheet = cytoscape.stylesheet()
     .selector('node')
         .css({
             'content': 'data(name)',
-            'text-valign': 'top',
+            'text-valign': 'bottom',
             'text-halign': 'center',
             'background-color': '#2CA089',
             "font-size": 14,

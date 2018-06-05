@@ -372,7 +372,7 @@ input[type=number]::-webkit-inner-spin-button {
 .bsize-container         { margin-top: 10px; }
 .bsize-container         { height: 20px !important; }
 #bsizeOutput             { font-size: 18px; line-height: 20px; padding-top: 0px !important; }
-.gexplorer-btn           { display: inline-block; width: 90%; height: 50px; }
+.gexplorer-btn           { display: inline-block; vertical-align: middle; width: 90%; height: 50px; }
 .gexplorer-col           { text-align:center; padding: 0 !important; }
 .gexplorer-row           { margin-bottom: 10px; }
 .glyphicon-grab          { display:inline-block; width: 14px; height: 16px; }
@@ -392,6 +392,46 @@ input[type=number]::-webkit-inner-spin-button {
 	background-color: #FAFAFA;
 
 }
+
+
+#legend-dialog       { 
+	width: 40%; 
+	height: 500px; 
+	display: none; 
+	position: fixed; 
+	padding: 25px;
+	left: 17.5%;
+	top: 125px;
+	z-index: 3;
+	background-color: #FAFAFA;
+}
+
+.card-dialog { 
+	width: 40%; 
+	height: 500px; 
+	display: none; 
+	position: fixed; 
+	padding: 25px;
+	left: 30%;
+	top: 125px;
+	z-index: 3;
+	background-color: #FAFAFA;
+	box-shadow: 0px 0px 180px 120px rgba(0,0,0,0.75);
+}
+
+.close-card-btn {
+	position: absolute;
+	top: 25px;
+	right: 25px;
+}
+
+#close-legend-btn {
+	position: absolute;
+	top: 25px;
+	right: 25px;
+}
+
+.legend-img { width: 40px; }
 
 .vertical-line{
       width: 1px; /* Line width */
@@ -527,7 +567,7 @@ input[type=number]::-webkit-inner-spin-button {
     margin-top: -5px;
 }
 
-.presults {
+.body-card {
 	background-color: #FAFAFA;
 	box-shadow: -2px 2px 8px 2px #E1E1E1;
 	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;            
@@ -536,6 +576,16 @@ input[type=number]::-webkit-inner-spin-button {
 	width: 80%;
 	margin-left: 10%;
 	margin-right: 10%;
+	min-height: 500px;
+}
+
+#title-404 {
+	font-size: 60px;
+	color: #555;
+}
+
+.centered {
+	text-align: center;
 }
 
 .botton-btns-container {

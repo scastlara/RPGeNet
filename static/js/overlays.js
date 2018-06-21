@@ -4,7 +4,7 @@ overlays.js - Setting the overlays of the index page
 
 // INPUT GENES
 $(".inputgenes-btn").on("click", function() {
-	$("#inputgenes-dialog").slideToggle(450);
+	$("#inputgenes-dialog").show();
 });
 
 $("#close-inputgenes-btn").on("click", function() {
@@ -13,7 +13,7 @@ $("#close-inputgenes-btn").on("click", function() {
 
 // GENEDISTANCE
 $(".genedistance-btn").on("click", function() {
-	$("#genedistance-dialog").slideToggle(450);
+	$("#genedistance-dialog").show();
 });
 
 $("#close-genedistance-btn").on("click", function() {
@@ -22,7 +22,7 @@ $("#close-genedistance-btn").on("click", function() {
 
 // INTLVL
 $(".intlvl-btn").on("click", function() {
-	$("#intlvl-dialog").slideToggle(450);
+	$("#intlvl-dialog").show();
 });
 
 $("#close-intlvl-btn").on("click", function() {
@@ -31,7 +31,7 @@ $("#close-intlvl-btn").on("click", function() {
 
 // GENEXP
 $(".genexp-btn").on("click", function() {
-	$("#genexp-dialog").slideToggle(450);
+	$("#genexp-dialog").show();
 });
 
 $("#close-genexp-btn").on("click", function() {

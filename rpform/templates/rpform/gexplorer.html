@@ -274,17 +274,31 @@
 		<h2>Legend</h2>
 		<hr>
 
-		<ul>
-			<li><img class="legend-img" src="{% static 'Images/syndromic.png' %}"> Syndromic driver</li>
-			<li><img class="legend-img" src="{% static 'Images/non-syndromic.png' %}"> Non-Syndromic driver</li>
-			<li><img class="legend-img" src="{% static 'Images/both.png' %}"> Syndromic+Non-Syndromic driver</li>
-		</ul>
-		<hr>
-		<ul>
-			<li><img class="legend-img" src="{% static 'Images/physical.png' %}"> Physical interaction</li>
-			<li><img class="legend-img" src="{% static 'Images/genetic.png' %}"> Genetic interaction</li>
-			<li><img class="legend-img" src="{% static 'Images/unknown.png' %}"> Unknown interaction</li>
-		</ul>
+		<div class="row">
+			<div class="col-sm-5">
+				<ul>
+					<li><img class="legend-img" src="{% static 'Images/lvl0.png' %}"> Skeleton</li>
+					<li><img class="legend-img" src="{% static 'Images/lvl1.png' %}"> Level 1</li>
+					<li><img class="legend-img" src="{% static 'Images/lvl2.png' %}"> Level 2</li>
+					<li><img class="legend-img" src="{% static 'Images/lvl3.png' %}"> Level 3</li>
+					<li><img class="legend-img" src="{% static 'Images/lvl4.png' %}"> Level 4</li>
+					<li><img class="legend-img" src="{% static 'Images/lvl5.png' %}"> Level 5</li>
+				</ul>
+			</div>
+			<div class="col-sm-7">
+				<ul>
+					<li><img class="legend-img" src="{% static 'Images/syndromic.png' %}"> Syndromic driver</li>
+					<li><img class="legend-img" src="{% static 'Images/non-syndromic.png' %}"> Non-Syndromic driver</li>
+					<li><img class="legend-img" src="{% static 'Images/both.png' %}"> Syndromic + Non-Syndromic driver</li>
+				</ul>
+				<hr>
+				<ul>
+					<li><img class="legend-img" src="{% static 'Images/physical.png' %}"> Physical interaction</li>
+					<li><img class="legend-img" src="{% static 'Images/genetic.png' %}"> Genetic interaction</li>
+					<li><img class="legend-img" src="{% static 'Images/unknown.png' %}"> Unknown interaction</li>
+				</ul>
+			</div>
+		
 
 		<div id="close-legend-btn" class="btn btn-danger">
 			<span class="glyphicon glyphicon-remove"></span>
@@ -313,7 +327,7 @@
 		};
 
 		$('#show-legend-btn').on("click", function(){
-			$("#legend-dialog").show();
+			$("#legend-dialog").slideToggle(450);
 			$("#blur-effect").show();
 		});
 

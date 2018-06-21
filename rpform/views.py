@@ -82,7 +82,9 @@ def get_properties(request):
 			gene = request.GET['gene']
 			gene_obj = Gene(identifier=gene)
 			gene_obj.check()
+			gene_obj.get_summary()
 			gene_obj.get_go()
+			gene_obj.get_aliases()
 			template = 'rpform/gene_properties.html'
 			response['gene'] = gene_obj
 		else:
@@ -91,6 +93,7 @@ def get_properties(request):
 			inta, intb, int_type = interaction.split('-')
 			int_obj = Interaction(parent=Gene(inta), child=Gene(intb))
 			int_obj.check()
+			int_obj.fix_string_evidences()
 			template = 'rpform/int_properties.html'
 			response['interaction'] = int_obj
 		return render(request, template, response)
@@ -125,7 +128,7 @@ def pathway_explorer(request):
 	'''
 	Find Pathways from your genes to specific levels of the RPGeNet graph
 	'''
-	gene = request.GET['gene']
+	gene = request.GET['gene'].upper()
 	level = int(request.GET['path-to'])
 	exp_id = request.GET['exp']
 	response = dict()
@@ -156,8 +159,8 @@ def shortest_path(request):
 	response = dict()
 	response['error'] = False
 	response['appname'] = "Shortest Paths"
-	gene1 = request.GET['gene1']
-	gene2 = request.GET['gene2']
+	gene1 = request.GET['gene1'].upper()
+	gene2 = request.GET['gene2'].upper()
 	exp_id = request.GET['exp']
 	response['source'] = gene1
 	response['target'] = gene2

@@ -1,6 +1,7 @@
 from django.db import models
 from py2neo import Graph, walk
 import json
+import re
 
 
 class NeoDriver(object):
@@ -19,7 +20,12 @@ class NeoDriver(object):
         '''
         Constructor of return clause based on a list of attributes for neo4j
         '''
-        non_attributes = set(['label', 'parent', 'child', 'expression', 'gos', 'int_type'])
+        non_attributes = set([
+            'label', 'parent', 
+            'child', 'expression', 
+            'gos', 'int_type', 
+            'aliases',
+            'summary', 'summary_source'])
         return_clause = ", ".join(['%s.%s as %s_%s' % (elem_name, attr, elem_name, attr) 
                                    for attr in attributes if attr not in non_attributes])
         return return_clause
@@ -70,6 +76,8 @@ class NeoDriver(object):
                 ppaxe_score=interaction['rel_ppaxe_score'],
                 ppaxe_pubmedid=interaction['rel_ppaxe_pubmedid'], 
                 biogrid_pubmedid=interaction['rel_biogrid_pubmedid'], 
+                string_evidence=interaction['rel_string_evidence'],
+                string_pubmedid=interaction['rel_string_pubmedid'],
                 genetic_interaction=interaction['rel_genetic_interaction'], 
                 physical_interaction=interaction['rel_physical_interaction'], 
                 unknown_interaction=interaction['rel_unknown_interaction'])
@@ -131,7 +139,9 @@ class NeoDriver(object):
                     ppaxe=interaction['rel_ppaxe'], 
                     ppaxe_score=interaction['rel_ppaxe_score'],
                     ppaxe_pubmedid=interaction['rel_ppaxe_pubmedid'], 
-                    biogrid_pubmedid=interaction['rel_biogrid_pubmedid'], 
+                    biogrid_pubmedid=interaction['rel_biogrid_pubmedid'],
+                    string_evidence=interaction['rel_string_evidence'],
+                    string_pubmedid=interaction['rel_string_pubmedid'],
                     genetic_interaction=interaction['rel_genetic_interaction'], 
                     physical_interaction=interaction['rel_physical_interaction'], 
                     unknown_interaction=interaction['rel_unknown_interaction'])
@@ -208,6 +218,8 @@ class NeoDriver(object):
                         ppaxe_score=rels[i]['ppaxe_score'],
                         ppaxe_pubmedid=rels[i]['ppaxe_pubmedid'], 
                         biogrid_pubmedid=rels[i]['biogrid_pubmedid'], 
+                        string_evidence=rels[i]['string_evidence'],
+                        string_pubmedid=rels[i]['string_pubmedid'],
                         genetic_interaction=rels[i]['genetic_interaction'], 
                         physical_interaction=rels[i]['physical_interaction'], 
                         unknown_interaction=rels[i]['unknown_interaction'])
@@ -283,7 +295,9 @@ class NeoDriver(object):
                         ppaxe=interaction['inter_ppaxe'], 
                         ppaxe_score=interaction['inter_ppaxe_score'],
                         ppaxe_pubmedid=interaction['inter_ppaxe_pubmedid'], 
-                        biogrid_pubmedid=interaction['inter_biogrid_pubmedid'], 
+                        biogrid_pubmedid=interaction['inter_biogrid_pubmedid'],
+                        string_evidence=interaction['inter_string_evidence'],
+                        string_pubmedid=interaction['inter_string_pubmedid'],
                         genetic_interaction=interaction['inter_genetic_interaction'], 
                         physical_interaction=interaction['inter_physical_interaction'], 
                         unknown_interaction=interaction['inter_unknown_interaction'])
@@ -341,9 +355,11 @@ class NeoDriver(object):
                                     ppaxe=rel['ppaxe'], 
                                     ppaxe_score=rel['ppaxe_score'],
                                     ppaxe_pubmedid=rel['ppaxe_pubmedid'], 
-                                    biogrid_pubmedid=rel['biogrid_pubmedid'], 
+                                    biogrid_pubmedid=rel['biogrid_pubmedid'],
+                                    string_evidence=rel['string_evidence'],
+                                    string_pubmedid=rel['string_pubmedid'],
                                     genetic_interaction=rel['genetic_interaction'], 
-                                    physical_interaction=rel['physical_interaction'], 
+                                    physical_interaction=rel['physical_interaction'],
                                     unknown_interaction=rel['unknown_interaction'])
                                 pathway.add_gene(g1)
                                 pathway.add_gene(g2)
@@ -358,6 +374,65 @@ class NeoDriver(object):
                 pathways.append(pathway)
         return pathways
 
+    def query_get_summary(self, gene):
+        '''
+        Returns the summary for the gene
+        '''
+        query = """
+            MATCH (n:GENE)
+            WHERE n.identifier = '%s'
+            RETURN n.summary AS summary, n.summary_source AS summary_source
+        """ % (gene.identifier)
+        results = self.dv.run(query)
+        results = results.data()
+        if results:
+            if results[0]['summary'] is not None:
+                summary = results[0]['summary']
+                src = results[0]['summary_source']
+            else:
+                summary = "Not available."
+                src = None
+        else:
+            summary = "Not available."
+            src = None
+        return summary, src
+
+    def query_unalias(self, gene):
+        '''
+        Changes the identifier of the gene object to the official
+        identifier in the database
+        '''
+        query = """
+            MATCH (n:ALIAS)<-[r:HAS_ALIAS]-(m:GENE)
+            WHERE n.identifier = '%s'
+            RETURN m.identifier as identifier
+        """ % gene.identifier
+        results = self.dv.run(query)
+        results = results.data()
+        if results:
+            gene.identifier = results[0]['identifier']
+        else:
+            # No alias, maybe an official identifier already
+            # Don't have to do anything
+            return
+
+    def query_all_aliases(self, gene):
+        '''
+        Returns list of alias identifiers
+        '''
+        aliases = list()
+        query = """
+            MATCH (n:GENE)-[r:HAS_ALIAS]->(m:ALIAS)
+            WHERE n.identifier = '%s'
+            RETURN m.identifier as alias
+        """ % gene.identifier
+        results = self.dv.run(query)
+        results = results.data()
+        if results:
+            for row in results:
+                aliases.append(row['alias'])
+        print(aliases)
+        return aliases
 
 class Node(object):
     '''
@@ -409,6 +484,8 @@ class Interaction(object):
         self.ppaxe_score = 0
         self.ppaxe_pubmedid = "NA"
         self.biogrid_pubmedid = "NA"
+        self.string_evidence = "NA"
+        self.string_pubmedid = "NA"
         self.genetic_interaction = 0
         self.physical_interaction = 0
         self.unknown_interaction = 0
@@ -421,6 +498,7 @@ class Interaction(object):
 
     def fill_attributes(self, level, string, biogrid, 
                         ppaxe, ppaxe_score, ppaxe_pubmedid, biogrid_pubmedid, 
+                        string_evidence, string_pubmedid,
                         genetic_interaction=0, physical_interaction=0, 
                         unknown_interaction=0):
         '''
@@ -433,10 +511,20 @@ class Interaction(object):
         self.ppaxe_score = ppaxe_score
         self.ppaxe_pubmedid = ppaxe_pubmedid
         self.biogrid_pubmedid = biogrid_pubmedid
+        self.string_evidence  = string_evidence
+        self.string_pubmedid  = string_pubmedid
         self.genetic_interaction = genetic_interaction
         self.physical_interaction = physical_interaction
         self.unknown_interaction = unknown_interaction
-   
+    
+    def fix_string_evidences(self):
+        '''
+        Changes String Evidences to strings of hrefs
+        '''
+        new_evidences = list()
+        if self.string_evidence:
+            for evidence in sorted(self.string_evidence):
+                print(evidence)
 
     def to_json_dict(self):
         '''
@@ -490,13 +578,30 @@ class Gene(Node):
         self.nvariants = 0
         self.gos = list()
         self.inheritance_pattern = 0
+        self.summary = None
+        self.summary_source = None
+        self.aliases = None
 
     def check(self):
         '''
         Queries Gene on neo4j and fills the attributes.
         If not in database: NodeNotFound
         '''
+        self.normalize_identifier()
+        self.unalias()
         NEO.query_by_id(self)
+
+    def normalize_identifier(self):
+        '''
+        Removes strange characters from identifiers
+        '''
+        self.identifier = re.sub(r'\W+', '_', self.identifier)
+
+    def unalias(self):
+        '''
+        Unalias
+        '''
+        NEO.query_unalias(self)
 
     def fill_attributes(self, level, nvar, dc, inh):
         '''
@@ -605,13 +710,26 @@ class Gene(Node):
         paths = NEO.query_path_to_level(self, level)
         return paths
 
-
     def path_to_gene(self, cobj):
         '''
         Shortest path to Gene Object
         '''
         path = NEO.query_shortest_path(self, cobj)
         return path
+
+    def get_summary(self):
+        '''
+        Returns summary for gene
+        '''
+        self.summary, self.summary_source = NEO.query_get_summary(self)
+        return self.summary
+
+    def get_aliases(self):
+        '''
+        Returns aliases for gene
+        '''
+        self.aliases = sorted(NEO.query_all_aliases(self))
+        return self.aliases
 
     def __hash__(self):
         return hash((self.identifier, self.gene_disease, self.level))

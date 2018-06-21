@@ -4,6 +4,30 @@
 <h2>{{ gene.identifier }} {% if gene.gene_disease > 0 %} <span class="driver-title">[driver]</span> {% endif %}</h2>
 <hr>
 
+{% if gene.aliases %}
+	<div class="other-names">
+		<span id="other-names-title">Other names:</span> 
+		{% for alias in gene.aliases %}
+			{{ alias }}{% if not forloop.last %}, {% endif %}
+		{% endfor %}
+	</div>
+{% endif %}
+
+<h3>Summary</h3>
+<hr>
+<div class="gene-summary">
+	<p>
+		{{ gene.summary }}
+	</p>
+</div>
+{% if gene.summary_source %}
+	<div class="gene-summary-src">{{ gene.summary_source }}</div>
+{% endif %}
+
+
+<br>
+<h3>Gene Data</h3>
+<hr>
 <table class="table table-bordered">
 	<tr>
 		<td><b>Type</b></td>

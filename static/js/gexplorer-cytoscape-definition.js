@@ -48,23 +48,23 @@ var stylesheet = cytoscape.stylesheet()
         })
     .selector('.lvl1')
      .css({
-        "border-color": "#C0EFBA",
+        "border-color": "#E0FFE8",
         })
     .selector('.lvl2')
      .css({
-        "border-color": "#5AD55A",
+        "border-color": "#86DD9C",
         })
     .selector('.lvl3')
      .css({
-        "border-color": "#0A945C",
+        "border-color": "#59BC72",
         })
     .selector('.lvl4')
      .css({
-        "border-color": "#426A2B",
+        "border-color": "#2C9B48",
         })
     .selector('.lvl5')
      .css({
-        "border-color": "#1E3610",
+        "border-color": "#007A1F",
     })
     .selector('edge')
         .css({

@@ -420,7 +420,7 @@ class NeoDriver(object):
         '''
         Returns list of alias identifiers
         '''
-        aliases = list()
+        aliases = set()
         query = """
             MATCH (n:GENE)-[r:HAS_ALIAS]->(m:ALIAS)
             WHERE n.identifier = '%s'
@@ -430,8 +430,7 @@ class NeoDriver(object):
         results = results.data()
         if results:
             for row in results:
-                aliases.append(row['alias'])
-        print(aliases)
+                aliases.add(row['alias'])
         return aliases
 
 class Node(object):
@@ -728,7 +727,21 @@ class Gene(Node):
         '''
         Returns aliases for gene
         '''
-        self.aliases = sorted(NEO.query_all_aliases(self))
+        def alias_key(a):
+            '''
+            Sorts aliases based on our arbitrary needs:
+                First Symbols, then ENS and finally Entrez.
+                Within each group, sort by length of the symbol.
+            '''
+            order = { 'sym': (1, len(a)), 'ens': (2, len(a)), 'num': (3, len(a)) }
+            key = 'sym'
+            if re.match('^ENS[GTP]', a):
+                key = 'ens'
+            elif re.match('^\d+$', a):
+                key = 'num'
+            return order[key]
+
+        self.aliases = sorted(NEO.query_all_aliases(self), key=alias_key)
         return self.aliases
 
     def __hash__(self):

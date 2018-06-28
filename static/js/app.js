@@ -3,12 +3,12 @@ app.js - Main script for the basic functionality of
          Netengine graph visualizations.
 ==================================================*/
 
-
 // GLOBALS
 //==================================================
 window.clickBehaviourOpts = {"properties":1, "addition":2, "deletion":3 }
 Object.freeze(window.clickBehaviourOpts);
 window.clickBehaviour = window.clickBehaviourOpts.properties; // Default behaviour
+window.ROOT = '/intranet/RPGeNet';
 window.drag = false;
 window.cy;
 
@@ -205,7 +205,7 @@ expandOnClick = function(cy, node) {
     }
     $.ajax({
         type: "GET",
-        url: "/add_neighbours",
+        url: window.ROOT + "/add_neighbours",
         cache: true,
         data: {
             'gene': node.data().name,
@@ -256,7 +256,7 @@ expandOnClick = function(cy, node) {
 nPropertiesOnClick = function(cy, node) {
     $.ajax({
         type: "GET",
-        url: "/get_properties",
+        url: window.ROOT + "/get_properties",
         cache: true,
         data: {
             'gene': node.data().name,
@@ -287,7 +287,7 @@ nPropertiesOnClick = function(cy, node) {
 ePropertiesOnClick = function(cy, edge) {
     $.ajax({
         type: "GET",
-        url: "/get_properties",
+        url: window.ROOT + "/get_properties",
         cache: true,
         data: {
             'interaction': edge.data().id,
@@ -402,7 +402,7 @@ function getCookie(name) {
     node_ids = node_ids.join(",");
     $.ajax({
         type: "POST",
-        url: "/show_connections",
+        url: window.ROOT + "/show_connections",
         cache: true,
         data: {
             'nodes': node_ids,

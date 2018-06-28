@@ -104,20 +104,23 @@ function b64ToBlob(b64Data, contentType, sliceSize) {
  	var jsonGraph = cy.json().elements;
  	var nodes     = {};
  	var edges     = {};
+    /*
  	for (var key in jsonGraph.nodes) {
  		var node = jsonGraph.nodes[key].data.id;
  		nodes[node] = 1;
  	}
+    */
     nodes = Object.keys(nodes).join("\n"); // to string
-
+    edges['Parent\tChild\tType\tLevel\tEvidences'] = 1;
     for (var ekey in jsonGraph.edges) {
         var edge = jsonGraph.edges[ekey].data.id;
-        edge = edge.replace("-", "\t");
-        edge = edge + "\t" + jsonGraph.edges[ekey].data.probability;
+        edge = edge.replace(/-/g, "\t");
+        edge = edge + "\t" + jsonGraph.edges[ekey].data.level;
+        edge = edge + "\t" + jsonGraph.edges[ekey].data.ewidth;
         edges[edge] = 1;
     }
     edges = Object.keys(edges).join("\n"); // to string
-    tblString = nodes + "\n" + edges;
+    tblString = edges;
     var blob = new Blob([tblString], {type: "text/plain;charset=utf-8"});
     saveAs(blob, "graph-export.tbl");
 };

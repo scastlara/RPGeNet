@@ -17,7 +17,6 @@ class NeoQuery(object):
         '''
         Executes query
         '''
-        print(self.cypher)
         try:
             results = self.driver.run(self.cypher)
         except Exception as err:

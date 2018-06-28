@@ -4,6 +4,209 @@ import json
 import re
 
 
+class NeoQuery(object):
+    '''
+    Class for Neo4j queries
+    '''
+    def __init__(self, driver, cypher):
+        self.driver = driver
+        self.cypher = cypher
+        self.results = None
+
+    def execute(self):
+        '''
+        Executes query
+        '''
+        print(self.cypher)
+        try:
+            results = self.driver.run(self.cypher)
+        except Exception as err:
+            raise NotValidQuery(self.cypher)
+        if results:
+            self.results = results.data()
+        else:
+            self.results = None
+        return self.results
+
+    def get_results(self):
+        '''
+        Returns dictionary with results of cypher query
+        '''
+        if self.results is None:
+            self.execute()
+
+        return self.results
+
+
+class NeoQueryFactory(object):
+    '''
+    Factory for Neo4j Queries
+    '''
+    def __init__(self, driver):
+        self.driver = driver
+
+    def _return_by_attributes(self, elem_name, attributes):
+        '''
+        Constructor of return clause based on a list of attributes for neo4j
+        '''
+        non_attributes = set([
+            'label', 'parent', 
+            'child', 'expression', 
+            'gos', 'int_type', 
+            'aliases',
+            'summary', 'summary_source'])
+        return_clause = ", ".join(['%s.%s as %s_%s' % (elem_name, attr, elem_name, attr) 
+                                   for attr in attributes if attr not in non_attributes])
+        return return_clause
+
+    def build_query_by_id(self, nodeobj):
+        '''
+        Creates query for Matching Nodes by Identifier
+        '''
+        attributes = nodeobj.__dict__.keys()
+        cypher = """
+            MATCH (node:%s)
+            WHERE node.identifier = '%s'
+            RETURN 
+        """ % (nodeobj.label, nodeobj.identifier)
+        cypher = cypher + self._return_by_attributes('node', attributes)
+        return NeoQuery(self.driver, cypher)
+
+    def build_query_by_int(self, intobj):
+        '''
+        Creates query to retrieve the interaction using parent-child identifiers
+        and fills the attributes of the interaction
+        '''
+        cypher = """
+            MATCH (n:GENE)-[rel:INTERACTS_WITH]->(m:GENE)
+            WHERE n.identifier = '%s'
+            AND   m.identifier = '%s'
+        """ % (intobj.parent.identifier, intobj.child.identifier)
+        cypher += 'RETURN ' + self._return_by_attributes('rel', intobj.__dict__.keys())
+        return NeoQuery(self.driver, cypher)
+
+    def build_query_expression(self, nodeobj, exp_id):
+        '''
+        Gets expression value for nodeobj in a given experiment
+        '''
+        cypher = """
+            MATCH  (node:%s)-[r:HAS_EXPRESSION]->(exp:EXPERIMENT)
+            WHERE  node.identifier = '%s'
+            AND    exp.identifier = '%s'
+            RETURN r.value as expvalue
+        """ % (nodeobj.label, nodeobj.identifier, nodeobj.identifier)
+        return NeoQuery(self.driver, cypher)
+
+    def build_query_get_connections(self, genelist, level):
+        '''
+        Gets connections for a list of Gene objects
+        '''
+        gene_q_string = str(list([str(gene.identifier) for gene in genelist]))
+        cypher = """
+            MATCH  (n:GENE)-[rel:INTERACTS_WITH]->(m:GENE)
+            WHERE  n.identifier IN %s
+            AND    m.identifier IN %s
+            AND    rel.level <= %s
+            RETURN n.identifier AS nidientifier,
+                   m.identifier AS midentifier,
+        """ % (gene_q_string, gene_q_string, level)
+        e_attributes = Interaction().__dict__.keys()
+        cypher += self._return_by_attributes('rel', e_attributes)
+        return NeoQuery(self.driver, cypher)
+
+    def build_query_gos(self, nodeobj):
+        cypher = """
+            MATCH  (node:%s)-[r:HAS_GO]->(go:GO)
+            WHERE  node.identifier = '%s'
+            RETURN go.accession as accession, 
+                   go.description as description, 
+                   go.domain as domain
+            ORDER BY go.domain
+        """ % (nodeobj.label, nodeobj.identifier)
+        return NeoQuery(self.driver, cypher)
+
+    def build_query_get_neighbours(self, nodeobj, level, dist, exp_id):
+        '''
+        Creates query to get neighbours to a particular node 
+        in a level and at a distance
+        '''
+        cypher = """
+            MATCH  p=(node1:GENE)-[rels:INTERACTS_WITH*1..%s]-(node2:GENE)
+            WHERE  node1.identifier = '%s'
+            AND    all(r IN rels WHERE r.level<=%s)
+            RETURN p as pathway, extract(r IN relationships(p)| startnode(r).identifier) as thestart
+        """ % (dist, nodeobj.identifier, level)
+        return NeoQuery(self.driver, cypher)
+
+    def build_query_path_to_level(self, nodeobj, level):
+        '''
+        Creates query for shortest path from node to a specific level
+        '''
+        cypher = """
+            MATCH (gene:GENE)-[p:HAS_PATH]->(path:PATHWAY)
+            WHERE gene.identifier = '%s'
+            AND   path.to_level = %s
+            WITH  gene, path
+            MATCH (gene1:GENE)-[p1:IS_IN_PATH]->(path)
+            MATCH (gene2:GENE)-[p2:IS_IN_PATH]->(path)
+            MATCH (gene1)-[inter:INTERACTS_WITH]->(gene2)
+            WHERE toInteger(p1.order) = toInteger(p2.order) - 1
+            RETURN 
+        """ % (nodeobj.identifier, level)
+        n_attributes = nodeobj.__dict__.keys()
+        e_attributes = Interaction().__dict__.keys()
+        cypher += self._return_by_attributes('gene1', n_attributes)
+        cypher += ", " + self._return_by_attributes('inter', e_attributes)
+        cypher += ", " + self._return_by_attributes('gene2', n_attributes)
+        cypher += ", " + "path.target AS target"
+        cypher += " ORDER BY path.target, p1.order"
+        return NeoQuery(self.driver, cypher)
+
+    def build_query_shortest_path(self, pobj, cobj):
+        '''
+        Creates query for shortest path between pobj -> cobj
+        '''
+        cypher = """
+            MATCH  p=allShortestPaths((s:GENE)-[r:INTERACTS_WITH*]->(t:GENE))
+            WHERE  s.identifier = '%s'
+            AND    t.identifier = '%s'
+            RETURN p
+        """ % (pobj.identifier, cobj.identifier)
+        return NeoQuery(self.driver, cypher)
+
+    def build_query_summary(self, nodeobj):
+        '''
+        Creates query to retrieve the summary of a gene
+        '''
+        cypher = """
+            MATCH (n:GENE)
+            WHERE n.identifier = '%s'
+            RETURN n.summary AS summary, n.summary_source AS summary_source
+        """ % (nodeobj.identifier)
+        return NeoQuery(self.driver, cypher)
+
+    def build_query_unalias(self, nodeobj):
+        '''
+        Creates query to disambiguate genes
+        '''
+        cypher = """
+            MATCH (n:ALIAS)<-[r:HAS_ALIAS]-(m:GENE)
+            WHERE n.identifier = '%s'
+            RETURN m.identifier as identifier
+        """ % nodeobj.identifier
+        return NeoQuery(self.driver, cypher)
+
+    def build_query_all_aliases(self, nodeobj):
+        '''
+        Creates query to retrieve all aliases to Gene
+        '''
+        cypher = """
+            MATCH (n:GENE)-[r:HAS_ALIAS]->(m:ALIAS)
+            WHERE n.identifier = '%s'
+            RETURN m.identifier as alias
+        """ % nodeobj.identifier
+        return NeoQuery(self.driver, cypher)
+
 class NeoDriver(object):
     '''
     Class for the Neo4jDriver
@@ -15,6 +218,7 @@ class NeoDriver(object):
         self.passw = passw
         address = "http://%s:%s/db/data/" % (ip, port)
         self.dv = Graph(address, password=passw, bolt_port=bolt_port)
+        self.query_factory = NeoQueryFactory(self.dv)
 
     def return_by_attributes(self, elem_name, attributes):
         '''
@@ -34,15 +238,8 @@ class NeoDriver(object):
         '''
         Gets ONE node object of class 
         '''
-        attributes = nodeobj.__dict__.keys()
-        query = """
-            MATCH (node:%s)
-            WHERE node.identifier = '%s'
-            RETURN 
-        """ % (nodeobj.label, nodeobj.identifier)
-        query = query + self.return_by_attributes('node', attributes)
-        results = self.dv.run(query)    
-        results = results.data()
+        query = self.query_factory.build_query_by_id(nodeobj)
+        results = query.get_results()
         if results:
             results = results[0]
             nodeobj.fill_attributes(results, 'node')
@@ -54,14 +251,8 @@ class NeoDriver(object):
         Queries the interaction using parent-child identifiers
         and fills the attributes of the interaction
         '''
-        query = """
-            MATCH (n:GENE)-[rel:INTERACTS_WITH]->(m:GENE)
-            WHERE n.identifier = '%s'
-            AND   m.identifier = '%s'
-        """ % (intobj.parent.identifier, intobj.child.identifier)
-        query += 'RETURN ' + self.return_by_attributes('rel', intobj.__dict__.keys()) 
-        results = self.dv.run(query)
-        results = results.data()
+        query = self.query_factory.build_query_by_int(intobj)
+        results = query.get_results()
         if results:
             interaction = results[0]
             intobj.fill_attributes(interaction, 'rel')
@@ -77,19 +268,13 @@ class NeoDriver(object):
         '''
         Gets expression value for nodeobj
         '''
-        query = """
-            MATCH  (node:%s)-[r:HAS_EXPRESSION]->(exp:EXPERIMENT)
-            WHERE  node.identifier = '%s'
-            AND    exp.identifier = '%s'
-            RETURN r.value as expvalue
-        """ % (nodeobj.label, nodeobj.identifier, nodeobj.identifier)
-        results = self.dv.run(query)
-        results = results.data()
+        query = self.query_factory.build_query_expression(nodeobj, exp_id)
+        results = query.get_results()
+        #print("Expression %s" % results)
         if results:
             nodeobj.expression = results[0]['expvalue']
         else:
             nodeobj.expression = 'NA'
-
 
     def query_get_connections(self, genelist, level):
         '''
@@ -98,19 +283,8 @@ class NeoDriver(object):
         connections_graph = GraphCyt()
         for gene in genelist:
             connections_graph.add_gene(Gene(identifier=gene.identifier))
-        gene_q_string = str(list([str(gene.identifier) for gene in genelist]))
-        query = """
-            MATCH  (n:GENE)-[rel:INTERACTS_WITH]->(m:GENE)
-            WHERE  n.identifier IN %s
-            AND    m.identifier IN %s
-            AND    rel.level <= %s
-            RETURN n.identifier AS nidientifier,
-                   m.identifier AS midentifier,
-        """ % (gene_q_string, gene_q_string, level)
-        e_attributes = Interaction().__dict__.keys()
-        query += self.return_by_attributes('rel', e_attributes)
-        results = self.dv.run(query)
-        results = results.data()
+        query = self.query_factory.build_query_get_connections(genelist, level)
+        results = query.get_results()
         if results:
             for interaction in results:
                 intobj = Interaction(
@@ -125,16 +299,8 @@ class NeoDriver(object):
         Gets the GO of the nodeobj Gene
         '''
         go_list = list()
-        query = """
-            MATCH  (node:%s)-[r:HAS_GO]->(go:GO)
-            WHERE  node.identifier = '%s'
-            RETURN go.accession as accession, 
-                   go.description as description, 
-                   go.domain as domain
-            ORDER BY go.domain
-        """ % (nodeobj.label, nodeobj.identifier)
-        results = self.dv.run(query)
-        results = results.data()
+        query = self.query_factory.build_query_gos(nodeobj)
+        results = query.get_results()
         if results:
             for go in results:
                 go_list.append(GO(accession=go['accession'], 
@@ -149,15 +315,8 @@ class NeoDriver(object):
         '''
         neighbour_graph = GraphCyt()
         neighbour_graph.genes.add(nodeobj)
-        query = """
-            MATCH  p=(node1:GENE)-[rels:INTERACTS_WITH*1..%s]-(node2:GENE)
-            WHERE  node1.identifier = '%s'
-            AND    all(r IN rels WHERE r.level<=%s)
-            RETURN p as pathway, extract(r IN relationships(p)| startnode(r).identifier) as thestart
-        """ % (dist, nodeobj.identifier, level)
-        results = self.dv.run(query)
-        results = results.data()
-
+        query = self.query_factory.build_query_get_neighbours(nodeobj, level, dist, exp_id)
+        results = query.get_results()
         if results:
             # Add genes first
             for row in results:
@@ -170,7 +329,7 @@ class NeoDriver(object):
                     gene2.fill_attributes(nodes[i+1], None)
                     neighbour_graph.add_gene(gene1)
                     neighbour_graph.add_gene(gene2)
-                    if gene1.identifier == row['thestart'][0]:
+                    if gene1.identifier == row['thestart'][-1]:
                         interaction_obj = Interaction(parent=gene1, child=gene2)
                     else:
                         interaction_obj = Interaction(parent=gene2, child=gene1)
@@ -185,28 +344,9 @@ class NeoDriver(object):
         Shortest paths between 'node' and any node in level 'level'
         '''
         pathways = dict()
-        
-        query = """
-            MATCH (gene:GENE)-[p:HAS_PATH]->(path:PATHWAY)
-            WHERE gene.identifier = '%s'
-            AND   path.to_level = %s
-            WITH  gene, path
-            MATCH (gene1:GENE)-[p1:IS_IN_PATH]->(path)
-            MATCH (gene2:GENE)-[p2:IS_IN_PATH]->(path)
-            MATCH (gene1)-[inter:INTERACTS_WITH]->(gene2)
-            WHERE toInteger(p1.order) = toInteger(p2.order) - 1
-            RETURN 
-        """ % (nodeobj.identifier, level)
-        n_attributes = nodeobj.__dict__.keys()
-        e_attributes = Interaction().__dict__.keys()
-        query += self.return_by_attributes('gene1', n_attributes)
-        query += ", " + self.return_by_attributes('inter', e_attributes)
-        query += ", " + self.return_by_attributes('gene2', n_attributes)
-        query += ", " + "path.target AS target"
-        query += " ORDER BY path.target, p1.order"
-        results = self.dv.run(query)
-        results = results.data()
         gene_order = 0
+        query = self.query_factory.build_query_path_to_level(nodeobj, level)
+        results = query.get_results()
         if results:
             for interaction in results:
                 if interaction['target'] not in pathways:
@@ -234,25 +374,15 @@ class NeoDriver(object):
                 interaction_obj = Interaction(parent=gene1, child=gene2)
                 interaction_obj.fill_attributes(interaction, 'inter')
                 pathways[interaction['target']].add_interaction(interaction_obj)
-        else:
-            # Maybe path length == 1
-            # execute second query
-            pass
         return pathways
 
     def query_shortest_path(self, pobj, cobj):
         '''
         Returns list of GraphCytoscape with shortest path between pobj and cobj
         '''
-        query = """
-            MATCH  p=allShortestPaths((s:GENE)-[r:INTERACTS_WITH*]->(t:GENE))
-            WHERE  s.identifier = '%s'
-            AND    t.identifier = '%s'
-            RETURN p
-        """ % (pobj.identifier, cobj.identifier)
-        results = self.dv.run(query)
-        results = results.data()
         pathways = list()
+        query = self.query_factory.build_query_shortest_path(pobj, cobj)
+        results = query.get_results()
         if results:
             for path in results:
                 pathway = GraphCyt()
@@ -287,17 +417,12 @@ class NeoDriver(object):
                 pathways.append(pathway)
         return pathways
 
-    def query_get_summary(self, gene):
+    def query_get_summary(self, nodeobj):
         '''
         Returns the summary for the gene
         '''
-        query = """
-            MATCH (n:GENE)
-            WHERE n.identifier = '%s'
-            RETURN n.summary AS summary, n.summary_source AS summary_source
-        """ % (gene.identifier)
-        results = self.dv.run(query)
-        results = results.data()
+        query = self.query_factory.build_query_summary(nodeobj)
+        results = query.get_results()
         if results:
             if results[0]['summary'] is not None:
                 summary = results[0]['summary']
@@ -310,37 +435,27 @@ class NeoDriver(object):
             src = None
         return summary, src
 
-    def query_unalias(self, gene):
+    def query_unalias(self, nodeobj):
         '''
         Changes the identifier of the gene object to the official
         identifier in the database
         '''
-        query = """
-            MATCH (n:ALIAS)<-[r:HAS_ALIAS]-(m:GENE)
-            WHERE n.identifier = '%s'
-            RETURN m.identifier as identifier
-        """ % gene.identifier
-        results = self.dv.run(query)
-        results = results.data()
+        query = self.query_factory.build_query_unalias(nodeobj)
+        results = query.get_results()
         if results:
-            gene.identifier = results[0]['identifier']
+            nodeobj.identifier = results[0]['identifier']
         else:
             # No alias, maybe an official identifier already
             # Don't have to do anything
             return
 
-    def query_all_aliases(self, gene):
+    def query_all_aliases(self, nodeobj):
         '''
         Returns list of alias identifiers
         '''
         aliases = set()
-        query = """
-            MATCH (n:GENE)-[r:HAS_ALIAS]->(m:ALIAS)
-            WHERE n.identifier = '%s'
-            RETURN m.identifier as alias
-        """ % gene.identifier
-        results = self.dv.run(query)
-        results = results.data()
+        query = self.query_factory.build_query_all_aliases(nodeobj)
+        results = query.get_results()
         if results:
             for row in results:
                 aliases.add(row['alias'])
@@ -804,3 +919,10 @@ class InteractionNotFound(Exception):
         self.identifier   = parent + "-" + child
     def __str__(self):
         return "Interaction not found %s." % (self.identifier)
+
+
+class NotValidQuery(Exception):
+    def __init__(self, cypher):
+        self.cypher   = cypher
+    def __str__(self):
+        return "Not valid query: %s." % (self.cypher)

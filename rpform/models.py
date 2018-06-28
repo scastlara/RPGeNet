@@ -45,11 +45,7 @@ class NeoDriver(object):
         results = results.data()
         if results:
             results = results[0]
-            nodeobj.fill_attributes(
-                results['node_level'], 
-                results['node_nvariants'],
-                results['node_gene_disease'], 
-                results['node_inheritance_pattern'])
+            nodeobj.fill_attributes(results, 'node')
         else:
             raise NodeNotFound(nodeobj.identifier, nodeobj.label)
 
@@ -68,19 +64,7 @@ class NeoDriver(object):
         results = results.data()
         if results:
             interaction = results[0]
-            intobj.fill_attributes(
-                level=interaction['rel_level'], 
-                string=interaction['rel_string'], 
-                biogrid=interaction['rel_biogrid'], 
-                ppaxe=interaction['rel_ppaxe'], 
-                ppaxe_score=interaction['rel_ppaxe_score'],
-                ppaxe_pubmedid=interaction['rel_ppaxe_pubmedid'], 
-                biogrid_pubmedid=interaction['rel_biogrid_pubmedid'], 
-                string_evidence=interaction['rel_string_evidence'],
-                string_pubmedid=interaction['rel_string_pubmedid'],
-                genetic_interaction=interaction['rel_genetic_interaction'], 
-                physical_interaction=interaction['rel_physical_interaction'], 
-                unknown_interaction=interaction['rel_unknown_interaction'])
+            intobj.fill_attributes(interaction, 'rel')
             for int_type in ['physical_interaction', 'genetic_interaction', 'unknown_interaction']:
                 if interaction['rel_' + int_type]:
                     int_type = int_type.split('_')[0] # remove '_interaction'
@@ -132,19 +116,7 @@ class NeoDriver(object):
                 intobj = Interaction(
                     parent=Gene(identifier=interaction['nidientifier']),
                     child=Gene(identifier=interaction['midentifier']))
-                intobj.fill_attributes(
-                    level=interaction['rel_level'], 
-                    string=interaction['rel_string'], 
-                    biogrid=interaction['rel_biogrid'], 
-                    ppaxe=interaction['rel_ppaxe'], 
-                    ppaxe_score=interaction['rel_ppaxe_score'],
-                    ppaxe_pubmedid=interaction['rel_ppaxe_pubmedid'], 
-                    biogrid_pubmedid=interaction['rel_biogrid_pubmedid'],
-                    string_evidence=interaction['rel_string_evidence'],
-                    string_pubmedid=interaction['rel_string_pubmedid'],
-                    genetic_interaction=interaction['rel_genetic_interaction'], 
-                    physical_interaction=interaction['rel_physical_interaction'], 
-                    unknown_interaction=interaction['rel_unknown_interaction'])
+                intobj.fill_attributes(interaction, 'rel')
                 connections_graph.add_interaction(intobj)
         return connections_graph
 
@@ -193,36 +165,16 @@ class NeoDriver(object):
                 rels  = row['pathway'].relationships()
                 for i in range(0, len(nodes) - 1):
                     gene1 = Gene(nodes[i]['identifier'])
-                    gene1.fill_attributes(
-                        level=nodes[i]['level'],
-                        nvar=nodes[i]['nvariants'],
-                        dc=nodes[i]['gene_disease'],
-                        inh=nodes[i]['inheritance_pattern'])
+                    gene1.fill_attributes(nodes[i], None)
                     gene2 = Gene(nodes[i+1]['identifier'])
-                    gene2.fill_attributes(
-                        level=nodes[i+1]['level'],
-                        nvar=nodes[i+1]['nvariants'],
-                        dc=nodes[i+1]['gene_disease'],
-                        inh=nodes[i+1]['inheritance_pattern'])
+                    gene2.fill_attributes(nodes[i+1], None)
                     neighbour_graph.add_gene(gene1)
                     neighbour_graph.add_gene(gene2)
                     if gene1.identifier == row['thestart'][0]:
                         interaction_obj = Interaction(parent=gene1, child=gene2)
                     else:
                         interaction_obj = Interaction(parent=gene2, child=gene1)
-                    interaction_obj.fill_attributes(
-                        level=rels[i]['level'], 
-                        string=rels[i]['string'], 
-                        biogrid=rels[i]['biogrid'], 
-                        ppaxe=rels[i]['ppaxe'], 
-                        ppaxe_score=rels[i]['ppaxe_score'],
-                        ppaxe_pubmedid=rels[i]['ppaxe_pubmedid'], 
-                        biogrid_pubmedid=rels[i]['biogrid_pubmedid'], 
-                        string_evidence=rels[i]['string_evidence'],
-                        string_pubmedid=rels[i]['string_pubmedid'],
-                        genetic_interaction=rels[i]['genetic_interaction'], 
-                        physical_interaction=rels[i]['physical_interaction'], 
-                        unknown_interaction=rels[i]['unknown_interaction'])
+                    interaction_obj.fill_attributes(rels[i], None)
                     neighbour_graph.add_interaction(interaction_obj)
             return neighbour_graph
         else:
@@ -265,11 +217,7 @@ class NeoDriver(object):
                     gene1 = pathways[interaction['target']].return_gene(interaction['gene1_identifier'])
                 else:
                     gene1 = Gene(interaction['gene1_identifier'])
-                    gene1.fill_attributes(
-                        level=interaction['gene1_level'],
-                        nvar=interaction['gene1_nvariants'],
-                        dc=interaction['gene1_gene_disease'],
-                        inh=interaction['gene1_inheritance_pattern'])
+                    gene1.fill_attributes(interaction, 'gene1')
                     pathways[interaction['target']].add_gene(gene1)
                     pathways[interaction['target']].set_order(gene1, gene_order)
                     gene_order += 1
@@ -277,30 +225,14 @@ class NeoDriver(object):
                     gene2 = pathways[interaction['target']].return_gene(interaction['gene2_identifier'])
                 else:
                     gene2 = Gene(interaction['gene2_identifier'])
-                    gene2.fill_attributes(
-                        level=interaction['gene2_level'],
-                        nvar=interaction['gene2_nvariants'],
-                        dc=interaction['gene2_gene_disease'],
-                        inh=interaction['gene2_inheritance_pattern'])
+                    gene2.fill_attributes(interaction, 'gene2')
                     pathways[interaction['target']].add_gene(gene2)
                     pathways[interaction['target']].set_order(gene2, gene_order)
                     gene_order += 1
 
                 # Adding interaction here
                 interaction_obj = Interaction(parent=gene1, child=gene2)
-                interaction_obj.fill_attributes(
-                        level=interaction['inter_level'], 
-                        string=interaction['inter_string'], 
-                        biogrid=interaction['inter_biogrid'], 
-                        ppaxe=interaction['inter_ppaxe'], 
-                        ppaxe_score=interaction['inter_ppaxe_score'],
-                        ppaxe_pubmedid=interaction['inter_ppaxe_pubmedid'], 
-                        biogrid_pubmedid=interaction['inter_biogrid_pubmedid'],
-                        string_evidence=interaction['inter_string_evidence'],
-                        string_pubmedid=interaction['inter_string_pubmedid'],
-                        genetic_interaction=interaction['inter_genetic_interaction'], 
-                        physical_interaction=interaction['inter_physical_interaction'], 
-                        unknown_interaction=interaction['inter_unknown_interaction'])
+                interaction_obj.fill_attributes(interaction, 'inter')
                 pathways[interaction['target']].add_interaction(interaction_obj)
         else:
             # Maybe path length == 1
@@ -334,33 +266,14 @@ class NeoDriver(object):
                         if not g1:
                             # Gene 1
                             g1 = Gene(elem['identifier'])
-                            g1.fill_attributes(
-                                level=elem['level'],
-                                nvar=elem['nvariants'],
-                                dc=elem['gene_disease'],
-                                inh=elem['inheritance_pattern'])
+                            g1.fill_attributes(elem, None)
+
                         else:
                             g2 = Gene(elem['identifier'])
-                            g2.fill_attributes(
-                                level=elem['level'],
-                                nvar=elem['nvariants'],
-                                dc=elem['gene_disease'],
-                                inh=elem['inheritance_pattern'])
+                            g2.fill_attributes(elem, None)
                             if g1 and g2:
                                 interaction_obj = Interaction(parent=g1, child=g2)
-                                interaction_obj.fill_attributes(
-                                    level=rel['level'], 
-                                    string=rel['string'], 
-                                    biogrid=rel['biogrid'], 
-                                    ppaxe=rel['ppaxe'], 
-                                    ppaxe_score=rel['ppaxe_score'],
-                                    ppaxe_pubmedid=rel['ppaxe_pubmedid'], 
-                                    biogrid_pubmedid=rel['biogrid_pubmedid'],
-                                    string_evidence=rel['string_evidence'],
-                                    string_pubmedid=rel['string_pubmedid'],
-                                    genetic_interaction=rel['genetic_interaction'], 
-                                    physical_interaction=rel['physical_interaction'],
-                                    unknown_interaction=rel['unknown_interaction'])
+                                interaction_obj.fill_attributes(rel, None)
                                 pathway.add_gene(g1)
                                 pathway.add_gene(g2)
                                 pathway.set_order(g1, order)
@@ -433,6 +346,7 @@ class NeoDriver(object):
                 aliases.add(row['alias'])
         return aliases
 
+
 class Node(object):
     '''
     General class for nodes on neo4j
@@ -495,26 +409,36 @@ class Interaction(object):
         '''
         NEO.query_by_int(self)
 
-    def fill_attributes(self, level, string, biogrid, 
-                        ppaxe, ppaxe_score, ppaxe_pubmedid, biogrid_pubmedid, 
-                        string_evidence, string_pubmedid,
-                        genetic_interaction=0, physical_interaction=0, 
-                        unknown_interaction=0):
+    def fill_attributes(self, interaction_dict, prefix):
         '''
         Fills the attributes of the interaction to avoid querying db
         '''
-        self.level = level
-        self.string = string
-        self.biogrid = biogrid
-        self.ppaxe = ppaxe
-        self.ppaxe_score = ppaxe_score
-        self.ppaxe_pubmedid = ppaxe_pubmedid
-        self.biogrid_pubmedid = biogrid_pubmedid
-        self.string_evidence  = string_evidence
-        self.string_pubmedid  = string_pubmedid
-        self.genetic_interaction = genetic_interaction
-        self.physical_interaction = physical_interaction
-        self.unknown_interaction = unknown_interaction
+        if prefix is None:
+            self.level = interaction_dict['level']
+            self.string = interaction_dict['string']
+            self.biogrid = interaction_dict['biogrid']
+            self.ppaxe = interaction_dict['ppaxe']
+            self.ppaxe_score = interaction_dict['ppaxe_score']
+            self.ppaxe_pubmedid = interaction_dict['ppaxe_pubmedid']
+            self.biogrid_pubmedid = interaction_dict['biogrid_pubmedid']
+            self.string_evidence  = interaction_dict['string_evidence']
+            self.string_pubmedid  = interaction_dict['string_pubmedid']
+            self.genetic_interaction = interaction_dict['genetic_interaction']
+            self.physical_interaction = interaction_dict['physical_interaction']
+            self.unknown_interaction = interaction_dict['unknown_interaction']
+        else:
+            self.level = interaction_dict[prefix + '_level']
+            self.string = interaction_dict[prefix + '_string']
+            self.biogrid = interaction_dict[prefix + '_biogrid']
+            self.ppaxe = interaction_dict[prefix + '_ppaxe']
+            self.ppaxe_score = interaction_dict[prefix + '_ppaxe_score']
+            self.ppaxe_pubmedid = interaction_dict[prefix + '_ppaxe_pubmedid']
+            self.biogrid_pubmedid = interaction_dict[prefix + '_biogrid_pubmedid']
+            self.string_evidence  = interaction_dict[prefix + '_string_evidence']
+            self.string_pubmedid  = interaction_dict[prefix + '_string_pubmedid']
+            self.genetic_interaction = interaction_dict[prefix + '_genetic_interaction']
+            self.physical_interaction = interaction_dict[prefix + '_physical_interaction']
+            self.unknown_interaction = interaction_dict[prefix + '_unknown_interaction'] 
     
     def fix_string_evidences(self):
         '''
@@ -602,14 +526,20 @@ class Gene(Node):
         '''
         NEO.query_unalias(self)
 
-    def fill_attributes(self, level, nvar, dc, inh):
+    def fill_attributes(self, genedict, prefix):
         '''
         Fills the attributes of the object. Avoids querying db
         '''
-        self.level = level
-        self.nvariants = nvar
-        self.gene_disease = dc
-        self.inheritance_pattern = inh
+        if prefix is None:
+            self.level = genedict['level']
+            self.nvariants = genedict['nvariants']
+            self.gene_disease = genedict['gene_disease']
+            self.inheritance_pattern = genedict['inheritance_pattern']
+        else:
+            self.level = genedict[prefix + '_level']
+            self.nvariants = genedict[prefix + '_nvariants']
+            self.gene_disease = genedict[prefix + '_gene_disease']
+            self.inheritance_pattern = genedict[prefix + '_inheritance_pattern']     
 
     def is_driver(self):
         '''

@@ -10,8 +10,7 @@ handler404 = "rpform.views.handler404"
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^', include('rpform.urls')),
-    # url(r'^$', 'rpgnetv2.views.home', name='home'),
+     url(r'^', include('rpform.urls')),
     # url(r'^rpgnetv2/', include('rpgnetv2.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -20,3 +19,4 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 )
+

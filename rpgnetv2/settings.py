@@ -2,11 +2,20 @@
 import os
 import logging
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+ROOT_PATH = os.path.dirname(__file__)
+BASE_DIR = '/datasets/RPGeNet_v2_201806'
+# os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#  + 
+# BASE_DIR=os.path.dirname(__file__)
+# BASE_DIR = '/www/compgen/compgen.bio.ub.edu.2018/datasets/RPGeNet_v2_201806'
+#            os.path.dirname(os.path.dirname(__file__))
+#  + 
 DEBUG = True
 
+# THYSERVER = os.environ.get('SCRIPT_NAME', False)
+
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+     ('Compgen Web Master', 'compgen@ub.edu'),
 )
 
 MANAGERS = ADMINS
@@ -30,7 +39,8 @@ ALLOWED_HOSTS = []
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/Madrid'
+#            Europe/Andorra
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -62,18 +72,34 @@ USE_TZ = True
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = BASE_DIR + '/static/'
+STATIC_ROOT= os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#             BASE_DIR + '/static/'
+#             os.path.join(PROJECT_DIR, 'static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = 'https://compgen.bio.ub.edu/datasets/RPGeNet_v2_201806/static/'
-
-# Additional locations of static files
-STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
+# STATIC_URL = 'https://compgen.bio.ub.edu/datasets/RPGeNet_v2_201806/static/'
+# if THYSERVER == False:
+#     STATIC_URL = '/static/'
+# else:
+#     STATIC_URL = '/datasets/RPGeNet_v2_20180/static/'
+STATIC_URL = BASE_DIR + '/static/'
+    
+# # Additional locations of static files
+# IMPORTANT: if the static root is the same with static_dirs, no need to set it
+# in your settings. STATICFILES_DIRS is the list of folders where
+# Django will search for additional static files, in addition to each
+# static folder of each app installed. STATIC_ROOT is the folder where
+# every static files will be stored after a manage.py collectstatic
+STATICFILES_DIRS = ( os.path.join(BASE_DIR,'static'), )
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'),
+#     # os.path.join(PROJECT_DIR, "static")
+#     # Put strings here, like "/home/html/static" or "C:/www/django/static".
+#     # Always use forward slashes, even on Windows.
+#     # Don't forget to use absolute paths, not relative paths.
+# )
 
 # List of finder classes that know how to find static files in
 # various locations.

@@ -3,14 +3,15 @@ import os
 import logging
 
 ROOT_PATH = os.path.dirname(__file__)
-BASE_DIR = '/datasets/RPGeNet_v2_201806'
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+#          '/datasets/RPGeNet_v2_201806'
 # os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #  + 
 # BASE_DIR=os.path.dirname(__file__)
 # BASE_DIR = '/www/compgen/compgen.bio.ub.edu.2018/datasets/RPGeNet_v2_201806'
 #            os.path.dirname(os.path.dirname(__file__))
 #  + 
-DEBUG = True
+DEBUG = False
 
 # THYSERVER = os.environ.get('SCRIPT_NAME', False)
 
@@ -33,7 +34,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.4/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ 'compgen.bio.ub.edu', '127.0.25.16', 'localhost' ]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -61,30 +62,35 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-## MEDIA_ROOT = '/home/compgen/scastillo/RPGeNet/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR + 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-## MEDIA_URL = 'https://compgen.bio.ub.edu/PlanNET/media/'
+# MEDIA_URL = '/media/'
+MEDIA_URL = 'https://compgen.bio.ub.edu/datasets/RPGeNet_v2_201806/media/'
+#           'https://compgen.bio.ub.edu/PlanNET/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT= os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT='/www/compgen/compgen.bio.ub.edu.2018/doc/datasets/RPGeNet_v2_201806/static/'
+#STATIC_ROOT= os.path.join(BASE_DIR, 'staticfiles')
+#
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #             BASE_DIR + '/static/'
 #             os.path.join(PROJECT_DIR, 'static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-# STATIC_URL = 'https://compgen.bio.ub.edu/datasets/RPGeNet_v2_201806/static/'
+STATIC_URL = 'https://compgen.bio.ub.edu/datasets/RPGeNet_v2_201806/static/'
+#STATIC_URL = '/static/'
 # if THYSERVER == False:
 #     STATIC_URL = '/static/'
 # else:
 #     STATIC_URL = '/datasets/RPGeNet_v2_20180/static/'
-STATIC_URL = BASE_DIR + '/static/'
+#STATIC_URL = BASE_DIR + '/static/'
     
 # # Additional locations of static files
 # IMPORTANT: if the static root is the same with static_dirs, no need to set it

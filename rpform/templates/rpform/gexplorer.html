@@ -44,8 +44,16 @@
 	<div id="cyt"></div>
 
 	<!-- INTERACTION LVL INDICATOR -->
-	{% if level %}
-		<div id="lvl-indicator">Level: {{ level }}</div>
+	{% if level != None %}
+		<div id="lvl-indicator">
+			{% if level == 0 %} 
+				Skeleton
+			{% elif level == 4 %} 
+				WholeGraph
+			{% else %} 
+				Level: {{ level }}
+			{% endif %} 
+		</div>
 		<script>
 			window.level = {{ level }};
 		</script>

@@ -56,14 +56,15 @@ def gene_explorer(request):
 		# Check form request [HERE]
 		genes = request.GET['gene']
 		genes = re.sub(r'\s', '', genes)
-		level = request.GET['level']
+		level = int(request.GET['level'])
 		exp_id = request.GET['exp']
-		dist = request.GET['dist']
+		dist = int(request.GET['dist'])
 		genes = [ gene.upper() for gene in genes.split(",") ]
 		wholegraph = GraphCyt()
 		wholegraph.get_genes_in_level(genes, level, dist, exp_id)
 		if wholegraph:
 			response['jsongraph'] = wholegraph.to_json()
+		print(level)
 		response['level'] = level
 		response['dist']  = dist
 		response['exp_id'] = exp_id

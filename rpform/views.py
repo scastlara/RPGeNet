@@ -29,12 +29,12 @@ def upload_graph(request):
 			# Uploaded file
 			response['upload_json'] = request.FILES['myfile'].read()
 			response['upload_json'] = response['upload_json'].replace("\xef\xbb\xbf", "")
-			response['with_pos'] = True
+			response['withpos'] = True
 		else:
 			# From Path to level 'Explore Network' button
 			response['upload_json'] = request.POST['myfile']
 			response['exp_id'] = request.POST['exp_id']
-			response['with_pos'] = False # No positions specified in json
+			response['withpos'] = False # No positions specified in json
 		response['level'] = request.POST['upload-level']
 
 		# Check if valid json

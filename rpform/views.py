@@ -64,7 +64,6 @@ def gene_explorer(request):
 		wholegraph.get_genes_in_level(genes, level, dist, exp_id)
 		if wholegraph:
 			response['jsongraph'] = wholegraph.to_json()
-		print(level)
 		response['level'] = level
 		response['dist']  = dist
 		response['exp_id'] = exp_id

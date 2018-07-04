@@ -22,7 +22,13 @@
 <table class="table table-bordered">
 	<tr>
 		<td><b>Level</b></td>
-		<td>{{ interaction.level }}</td>
+		{% if interaction.level == 0 %} 
+			<td>Skeleton</td>
+		{% elif interaction.level == 5 %} 
+			<td>WholeGraph</td>
+		{% else %} 
+			<td>{{ interaction.level }}</td>
+		{% endif %} 
 	</tr>
 	<tr>
 		<td><b>Genetic interactions</b></td>

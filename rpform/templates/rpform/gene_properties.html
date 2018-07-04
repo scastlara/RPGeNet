@@ -46,7 +46,13 @@
 		</td>
 	<tr>
 		<td><b>Level</b></td>
-        <td>{{ gene.level }}</td>
+		{% if gene.level == 0 %} 
+			<td>Skeleton</td>
+		{% elif gene.level == 5 %} 
+			<td>WholeGraph</td>
+		{% else %} 
+			<td>{{ gene.level }}</td>
+		{% endif %} 
     </tr>
 	<tr>
         <td><b>Number of variants</b></td>

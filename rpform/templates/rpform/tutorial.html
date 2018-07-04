@@ -38,8 +38,174 @@
   <br>
 
   <div class="body-card">
-    TUTORIAL
+    <h1>Tutorial</h1>
+    <hr>
+
+    <div class="toc">
+      <h3>Table of Contents</h3>
+  
+      <ol>
+        <li><a href="#color-legend">Color Legends</a></li>
+        <li><a href="#network-explorer">Network Explorer</a></li>
+        <ul>
+          <li><a href="#network-explorer-form">Form Options</a></li>
+          <ol>
+              <li><a href="#form-gene">Gene/s</a></li>
+              <li><a href="#form-int">Interaction Level</a></li>
+              <li><a href="#form-dist">Gene distance</a></li>
+              <li><a href="#form-exp">Expression</a></li>
+            </ol>
+          <li><a href="#controls">Navigation options</a></li>
+            <ol>
+              <li><a href="#options-click">On Click</a></li>
+              <li><a href="#options-layout">Layout Selection</a></li>
+              <li><a href="#options-connect">Connect Genes</a></li>
+              <li><a href="#options-border">Border size</a></li>
+              <li><a href="#options-export">More Controls</a></li>
+            </ol>
+        </ul>
+        <li><a href="#pathway-to-level">Pathway to Level</a></li>
+        <li><a href="#shortest-path">Shortest Path Between Genes</a></li>
+      </ol>
+    </div>
+
+  <h3 id="color-legend">Color Legends</h3>
+  <hr>
+  
+
+  <h3 id="metwork-explorer">Network Explorer</h3>
+  <hr>
+   
+   <p>
+    The Network Explorer allows you to explore the different levels of the Retinitis Pigmentosa (RP) network by selecting one or several genes and retrieving all their interactions.
+  </p>
+
+  <br><br>
+  <h4 id="network-explorer-form">Form options</h4>
+
+    <div class="center-text">
+      <a href="{% static 'Images/network_explorer_form.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/network_explorer_form.png' %}">
+      </a>
+    </div>
+
+   <br><br>
+   <ol>
+    <li id="form-gene"><b>Gene/s</b>. </li> 
+    <p>
+      Here is where you can input one or several genes of interest related or unrelated to Retinitis Pigmentosa (RP) (althought if is not related there is a big change that it won't have interactors, since the network is using RP genes as seeds). If the input are multiple genes, then those genes have to be separated be a comma "," or a blank space " " between them.
+    </p>
+    <li id="form-int"><b>Interaction Level</b>. </li>
+    <p>
+      The RP network has 4 levels: "Skeleton", Level 1, Level 2, Level 3, and WholeGraph. Each level represents a sub-network of genes and interactions ranging from more related to Retinitis Pigmentosa (Skeleton) to less related (WholeGraph).
+    </p>
+    <li id="form-dist"><b>Gene distance</b>. </li>
+    <p>
+      Specify the distance from the input genes to retrieve from the Network. By default this is set to 1, that is, RPGeNet will only retrieve parents and childs of the specified genes. If set to 2, RPGeNet will also retrieve parents and childs to the interactors of the input genes. Please, note that this field can only be changed when Interaction Level is set to Skeleton.
+    </p>
+    <li id="form-exp"><b>Expression</b>. </li>
+    <p>
+      Color the genes in the graph according to their expression in the specified experiment.
+    </p>
+
+   </ol>
+
+  <br><br>
+  <h4 id="controls">Navigation Options</h4>
+  <div class="center-text">
+    <a href="{% static 'Images/navoptions.png' %}" target="_blank"><img class="tutorial-img" src="{% static 'Images/navoptions.png' %}"></a>
   </div>
+   In Network Explorer you have several options and controls to modify the graph visualization.
+
+   <br><br>
+   <ol>
+     <li id="options-click"><b>On Click.</b></li>
+     <p>
+        This option defines three different behaviours when clicking on Nodes or Edges. "Show Properties" will display an overlay with information about the gene or the interaction. "Node Addition" will add all the interactors to the clicked node to the visualization. Finally, "Node Deletion" will delete the clicked node from the visualization; please, not that this process is irreversible.
+      </p>
+     <li id="options-layout"><b>Layout Selection.</b></li>
+     <p>
+      Change the layout of the nodes and interactions. Available layouts are: 'Dagre', 'Cose', 'Grid', 'Circle', and 'Concentric'.
+     </p>
+     <li id="options-connect"><b>Connect Genes.</b></li>
+     <p>
+        This button will add all the interactions in the current level between all the genes displayed on the visualization. 
+      </p>
+     <li id="options-border"><b>Border size.</b></li>
+     <p>
+      Increase or decrease the border size of genes.
+     </p>
+     <li id="options-export"><b>More Controls.</b></li>
+     <ul>
+        <li><b>Fit.</b> Fit all the nodes in the drawing area to make them visible.</li>
+        <li><b>Drag.</b> Enables or disables the ability to move the visualization when dragging it with the mouse.</li>
+        <li><b>Export.</b> Export the graph as a csv file to be used elsewhere (e.g.: Excel).</li>
+        <li><b>Save.</b> Save the graph in JSON format to be able to upload it later.</li>
+        <li><b>Image.</b> Export a png image of the graph.</li>
+        <li><b>Upload.</b> Upload a previously exported JSON graph (using the 'Export' button).</li>
+     </ul>
+   </ol>
+
+  <br><br>
+  <h3 id="pathway-to-level">Pathway to Level</h3>
+  <hr>
+  <div class="center-text">
+    <a href="{% static 'Images/pathway_form.png' %}" target="_blank">
+      <img class="tutorial-img-large" src="{% static 'Images/pathway_form.png' %}">
+    </a>
+  </div>
+  <br>
+  <p>
+    Pathway to Level allows you to get the shortest paths between a specified Gene and either 'Driver Genes' or 'Skeleton Genes'. If there is more than one target gene with the same path length (the same number of interactions until reaching that gene), all the pathways will be displayed on the results page. 
+  </p>
+  <p>
+    Pathway to level is useful when trying to assess the importance of a particular gene to Retinitis Pigmentosa, or to have an idea of how close a gene is to other genes related to Retinitis Pigmentosa (in terms of signalling and protein pathways).
+  </p>
+
+  <div class="center-text">
+    <a href="{% static 'Images/pathway_results.png' %}" target="_blank">
+      <img class="tutorial-img-large" src="{% static 'Images/pathway_results.png' %}">
+    </a>
+  </div>
+  <br>
+  <p>
+    As can be seen in the image above, each pathway is represented as an individual graph visualization. Only one pathway is represented between two genes; if you want all the possible shortest pathways between, for example, PMM2 and SNRNP200, you can click on the "All shortest paths" link above the visualization. In addition, if you want to explore a particular pathway further, you can click on the "Explore Network" button, which will bring you to Network Explorer with the specified pathway in the graph visualization.
+  </p>
+
+
+  <br><br>
+  <h3 id="shortest-path">Shortest Path Between Genes</h3>
+  <hr>
+  <div class="center-text">
+    <a href="{% static 'Images/shortest_form.png' %}" target="_blank">
+      <img class="tutorial-img-large" src="{% static 'Images/shortest_form.png' %}">
+    </a>
+  </div>
+
+  <br>
+  <p>
+    This form allows you to compute the shortest path between any two genes in the network. Please, note that all the connections in RPGeNet are directional, so the results of A->B will be different from B->A. All the shortest paths are computed on the WholeGraph. The results page from this form are the same as the one from "Pathway to Level".
+  </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+  </div>
+
+
+
+
+  
 
   <div id="footer">
     <div class="footer-left">

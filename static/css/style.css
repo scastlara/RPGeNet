@@ -231,6 +231,7 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 }
 
 #forms-container-container {
+	padding-left: 2.5%;
 	text-align: center;
 }
 #forms-container {
@@ -371,22 +372,74 @@ input[type=number]::-webkit-inner-spin-button {
 	font-size: 28px;
 }
 
-#lvl-indicator { 
+
+#lvl-indicator-title {
 	position: fixed;
-	right: 30%;
-	top: 30px;
+	right: 26%;
+	top: 15px;
 	text-align: center;
 	vertical-align: center;
-	font-size: 20px;
+	font-size: 15px;
 	z-index: 2;
 	width: 140px;
-	height: 50px;
+	height: 25px;
+	background-color: #3A9F88;
+	border: 1px solid #ccc;
+	color: white;
+    border-radius: 4px;
+}
+
+#lvl-indicator { 
+	position: fixed;
+	right: 26%;
+	top: 40px;
+	text-align: center;
+	vertical-align: center;
+	font-size: 15px;
+	z-index: 2;
+	width: 140px;
+	height: 35px;
 	padding: 5px;
 	background-color: white;
 	border: 1px solid #ccc;
 	color: #777;
     border-radius: 4px;
 }
+
+
+#exp-indicator-title {
+	position: fixed;
+	right: 26%;
+	top: 85px;
+	text-align: center;
+	vertical-align: center;
+	font-size: 15px;
+	z-index: 2;
+	width: 140px;
+	height: 25px;
+	background-color: #3A9F88;
+	border: 1px solid #ccc;
+	color: white;
+    border-radius: 4px;
+}
+
+#exp-indicator {
+	position: fixed;
+	right: 26%;
+	top: 100px;
+	text-align: center;
+	vertical-align: center;
+	font-size: 15px;
+	z-index: 2;
+	width: 140px;
+	height: 35px;
+	padding: 5px;
+	background-color: white;
+	border: 1px solid #ccc;
+	color: #777;
+    border-radius: 4px;
+}
+
 
 .behaviour-btn       { min-height: 30px; }
 .behaviour-btn:hover { cursor: pointer; }

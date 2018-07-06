@@ -168,32 +168,40 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 	height: 285px;
 	text-align: left !important;
 	width: 520px !important;
-	background-image: url('/static/Images/app-panel.png') !important;
+	background-image: url('../Images/app-panel.png') !important;
 	border-radius: 10px;
 }
 
 .label-rp {background-color: #3A9F88}
 
 .btn-f1 {
-	background-color: #8DC842 !important;
+	background-color: #85B574 !important;
 	color: white !important;
+	font-weight: normal !important;
 	width: 150px !important;
 	margin-top: 25px;
 }
 
 .btn-f2 {
-	background-color: #4AB0ED !important;
+	background-color: #85BCC1 !important;
 	color: white !important;
+	font-weight: normal !important;
 	width: 150px !important;
 	margin-top: 25px;
 }
 
 .btn-f3 {
-	background-color: #ED654A !important;
+	background-color: #B66E6D !important;
 	color: white !important;
+	font-weight: normal !important;
 	width: 150px !important;
 	margin-top: 25px;
 }
+
+
+.network-explorer-panel { background-color: #FAFAFA !important; }
+.pathway-to-level-panel { background-color: #FAFAFA !important; }
+.shortest-path-panel    { background-color: #FAFAFA !important; }
 
 .btn-f1:hover {
 	opacity: 0.8;
@@ -201,6 +209,25 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 
 .btn-f2:hover {
 	opacity: 0.8;
+}
+
+.btn-f3:hover {
+	opacity: 0.8;
+}
+
+.btn-f1:active {
+	background-color: #578E44 !important;
+	opacity: 1;
+}
+
+.btn-f2:active {
+	background-color: #6F979A !important;
+	opacity: 1;
+}
+
+.btn-f3:active {
+	background-color: #8F5453 !important;
+	opacity: 1;
 }
 
 #forms-container-container {
@@ -297,6 +324,7 @@ tr.spaceUnder>th {
 
 .f-title {
 	text-align: left;
+	margin-bottom: 25px !important;
 }
 
 input[type=number]::-webkit-inner-spin-button {
@@ -324,7 +352,7 @@ input[type=number]::-webkit-inner-spin-button {
 	float: left;
 	min-width: 330px;
 	width: 25%;
-	height: 100%;
+	height: 100vh;
 	background-color: #FAFAFA;
 	box-shadow: -2px 2px 8px 2px #E1E1E1;
 	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;            
@@ -344,22 +372,74 @@ input[type=number]::-webkit-inner-spin-button {
 	font-size: 28px;
 }
 
-#lvl-indicator { 
+
+#lvl-indicator-title {
 	position: fixed;
-	right: 30%;
-	top: 30px;
+	right: 26%;
+	top: 15px;
 	text-align: center;
 	vertical-align: center;
-	font-size: 28px;
+	font-size: 15px;
 	z-index: 2;
-	width: 120px;
-	height: 50px;
+	width: 140px;
+	height: 25px;
+	background-color: #3A9F88;
+	border: 1px solid #ccc;
+	color: white;
+    border-radius: 4px;
+}
+
+#lvl-indicator { 
+	position: fixed;
+	right: 26%;
+	top: 40px;
+	text-align: center;
+	vertical-align: center;
+	font-size: 15px;
+	z-index: 2;
+	width: 140px;
+	height: 35px;
 	padding: 5px;
 	background-color: white;
 	border: 1px solid #ccc;
 	color: #777;
     border-radius: 4px;
 }
+
+
+#exp-indicator-title {
+	position: fixed;
+	right: 26%;
+	top: 85px;
+	text-align: center;
+	vertical-align: center;
+	font-size: 15px;
+	z-index: 2;
+	width: 140px;
+	height: 25px;
+	background-color: #3A9F88;
+	border: 1px solid #ccc;
+	color: white;
+    border-radius: 4px;
+}
+
+#exp-indicator {
+	position: fixed;
+	right: 26%;
+	top: 100px;
+	text-align: center;
+	vertical-align: center;
+	font-size: 15px;
+	z-index: 2;
+	width: 140px;
+	height: 35px;
+	padding: 5px;
+	background-color: white;
+	border: 1px solid #ccc;
+	color: #777;
+    border-radius: 4px;
+}
+
 
 .behaviour-btn       { min-height: 30px; }
 .behaviour-btn:hover { cursor: pointer; }
@@ -433,6 +513,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 .legend-img { width: 40px; }
 
+#show-legend-btn { padding-top: 15px; }
 .vertical-line{
       width: 1px; /* Line width */
       background-color: #AFAFAF; /* Line color */
@@ -474,15 +555,19 @@ input[type=number]::-webkit-inner-spin-button {
     z-index: 80;
     background: white;
     padding-left: 5%;
-    padding-top: 5%;
+    padding-top: 2%;
     padding-right: 5%;
-    padding-bottom: 5%;
+    padding-bottom: 2%;
     overflow: scroll;
     overflow-y: scroll;
     -webkit-box-shadow: 0px 0px 180px 120px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 180px 120px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 180px 120px rgba(0,0,0,0.75);
     color: #777777;
+}
+
+.panel-form {
+	padding-top: 2px !important;
 }
 
 .close-overlay, #click {
@@ -624,7 +709,6 @@ input[type=number]::-webkit-inner-spin-button {
 .pcontainer { height: 150px; width: 100%; }
 
 
-
 /* BACK TO TOP THINGS */
 .cd-top.cd-is-visible {
   /* the button becomes visible */
@@ -695,4 +779,75 @@ input[type=number]::-webkit-inner-spin-button {
 .path-right-btns {
 	height: 50px;
 	padding: 25px;
+}
+
+.gene-summary {
+	padding: 18px;
+	min-height: 50px;
+	min-width: 80%;
+	background-color: #F7F7F7;
+	color: #777777;
+	font-size: 14px;
+}
+
+.gene-summary-src {
+	color: #3A9F88;
+	float: right;
+}
+
+.table-left {
+	width: 50% !important;
+	float: left !important;
+}
+
+.table-right {
+	width: 50% !important;
+	float: right !important;
+}
+
+.other-names {
+	padding: 18px;
+	min-height: 50px;
+	min-width: 80%;
+	background-color: #F7F7F7;
+	color: #777777;
+	font-size: 12px;
+}
+
+#other-names-title {
+	font-weight: bold;
+}
+
+.source-logo {
+	width: 22px;
+}
+
+.evidence-div {
+	display: inline-block;
+	width: 100%;
+}
+
+.toc {
+	background-color: white;
+	width: 40%;
+	min-width: 400px; 
+	padding: 20px;
+	border: 1px solid transparent;
+	border: 1px solid #CCC;
+	border-radius: 4px;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+
+.tutorial-img {
+	width: 400px;
+}
+
+.tutorial-img-large {
+	width: 800px;
+}
+
+
+.center-text {
+	text-align: center;
 }

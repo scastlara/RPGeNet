@@ -231,7 +231,6 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 }
 
 #forms-container-container {
-	padding-left: 2.5%;
 	text-align: center;
 }
 #forms-container {
@@ -239,7 +238,7 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 	text-align: center;
 	margin-top: 5%;
 	color: #555;
-
+        width: 90%;
 	/*width: 940px;
 	margin-left: 65px;*/
 }

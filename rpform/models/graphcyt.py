@@ -31,7 +31,10 @@ class GraphCyt(object):
                 gene.check()
                 gene.get_expression(exp_id)
                 self.genes.add(gene)
-                self.merge(gene.get_neighbours(level, dist, exp_id))
+                neighbours = gene.get_neighbours(level, dist, exp_id)
+                for neighbour in neighbours.genes:
+                    neighbour.get_expression(exp_id)
+                self.merge(neighbours)
             except Exception as err:
                 print(err)
                 print("WHAAAT: %s" % NEO)
@@ -115,3 +118,8 @@ class GraphCyt(object):
             return True
         else:
             return False
+
+    def __str__(self):
+        string = "NODES:\n\t%s" % "\n\t".join([ node.identifier for node in self.genes ])
+        string += "\nEDGES:\n\t%s" % "\n\t".join([ str((inter.parent.identifier, inter.child.identifier))  for inter in self.interactions ])
+        return string

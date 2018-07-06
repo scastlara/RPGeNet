@@ -1,4 +1,5 @@
 from py2neo import Graph, walk
+from exceptions import *
 
 class NeoQueryFactory(object):
     '''
@@ -169,6 +170,17 @@ class NeoQueryFactory(object):
         """ % nodeobj.identifier
         return NeoQuery(self.driver, cypher)
 
+    def build_query_experiment(self, experiment):
+        '''
+        Creates query to retrieve experiment with min/max values
+        '''
+        cypher = """
+            MATCH (n:EXPERIMENT)
+            WHERE n.identifier = '%s'
+            RETURN n.max, n.min
+        """ % experiment.identifier
+        return NeoQuery(self.driver, cypher)
+
 
 class NeoQuery(object):
     '''
@@ -200,6 +212,9 @@ class NeoQuery(object):
         if self.results is None:
             self.execute()
         return self.results
+
+    def __str__(self):
+        return self.cypher
 
 
 class NeoDriver(object):
@@ -457,6 +472,18 @@ class NeoDriver(object):
             for row in results:
                 aliases.add(row['alias'])
         return aliases
+
+    def query_experiment(self, experiment):
+        '''
+        Checks Experiment in DB and returns the Experiment max and min values.
+        '''
+        query = self.query_factory.build_query_experiment(experiment)
+        print(query)
+        results = query.get_results()
+        if results:
+            pass
+        else:
+            raise ExperimentNotFound(experiment)
 
 
 # NEO4J CONNECTION

@@ -1,5 +1,6 @@
 from rpform.models.neomodels import *
 from rpform.models.graphcyt import *
+from rpform.models.experiment import *
 from rpform.models.exceptions import *
 
 __all__ = [
@@ -12,7 +13,9 @@ __all__ = [
 	'Interaction',
 	'GO',
 	'NodeNotFound',
+	'Experiment',
 	'InteractionNotFound',
-	'NotValidQuery'
+	'NotValidQuery',
+	'ExperimentNotFound'
 ]
 

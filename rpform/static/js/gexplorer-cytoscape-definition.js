@@ -23,8 +23,13 @@ var stylesheet = cytoscape.stylesheet()
         })
     .selector(':selected')
         .css({
-            'background-color': 'black',
-            'color': 'black',
+            "background-color": "#3A9F88",
+            "font-size": 18,
+            "color": "#3A9F88",
+            "text-background-opacity": 1,
+            "text-background-color": "#ccc",
+            "text-background-shape": "roundrectangle",
+
         })
     .selector('.driver')
         .css({
@@ -89,6 +94,11 @@ var stylesheet = cytoscape.stylesheet()
         .css({
             'line-color': '#5B5B5B',
             'target-arrow-color': '#5B5B5B',
+        })
+    .selector(':selected')
+        .css({
+            'line-color': '#3A9F88',
+            'target-arrow-color': '#3A9F88',
         })
     
 

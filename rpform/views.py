@@ -201,6 +201,7 @@ def show_connections(request):
     else:
         return render(request, 'rpform/404.html')
 
+
 def change_expression(request):
 	'''
 	Gets expression values for a particular experiment
@@ -217,11 +218,13 @@ def change_expression(request):
 	else:
 		return render(request, 'rpform/404.html')
 
+
 def tutorial(request):
 	'''
 	Tutorial view
 	'''
 	return render(request, 'rpform/tutorial.html')
+
 
 def data(request):
 	'''

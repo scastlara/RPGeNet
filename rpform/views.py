@@ -201,6 +201,22 @@ def show_connections(request):
     else:
         return render(request, 'rpform/404.html')
 
+def change_expression(request):
+	'''
+	Gets expression values for a particular experiment
+	and returns the necessary colors
+	'''
+	if request.is_ajax():
+		node_ids = request.POST['nodes'].split(",")
+		level = request.POST['level']
+		exp_id = request.POST['exp_id']
+		genes = [ Gene(identifier=ident) for ident in node_ids ]
+		expressions = { gene.identifier: gene.get_expression(exp_id) for gene in genes }
+		print(expressions)
+		return HttpResponse(json.dumps(expressions), content_type="application/json")
+	else:
+		return render(request, 'rpform/404.html')
+
 def tutorial(request):
 	'''
 	Tutorial view

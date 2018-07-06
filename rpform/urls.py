@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^datasets/RPGeNet_v2_201806/shortest_path$', views.shortest_path, name='shortest_path'),
     url(r'^datasets/RPGeNet_v2_201806/upload_graph$', views.upload_graph, name='upload_graph'),
     url(r'^datasets/RPGeNet_v2_201806/add_neighbours', views.add_neighbours, name='add_neighbours'),
+    url(r'^datasets/RPGeNet_v2_201806/change_expression', views.change_expression, name='change_expression'),
     url(r'^datasets/RPGeNet_v2_201806/get_properties$', views.get_properties, name='get_properties'),
     url(r'^datasets/RPGeNet_v2_201806/show_connections$', views.show_connections, name='show_connections'),
     url(r'^datasets/RPGeNet_v2_201806/tutorial$', views.tutorial, name='tutorial'),

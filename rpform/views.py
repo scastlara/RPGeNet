@@ -113,7 +113,7 @@ def add_neighbours(request):
 			exp_id = request.GET['exp']
 			x = request.GET['x']
 			y = request.GET['y']
-			dist = 1 # Always distance 1
+			dist = 1 # Always distance 1 because we want neighbours
 			wholegraph = GraphCyt()
 			wholegraph.get_genes_in_level([gene], level, dist, exp_id)
 			json_data = wholegraph.to_json((x,y))
@@ -213,6 +213,10 @@ def change_expression(request):
 		exp_id = request.POST['exp_id']
 		genes = [ Gene(identifier=ident) for ident in node_ids ]
 		expressions = { gene.identifier: gene.get_expression(exp_id) for gene in genes }
+		experiment = Experiment(identifier=exp_id)
+		for gene, expval in expressions.iteritems():
+			expressions[gene] = experiment.color_from_value(expval)
+
 		print(expressions)
 		return HttpResponse(json.dumps(expressions), content_type="application/json")
 	else:

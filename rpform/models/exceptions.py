@@ -19,3 +19,9 @@ class NotValidQuery(Exception):
         self.cypher   = cypher
     def __str__(self):
         return "Not valid query: %s." % (self.cypher)
+
+class ExperimentNotFound(Exception):
+    def __init__(self, experiment):
+        self.experiment   = experiment.identifier
+    def __str__(self):
+        return "Not valid Experiment: %s." % (self.experiment)    

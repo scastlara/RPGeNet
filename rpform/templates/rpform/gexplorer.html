@@ -46,19 +46,25 @@
 
 	<!-- INTERACTION LVL INDICATOR -->
 	{% if level != None %}
+		<span id="lvl-indicator-title">Level</span>
 		<div id="lvl-indicator">
 			{% if level == 0 %} 
 				Skeleton
 			{% elif level == 5 %} 
 				WholeGraph
 			{% else %} 
-				Level: {{ level }}
+				{{ level }}
 			{% endif %} 
 		</div>
 		<script>
 			window.level = {{ level }};
 		</script>
 	{% endif %}
+	<span id="exp-indicator-title">Expression</span>
+	<select name="layout" class="layout-dropdown form-control" id="exp-indicator">
+		<option {% if exp_id == "Absolute" %}selected="selected"{% endif %} class="exp-option">Absolute</option>
+		<option {% if exp_id == "Relative" %}selected="selected"{% endif %} class="exp-option">Relative</option>
+	</select>
 
 	<!-- EXPERIMENT IDENTIFIER -->
 	{% if exp_id %}
@@ -139,11 +145,11 @@
 		<div class="cyt-controls-block">
 			<span class="cyt-controls-title">Layout</span>
 			<select name="layout" class="layout-dropdown form-control" id="layout">
-				<option>Dagre</option>
-				<option>Cose</option>
-				<option>Grid</option>
-				<option>Circle</option>
-				<option>Concentric</option>
+				<option class="layout-option">Dagre</option>
+				<option class="layout-option">Cose</option>
+				<option class="layout-option">Grid</option>
+				<option class="layout-option">Circle</option>
+				<option class="layout-option">Concentric</option>
 			</select>
 		</div>
 

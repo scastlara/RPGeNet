@@ -390,22 +390,29 @@ function getCookie(name) {
 }
 
 /*
- * Connects genes on visualization
+ * Get node Identifiers from cytoscape
  */
- showConnections = function(cy) {
+ getNodeIds = function(cy) {
     var nodes     = cy.nodes();
-    var csrftoken = getCookie('csrftoken');
     var node_ids  = [];
     for (var i = 0; i < nodes.length; i++) {
         node_ids.push( nodes[i].data().name );
     }
-    node_ids = node_ids.join(",");
+    return node_ids.join(",");
+ }
+
+/*
+ * Connects genes on visualization
+ */
+ showConnections = function(cy) {
+    var csrftoken = getCookie('csrftoken');
+    var nodeIds   = getNodeIds(cy);
     $.ajax({
         type: "POST",
         url: window.ROOT + "/show_connections",
         cache: true,
         data: {
-            'nodes': node_ids,
+            'nodes': nodeIds,
             'level': window.level,
             'csrfmiddlewaretoken': csrftoken
         },
@@ -443,10 +450,53 @@ function getCookie(name) {
     }
  }
 
+/*
+ * Changing expression color
+ */ 
+changeExpression = function(cy, exp_id) {
+    var csrftoken = getCookie('csrftoken');
+    var nodeIds   = getNodeIds(cy);
+    $.ajax({
+        type: "POST",
+        url: window.ROOT + "/change_expression",
+        cache: true,
+        data: {
+            'nodes': nodeIds,
+            'level': window.level,
+            'exp_id': exp_id,
+            'csrfmiddlewaretoken': csrftoken
+        },
+        beforeSend: function() {
+
+        },
+        success : function(data) {
+            var nodes = cy.nodes();
+            for (var i = 0; i < nodes.length; i++) {
+                nodeId = nodes[i].data().name;
+                if (data.hasOwnProperty(nodeId)) {
+                    nodes[i].data().exp = "RED";
+                } else {
+                    nodes[i].data().exp = "NA";
+                }
+            }
+
+
+        }, 
+        statusCode: {
+            404: function() {
+
+            },
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText);
+        }
+    });
+}
+
 // BUTTONS AND EVENTS
 //==================================================
 $('#behaviour-form').on("change", changeClickBehaviour);
-$("#layout").on("change", function() { changeLayout(window.cy, $(this).val())});
+$(".layout-option").on("click", function() { changeLayout(window.cy, $(this).val())});
 $("#fitscreen-btn").on("click", function() { fitScreen(window.cy) });
 $("#save-img").on("click", function() { saveImg(window.cy, $('#save-image-link')) });
 $("#export-tbl").on("click", function() { exportTBL(window.cy) });
@@ -456,6 +506,7 @@ $("#bsize").on("change", function() { changeBsize(window.cy, $(this).val()) });
 $("#get-connections").on('click', function() { showConnections(window.cy) });
 $("#search-node-btn").on("click", function(){ searchNode(window.cy, $("#search-node-term").val()) });
 $("#removesearch").on("click", function(){ window.cy.nodes().unselect() });
+$(".exp-option").on("click", function(){ changeExpression(window.cy, $(this).val())});
 window.cy.on( 'click', 'node', function() { onNodeClick(window.cy, this) });
 window.cy.on( 'click', 'edge', function() { onEdgeClick(window.cy, this) });
 window.cy.on('mouseover', 'node', function() { onNodeMouseOver(window.cy, this) });

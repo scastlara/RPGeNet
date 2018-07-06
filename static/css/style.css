@@ -177,7 +177,7 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 .btn-f1 {
 	background-color: #85B574 !important;
 	color: white !important;
-	font-weight: bolder !important;
+	font-weight: normal !important;
 	width: 150px !important;
 	margin-top: 25px;
 }
@@ -185,7 +185,7 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 .btn-f2 {
 	background-color: #85BCC1 !important;
 	color: white !important;
-	font-weight: bolder !important;
+	font-weight: normal !important;
 	width: 150px !important;
 	margin-top: 25px;
 }
@@ -193,7 +193,7 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 .btn-f3 {
 	background-color: #B66E6D !important;
 	color: white !important;
-	font-weight: bolder !important;
+	font-weight: normal !important;
 	width: 150px !important;
 	margin-top: 25px;
 }

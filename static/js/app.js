@@ -11,6 +11,7 @@ window.clickBehaviour = window.clickBehaviourOpts.properties; // Default behavio
 window.ROOT = '/datasets/RPGeNet_v2_201806'; // '';
 window.drag = false;
 window.cy;
+window.layout;
 
 
 // FUNCTIONS
@@ -29,7 +30,9 @@ changeClickBehaviour = function() {
  */
  changeLayout = function(cy, layout) {
     layout = layout.toLowerCase();
- 	cy.layout( { name: layout } );
+    ur.do("layout", { options: {name: layout } });
+ 	//var thelayout = cy.layout( { name: layout } );
+    //thelayout.run();
  }
 
 /*
@@ -167,7 +170,8 @@ exportJSON = function(cy) {
             }
         }
         if (! withpos) {
-            cy.layout({ name:  $("#layout").val().toLowerCase() });
+            window.layout = cy.layout({ name:  $("#layout").val().toLowerCase() });
+            window.layout.run();
         }
         window.jsongraph = {};
         var defaults = ({
@@ -211,40 +215,27 @@ expandOnClick = function(cy, node) {
             'gene': node.data().name,
             'level': window.level,
             'exp': window.expId,
-            'x':   node.position('x'),
-            'y':   node.position('y'),
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
         beforeSend: function() {
-            
+            $("#loading").show();
         },
         success : function(data) {
-            cy.add(data);
-            cy.layout({ 
-                name: 'cose',
-                maxSimulationTime: 3000,
-                fit: true,
-                directed: false,
-                padding: 40 
-            });
-            //cy.layout({ 
-            //    name: 'cose',
-            //    animateFilter: function ( node, i ){ 
-            //        if (eles.getElementById(node.data().id)) { 
-            //            return false;
-            //        } else { 
-            //            return false;
-            //        } 
-            //    },
-            //});
+            ur.do("add", data);
+            ur.do("layout", { options: {name: 'cola'} });
+            $("#loading").hide();
+            //window.layout.stop()
+            //window.layout = cy.layout({ name: 'cola' });
+            //window.layout.run();
         }, 
         statusCode: {
             404: function() {
-
+                $("#loading").hide();
             },
         },
         error: function(request, status, error) {
             alert(request.responseText);
+            $("#loading").hide();
         }
     });
     //body
@@ -263,20 +254,22 @@ nPropertiesOnClick = function(cy, node) {
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
         beforeSend: function() {
-
+            $("#loading").show();
         },
         success : function(data) {
             $('.card-overlay').html(data);
             $('.card-overlay').slideToggle(450);
             $('.close-overlay').slideToggle(450);
+            $("#loading").hide();
         }, 
         statusCode: {
             404: function() {
-
+                $("#loading").hide();
             },
         },
         error: function(xhr, status, error) {
             alert(xhr.responseText);
+            $("#loading").hide();
         }
     });
 }
@@ -294,20 +287,22 @@ ePropertiesOnClick = function(cy, edge) {
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
         beforeSend: function() {
-
+            $("#loading").show();
         },
         success : function(data) {
             $('.card-overlay').html(data);
             $('.card-overlay').slideToggle(450);
             $('.close-overlay').slideToggle(450);
+            $("#loading").hide();
         }, 
         statusCode: {
             404: function() {
-
+                $("#loading").hide();
             },
         },
         error: function(xhr, status, error) {
             alert(xhr.responseText);
+            $("#loading").hide();
         }
     });
 }
@@ -329,7 +324,7 @@ onNodeClick = function(cy, node) {
         expandOnClick(cy, node);
     } else if (window.clickBehaviour == window.clickBehaviourOpts.deletion) {
         if (cy.nodes(':selected').intersection(node).length) {
-            cy.nodes(':selected').remove();
+            ur.do("remove", cy.nodes(':selected'));
         } else {
             document.getElementById("cyt").style.cursor = 'not-allowed';
         }
@@ -417,19 +412,22 @@ function getCookie(name) {
             'csrfmiddlewaretoken': csrftoken
         },
         beforeSend: function() {
+            $("#loading").show();
 
         },
         success : function(data) {
-            cy.add(data);
-            cy.layout( { name: 'cose' } );
+            ur.do("add", data);
+            cy.layout( { name: 'cola' } );
+            $("#loading").hide();
         }, 
         statusCode: {
             404: function() {
-
+                $("#loading").hide();
             },
         },
         error: function(xhr, status, error) {
             alert(xhr.responseText);
+            $("#loading").hide();
         }
     });
  }
@@ -440,7 +438,7 @@ function getCookie(name) {
  searchNode = function(cy, term) {
     if (term) {
         var terms = term.split(",").map(function(x){ return x.toUpperCase() });
-        cy.nodes().filter(function(eidx, ele) {
+        cy.nodes().filter(function(ele, eidx, eles) {
             if (terms.indexOf(ele.data("name").toUpperCase()) !== -1) {
                 return true;
             } else {
@@ -467,7 +465,7 @@ changeExpression = function(cy, exp_id) {
             'csrfmiddlewaretoken': csrftoken
         },
         beforeSend: function() {
-
+            $("#loading").show();
         },
         success : function(data) {
             var nodes = cy.nodes();
@@ -479,18 +477,30 @@ changeExpression = function(cy, exp_id) {
                     nodes[i].data().exp = "NA";
                 }
             }
-
-
+            $("#loading").hide();
         }, 
         statusCode: {
             404: function() {
-
+                $("#loading").hide();
             },
         },
         error: function(xhr, status, error) {
             alert(xhr.responseText);
+            $("#loading").hide();
         }
     });
+}
+
+unDo = function() {
+    console.log("Undoing");
+    ur.undo();
+    fitScreen(window.cy);
+}
+
+reDo = function() {
+    console.log("Redoing");
+    ur.redo();
+    fitScreen(window.cy);
 }
 
 // BUTTONS AND EVENTS
@@ -507,6 +517,8 @@ $("#get-connections").on('click', function() { showConnections(window.cy) });
 $("#search-node-btn").on("click", function(){ searchNode(window.cy, $("#search-node-term").val()) });
 $("#removesearch").on("click", function(){ window.cy.nodes().unselect() });
 $(".exp-option").on("click", function(){ changeExpression(window.cy, $(this).val())});
+$("#undo-indicator").on("click", function(){ unDo(); });
+$("#redo-indicator").on("click", function(){ reDo(); });
 window.cy.on( 'click', 'node', function() { onNodeClick(window.cy, this) });
 window.cy.on( 'click', 'edge', function() { onEdgeClick(window.cy, this) });
 window.cy.on('mouseover', 'node', function() { onNodeMouseOver(window.cy, this) });

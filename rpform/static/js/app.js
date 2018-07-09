@@ -506,7 +506,7 @@ reDo = function() {
 // BUTTONS AND EVENTS
 //==================================================
 $('#behaviour-form').on("change", changeClickBehaviour);
-$(".layout-option").on("click", function() { changeLayout(window.cy, $(this).val())});
+$("#layout").on("change", function() { changeLayout(window.cy, $(this).val())});
 $("#fitscreen-btn").on("click", function() { fitScreen(window.cy) });
 $("#save-img").on("click", function() { saveImg(window.cy, $('#save-image-link')) });
 $("#export-tbl").on("click", function() { exportTBL(window.cy) });
@@ -516,7 +516,7 @@ $("#bsize").on("change", function() { changeBsize(window.cy, $(this).val()) });
 $("#get-connections").on('click', function() { showConnections(window.cy) });
 $("#search-node-btn").on("click", function(){ searchNode(window.cy, $("#search-node-term").val()) });
 $("#removesearch").on("click", function(){ window.cy.nodes().unselect() });
-$(".exp-option").on("click", function(){ changeExpression(window.cy, $(this).val())});
+$("#exp-indicator").on("change", function(){ changeExpression(window.cy, $(this).val())});
 $("#undo-indicator").on("click", function(){ unDo(); });
 $("#redo-indicator").on("click", function(){ reDo(); });
 window.cy.on( 'click', 'node', function() { onNodeClick(window.cy, this) });

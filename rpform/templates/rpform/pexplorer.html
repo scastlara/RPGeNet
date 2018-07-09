@@ -170,15 +170,16 @@
                         ready: function() {}
                     });
                     var elements = {{ path|safe }};
-                    cy.load(elements)
-                    cy.layout({
+                    cy.add(elements)
+                    var thelayout = cy.layout({
                         name: 'grid',
                         fit: true,
-                        rows: plen, // force num of rows in the grid
-  						cols: 1, // force num of columns in the grid
+                        rows: 1, // force num of rows in the grid
+  						cols: plen, // force num of columns in the grid
                         //directed: true,
                         padding: 40
                     });
+                    thelayout.run();
 
                     // Define graph behaviour here (?)
 

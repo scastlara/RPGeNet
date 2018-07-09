@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" href="{% static 'css/bootstrap-min.css' %}">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+
 </head>
 
 
@@ -30,7 +31,8 @@
       <div class="navbar-inner">
         <ul class="nav navbar-nav">
           <li id="navbar-home" class="nav-elem"><a href="{% url index_view %}">Home</a></li>
-          <li id="navbar-data" class="nav-elem active"><a href="{% url data %}">Data</a></li>
+          <li id="navbar-data" class="nav-elem"><a href="{% url data %}">Data</a></li>
+          <li id="navbar-data" class="nav-elem active"><a href="{% url drivers %}">Drivers</a></li>
           <li id="navbar-tutorial" class="nav-elem"><a href="{% url tutorial %}">Tutorial</a></li>
           <li id="navbar-about" class="nav-elem"><a href="{% url about %}">About</a></li>
         </ul>
@@ -39,35 +41,7 @@
   </div>
   <br>
 
-  <!-- Get info Card on click -->
-    <!-- Gene Card -->
-    <div id="button-container">
-        <div class="close-overlay" title="Close card">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-        </div>
-    </div>
-    <div class="card-overlay" id="card-overlay"></div>
-
-
-  <div class="body-card">
-    <h3 id="drivers">Driver Genes: </h3>
-    <hr>
-      <select id="driver-select" data-size="10" title="Choose Driver Gene" class="form-control selectpicker" data-live-search="true">
-        {% for driver in drivers %}
-          {% ifchanged driver.gene_disease %}
-            <optgroup label="
-              {% if driver.gene_disease == 1 %} 
-                Syndromic 
-              {% elif driver.gene_disease == 2 %} 
-                Non-Syndromic 
-              {% else %} 
-                Symdromic + Non-Syndromic 
-              {% endif %}"> 
-          {% endifchanged %}
-          <option class="driver-select">{{ driver.identifier }}</option>
-        {% endfor %}
-      </select>
-  </div>
+  
 
   <div id="footer">
     <div class="footer-left">
@@ -126,6 +100,7 @@
     nPropertiesOnClick("", driver);
   });
 </script>
+
 
 </body>
 </html>

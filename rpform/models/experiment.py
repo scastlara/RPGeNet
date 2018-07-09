@@ -11,8 +11,13 @@ class Experiment(Node):
 		self.max = 0 # will be overwritten by check()
 		self.min = 0 # will be overwritten by check()
 		self.cmap_type = None
-		self.check()
-		self.cmap = self._get_cmap()
+
+	@classmethod
+	def all_from_database(cls):
+		'''
+		Returns list of all Experiment objects available in neo4j
+		'''
+		return NEO.query_get_all_experiments(cls)
 
 	def _get_cmap(self):
 		'''
@@ -40,6 +45,7 @@ class Experiment(Node):
 		Adds interval values to experiment
 		'''
 		NEO.query_experiment(self)
+		self.cmap = self._get_cmap()
 
 	def color_from_value(self, value):
 		'''
@@ -57,3 +63,7 @@ class Experiment(Node):
 		Changes the expression of a Gene object
 		'''
 		gene.expression = self.color_from_value(gene.expression)
+		return self
+
+	def __str__(self):
+		return "Experiment %s of type %s\n\tmin: %s\n\tmax:%s\n" % (self.identifier, self.cmap_type, self.min, self.max)

@@ -72,7 +72,7 @@ class GraphCyt(object):
         for edge in self.interactions:
             edges.extend(edge.to_json_dict())
         if self.order:
-            genes = sorted(self.genes, key=lambda x: self.order[x.identifier])
+            genes = self.genes_to_list()
         else:
             genes = self.genes
         graphelements = {
@@ -107,6 +107,18 @@ class GraphCyt(object):
         """
         self.order[gene.identifier] = order
 
+    def get_drivers(self):
+        '''
+        Adds driver genes to genes attribute
+        '''
+        self.genes = NEO.query_get_drivers().genes
+
+    def genes_to_list(self):
+        '''
+        Returns list of gene objects ordered
+        ''' 
+        return sorted(self.genes, key=lambda x: self.order[x.identifier])
+
     def __bool__(self):
         if self.genes:
             return True
@@ -120,6 +132,10 @@ class GraphCyt(object):
             return False
 
     def __str__(self):
-        string = "NODES:\n\t%s" % "\n\t".join([ node.identifier for node in self.genes ])
+        if self.order:
+            nodes = sorted(self.genes, key=lambda x: self.order[x.identifier])
+        else:
+            nodes = list(self.genes)
+        string = "NODES:\n\t%s" % "\n\t".join([ node.identifier for node in nodes ])
         string += "\nEDGES:\n\t%s" % "\n\t".join([ str((inter.parent.identifier, inter.child.identifier))  for inter in self.interactions ])
         return string

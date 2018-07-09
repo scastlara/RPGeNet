@@ -44,27 +44,45 @@
 	<!-- CYTOSCAPE VIEWER -->
 	<div id="cyt"></div>
 
-	<!-- INTERACTION LVL INDICATOR -->
-	{% if level != None %}
-		<span id="lvl-indicator-title">Level</span>
-		<div id="lvl-indicator">
-			{% if level == 0 %} 
-				Skeleton
-			{% elif level == 5 %} 
-				WholeGraph
-			{% else %} 
-				{{ level }}
-			{% endif %} 
+	<div id="top-indicators" class="row">
+		<div class="col-sm-6">
+			<div id="undo-redo-indicator" class="row">
+				<div id="undo-indicator" class="btn btn-default col-sm-5">
+					<span id="undo" class="glyphicon glyphicon-share-alt"></span>
+				</div>
+				<div class="col-sm-2"> </div>
+				<div id="redo-indicator" class="btn btn-default col-sm-5">
+					<span id="redo" class="glyphicon glyphicon-share-alt"></span>
+				</div>
+			</div>
+			<img id="loading" src="{% static 'Images/loading.gif' %}">
 		</div>
-		<script>
-			window.level = {{ level }};
-		</script>
-	{% endif %}
-	<span id="exp-indicator-title">Expression</span>
-	<select name="layout" class="layout-dropdown form-control" id="exp-indicator">
-		<option {% if exp_id == "Absolute" %}selected="selected"{% endif %} class="exp-option">Absolute</option>
-		<option {% if exp_id == "Relative" %}selected="selected"{% endif %} class="exp-option">Relative</option>
-	</select>
+
+		<div class="col-sm-1"> </div>
+		<div class="col-sm-5">
+			<!-- INTERACTION LVL INDICATOR -->
+			{% if level != None %}
+				<span id="lvl-indicator-title">Level</span>
+				<div id="lvl-indicator">
+					{% if level == 0 %} 
+						Skeleton
+					{% elif level == 5 %} 
+						WholeGraph
+					{% else %} 
+						{{ level }}
+					{% endif %} 
+				</div>
+				<script>
+					window.level = {{ level }};
+				</script>
+			{% endif %}
+			<span id="exp-indicator-title">Expression</span>
+			<select name="layout" class="layout-dropdown form-control" id="exp-indicator">
+				<option {% if exp_id == "Absolute" %}selected="selected"{% endif %} class="exp-option">Absolute</option>
+				<option {% if exp_id == "Relative" %}selected="selected"{% endif %} class="exp-option">Relative</option>
+			</select>
+		</div>
+	</div>
 
 	<!-- EXPERIMENT IDENTIFIER -->
 	{% if exp_id %}
@@ -146,7 +164,12 @@
 			<span class="cyt-controls-title">Layout</span>
 			<select name="layout" class="layout-dropdown form-control" id="layout">
 				<option class="layout-option">Dagre</option>
+				<option class="layout-option">Cola</option>
+				<option class="layout-option">Euler</option>
+				<option class="layout-option">Klay</option>
 				<option class="layout-option">Cose</option>
+				<option class="layout-option">Arbor</option>
+				<option class="layout-option">Breadthfirst</option>
 				<option class="layout-option">Grid</option>
 				<option class="layout-option">Circle</option>
 				<option class="layout-option">Concentric</option>
@@ -186,34 +209,28 @@
 					</div>
 				</div>
 				<div class="gexplorer-col col-sm-3">
-					<div id="drag-btn" class="gexplorer-btn btn btn-default">
-						<img class="glyphicon-grab" src="{% static 'Images/grab.png' %}">
-						<br>Drag
-					</div>
-				</div>
-				<div class="gexplorer-col col-sm-3"> </div>
-			</div>
-			<div class="gexplorer-row row">
-				<div class="gexplorer-col col-sm-3"> </div>
-				<div class="gexplorer-col col-sm-2">
-					<div id="export-tbl" class="gexplorer-btn btn btn-default">
-						<span class="glyphicon glyphicon-download-alt"></span>
-						<br><span class="gexplorer-btn-txt">Export</span>
-					</div>
-				</div>
-				<div class="gexplorer-col col-sm-2">
-					<div id="export-json" class="gexplorer-btn btn btn-default">
-						<span class="glyphicon glyphicon-floppy-disk"></span>
-						<br><span class="gexplorer-btn-txt">Save</span>
-					</div>
-				</div>
-				<div class="gexplorer-col col-sm-2">
 					<a href="#" id="save-image-link">
 						<div id="save-img" class="gexplorer-btn btn btn-default">
 							<span class="glyphicon glyphicon-picture"></span>
 							<br><span class="gexplorer-btn-txt">Image</span>
 						</div>
 					</a>
+				</div>
+				<div class="gexplorer-col col-sm-3"> </div>
+			</div>
+			<div class="gexplorer-row row">
+				<div class="gexplorer-col col-sm-3"> </div>
+				<div class="gexplorer-col col-sm-3">
+					<div id="export-tbl" class="gexplorer-btn btn btn-default">
+						<span class="glyphicon glyphicon-download-alt"></span>
+						<br><span class="gexplorer-btn-txt">Export</span>
+					</div>
+				</div>
+				<div class="gexplorer-col col-sm-3">
+					<div id="export-json" class="gexplorer-btn btn btn-default">
+						<span class="glyphicon glyphicon-floppy-disk"></span>
+						<br><span class="gexplorer-btn-txt">Save</span>
+					</div>
 				</div>
 				<div class="gexplorer-col col-sm-3"> </div>
 			</div>
@@ -324,11 +341,18 @@
 	<!-- JAVASCRIPT FILES -->
 	<script src="{% static 'js/jquery-min.js' %}"></script>
 	<script src="{% static 'js/cytoscape.js' %}"></script>
+	<script src="{% static 'js/cytoscape-undo-redo.js' %}"></script>
 	<script src="{% static 'js/cytoscape-navigator.js' %}"></script>
 	<script src="{% static 'js/cytoscape-panzoom.js' %}"></script>
+	<script src="{% static 'js/dagre.js' %}"></script>
 	<script src="{% static 'js/cytoscape-dagre.js' %}"></script>
-	<script src="{% static 'js/cytoscape-cola.js' %}"></script>
-    <script src="{% static 'js/cytoscape-cola-min.js' %}"></script>
+	<script src="{% static 'js/klay.js' %}"></script>
+	<script src="{% static 'js/cytoscape-klay.js' %}"></script>
+	<script src="{% static 'js/arbor.js' %}"></script>
+	<script src="{% static 'js/cytoscape-arbor.js' %}"></script>
+	<script src="{% static 'js/cytoscape-euler.js' %}"></script>
+	<script src="{% static 'js/cola.js' %}"></script>
+    <script src="{% static 'js/cytoscape-cola.js' %}"></script>
 	<script src="{% static 'js/bootstrap-min.js' %}"></script>
 	<script src="{% static 'js/stoopidoverlay.js' %}"></script>
 	<script src="{% static 'js/FileSaver.js' %}"></script>

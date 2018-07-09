@@ -181,6 +181,37 @@ class NeoQueryFactory(object):
         """ % experiment.identifier
         return NeoQuery(self.driver, cypher)
 
+    def build_query_get_drivers(self):
+        '''
+        Creates query to get driver genes
+        '''
+        try:
+            n_attributes = Gene("").__dict__.keys()
+        except Exception as err:
+            print(err)
+
+        cypher = """
+            MATCH (n:GENE)
+            WHERE n.gene_disease > 0
+            RETURN 
+        """ 
+        cypher += self._return_by_attributes("n", n_attributes)
+        cypher += " ORDER BY n.identifier"
+        return NeoQuery(self.driver, cypher)
+
+    def build_query_get_all_experiments(self):
+        '''
+        Query to get all experiment objects
+        '''
+        cypher = """
+            MATCH (n:EXPERIMENT)
+            RETURN n.identifier as identifier,
+                   n.max as max, 
+                   n.min as min,
+                   n.cmap_type as cmap_type
+        """
+        return NeoQuery(self.driver, cypher)
+
 
 class NeoQuery(object):
     '''
@@ -485,6 +516,37 @@ class NeoDriver(object):
         else:
             raise ExperimentNotFound(experiment)
 
+    def query_get_drivers(self):
+        '''
+        Retrieves driver genes as a GraphCyt object
+        '''
+        genes = GraphCyt()
+        query = self.query_factory.build_query_get_drivers()
+        results = query.get_results()
+        if results:
+            for row in results:
+                gene = Gene(row['n_identifier'])
+                gene.fill_attributes(row, "n")
+                genes.add_gene(gene)
+        return genes
+
+    def query_get_all_experiments(self, cls):
+        '''
+        Retrieves all Experiment objects
+        '''
+        experiments = list()
+        query = self.query_factory.build_query_get_all_experiments()
+        results = query.get_results()
+        if results:
+            for exp in results:
+                experiment = cls(results['identifier'])
+                experiment.min = results['min']
+                experiment.max = results['max']
+                experiment.cmap_type = results['cmap_type']
+                experiments.append(experiment)
+        else:
+            print("No Experiments yet.")
+        return experiments
 
 # NEO4J CONNECTION
 NEO = NeoDriver('192.168.0.2', 8474, 8687, 'neo4j', 'p0tat0+')

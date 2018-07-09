@@ -43,45 +43,42 @@
 
 	<!-- CYTOSCAPE VIEWER -->
 	<div id="cyt"></div>
+	<div id="top-indicators">
 
-	<div id="top-indicators" class="row">
-		<div class="col-sm-6">
-			<div id="undo-redo-indicator" class="row">
-				<div id="undo-indicator" class="btn btn-default col-sm-5">
-					<span id="undo" class="glyphicon glyphicon-share-alt"></span>
-				</div>
-				<div class="col-sm-2"> </div>
-				<div id="redo-indicator" class="btn btn-default col-sm-5">
-					<span id="redo" class="glyphicon glyphicon-share-alt"></span>
-				</div>
+		<div id="undo-redo-indicator" class="row">
+			<div id="undo-indicator" class="btn btn-default col-sm-5">
+				<span id="undo" class="glyphicon glyphicon-share-alt"></span>
 			</div>
-			<img id="loading" src="{% static 'Images/loading.gif' %}">
+			<div class="col-sm-2"> </div>
+			<div id="redo-indicator" class="btn btn-default col-sm-5">
+				<span id="redo" class="glyphicon glyphicon-share-alt"></span>
+			</div>
 		</div>
+		
 
-		<div class="col-sm-1"> </div>
-		<div class="col-sm-5">
-			<!-- INTERACTION LVL INDICATOR -->
-			{% if level != None %}
-				<span id="lvl-indicator-title">Level</span>
-				<div id="lvl-indicator">
-					{% if level == 0 %} 
-						Skeleton
-					{% elif level == 5 %} 
-						WholeGraph
-					{% else %} 
-						{{ level }}
-					{% endif %} 
-				</div>
-				<script>
-					window.level = {{ level }};
-				</script>
-			{% endif %}
-			<span id="exp-indicator-title">Expression</span>
-			<select name="layout" class="layout-dropdown form-control" id="exp-indicator">
-				<option {% if exp_id == "Absolute" %}selected="selected"{% endif %} class="exp-option">Absolute</option>
-				<option {% if exp_id == "Relative" %}selected="selected"{% endif %} class="exp-option">Relative</option>
-			</select>
-		</div>
+		<!-- INTERACTION LVL INDICATOR -->
+		{% if level != None %}
+			<span id="lvl-indicator-title">Level</span>
+			<div id="lvl-indicator">
+				{% if level == 0 %} 
+					Skeleton
+				{% elif level == 5 %} 
+					WholeGraph
+				{% else %} 
+					{{ level }}
+				{% endif %} 
+			</div>
+			<script>
+				window.level = {{ level }};
+			</script>
+		{% endif %}
+		<span id="exp-indicator-title">Expression</span>
+		<select name="layout" class="layout-dropdown form-control" id="exp-indicator">
+			<option {% if exp_id == "Absolute" %}selected="selected"{% endif %} class="exp-option">Absolute</option>
+			<option {% if exp_id == "Relative" %}selected="selected"{% endif %} class="exp-option">Relative</option>
+		</select>
+		
+		<img id="loading" src="{% static 'Images/loading.gif' %}">
 	</div>
 
 	<!-- EXPERIMENT IDENTIFIER -->

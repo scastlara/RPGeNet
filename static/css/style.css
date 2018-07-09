@@ -836,6 +836,8 @@ span#undo {
 #redo {	line-height: 60px; }
 #undo {	line-height: 60px; }
 
+#undo-indicator:hover { background-color: #e6e6e6; }
+#redo-indicator:hover { background-color: #e6e6e6; }
 
 /*
 #redo-indicator:hover { cursor: pointer; background-color: #e6e6e6; border-color: #adadad; }

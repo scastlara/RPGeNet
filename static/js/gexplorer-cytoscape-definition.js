@@ -23,8 +23,13 @@ var stylesheet = cytoscape.stylesheet()
         })
     .selector(':selected')
         .css({
-            'background-color': 'black',
-            'color': 'black',
+            "background-color": "#3A9F88",
+            "font-size": 18,
+            "color": "#3A9F88",
+            "text-background-opacity": 1,
+            "text-background-color": "#ccc",
+            "text-background-shape": "roundrectangle",
+
         })
     .selector('.driver')
         .css({
@@ -70,6 +75,7 @@ var stylesheet = cytoscape.stylesheet()
         .css({
             'color': "#4F8ABA",
             'line-color': '#4F8ABA',
+            'curve-style': 'bezier',
             'target-arrow-color': '#4F8ABA',
             'target-arrow-shape': 'triangle',
             "width": "mapData(ewidth, 1, 9, 1, 5)",
@@ -90,6 +96,11 @@ var stylesheet = cytoscape.stylesheet()
             'line-color': '#5B5B5B',
             'target-arrow-color': '#5B5B5B',
         })
+    .selector(':selected')
+        .css({
+            'line-color': '#3A9F88',
+            'target-arrow-color': '#3A9F88',
+        })
     
 
 
@@ -101,3 +112,13 @@ var cy = cytoscape({
     boxSelectionEnabled: true,  
     ready: function() {}
 });
+var urOptions = {
+            isDebug: false, // Debug mode for console messages
+            actions: {},// actions to be added
+            undoableDrag: true, // Whether dragging nodes are undoable can be a function as well
+            stackSizeLimit: 5, // Size limit of undo stack, note that the size of redo stack cannot exceed size of undo stack
+            ready: function () { // callback when undo-redo is ready
+
+    }
+};
+var ur = cy.undoRedo(urOptions);

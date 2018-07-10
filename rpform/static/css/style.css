@@ -828,6 +828,7 @@ span#undo {
 	color: #777;
     border-radius: 4px;
     margin-bottom: 10px;
+    padding: 0 !important;
 }
 
 #redo-indicator { 
@@ -842,6 +843,7 @@ span#undo {
 	color: #777;
     border-radius: 4px;
     margin-bottom: 10px;
+    padding: 0 !important;
 }
 #redo {	line-height: 40px; }
 #undo {	line-height: 40px; }

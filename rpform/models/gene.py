@@ -28,6 +28,7 @@ class Gene(Node):
         self.summary = None
         self.summary_source = None
         self.aliases = None
+        self.color = None
 
     def check(self):
         '''
@@ -37,6 +38,7 @@ class Gene(Node):
         self.normalize_identifier()
         self.unalias()
         NEO.query_by_id(self)
+        return self
 
     def normalize_identifier(self):
         '''
@@ -143,6 +145,7 @@ class Gene(Node):
         element['data']['gene_disease'] = self.gene_disease
         element['data']['nvariants'] = self.nvariants
         element['data']['inheritance_pattern'] = self.inheritance_pattern
+        element['data']['color'] = self.color
         if self.is_driver():
             element['classes'] = "driver"
         else:

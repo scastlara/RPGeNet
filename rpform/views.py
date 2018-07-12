@@ -12,7 +12,8 @@ def index_view(request):
 	'''
 	response = dict()
 	experiments = Experiment.all_from_database()
-	print(experiments)
+	exp_names = [ experiment.identifier for experiment in experiments ]
+	response['experiments'] = exp_names
 	return render(request, 'rpform/index.html', response)
 
 
@@ -25,7 +26,9 @@ def upload_graph(request):
 
 	if request.method == "POST":
 		template = 'rpform/gexplorer.html'
-
+		experiments = Experiment.all_from_database()
+		exp_names = [ experiment.identifier for experiment in experiments ]
+		response['experiments'] = exp_names
 		# Upload graph
 		if 'myfile' in request.FILES:
 			# Uploaded file
@@ -38,7 +41,6 @@ def upload_graph(request):
 			response['exp_id'] = request.POST['exp_id']
 			response['withpos'] = False # No positions specified in json
 		response['level'] = request.POST['upload-level']
-
 		# Check if valid json
 		try:
 			json.loads(response['upload_json'])
@@ -54,8 +56,6 @@ def gene_explorer(request):
 	'''
 	response = dict()
 	if request.method == "GET":
-		# Simple search
-		# Check form request [HERE]
 		genes = request.GET['gene']
 		genes = re.sub(r'\s', '', genes)
 		level = int(request.GET['level'])
@@ -64,6 +64,11 @@ def gene_explorer(request):
 		genes = [ gene.upper() for gene in genes.split(",") ]
 		wholegraph = GraphCyt()
 		wholegraph.get_genes_in_level(genes, level, dist, exp_id)
+		experiment = Experiment(exp_id).check()
+		wholegraph.change_expression_color(experiment)
+		experiments = Experiment.all_from_database()
+		exp_names = [ experiment.identifier for experiment in experiments ]
+		response['experiments'] = exp_names
 		if wholegraph:
 			response['jsongraph'] = wholegraph.to_json()
 		response['level'] = level
@@ -82,19 +87,24 @@ def get_properties(request):
 		if 'gene' in request.GET:
 			# Requesting gene
 			gene = request.GET['gene']
-			gene_obj = Gene(identifier=gene)
-			gene_obj.check()
+			gene_obj = Gene(identifier=gene).check()
 			gene_obj.get_summary()
 			gene_obj.get_go()
 			gene_obj.get_aliases()
+			experiments = Experiment.all_from_database()
+			exp_data = dict()
+			for exp in experiments:
+				exp_data[exp.identifier] = exp.get_gene_expression(gene_obj)
+				if exp_data[exp.identifier] != "NA":
+					exp_data[exp.identifier] = round(float(exp_data[exp.identifier]), 3)
 			template = 'rpform/gene_properties.html'
 			response['gene'] = gene_obj
+			response['exp_data'] = exp_data
 		else:
 			# Requesting interaction
 			interaction = request.GET['interaction']
 			inta, intb, int_type = interaction.split('-')
-			int_obj = Interaction(parent=Gene(inta), child=Gene(intb))
-			int_obj.check()
+			int_obj = Interaction(parent=Gene(inta), child=Gene(intb)).check()
 			int_obj.fix_string_evidences()
 			template = 'rpform/int_properties.html'
 			response['interaction'] = int_obj
@@ -116,6 +126,9 @@ def add_neighbours(request):
 			dist = 1 # Always distance 1 because we want neighbours
 			wholegraph = GraphCyt()
 			wholegraph.get_genes_in_level([gene], level, dist, exp_id)
+			experiment = Experiment(exp_id).check()
+			wholegraph.change_expression_color(experiment)
+			colors = [ gene.color for gene in wholegraph.genes ]
 			json_data = wholegraph.to_json()
 			return HttpResponse(json_data, content_type="application/json")
 		else:
@@ -145,6 +158,10 @@ def pathway_explorer(request):
 	except NodeNotFound:
 		pass
 	mygraphs = mygene.path_to_level(level) # list of GraphCytoscape objects
+	experiment = Experiment(exp_id).check()
+	for target, graph in mygraphs.iteritems():
+		graph.get_expression(experiment)
+		graph.change_expression_color(experiment)
 	if mygraphs:
 		response['plen'] = len(mygraphs[mygraphs.keys()[0]].interactions)
 		response['numpaths'] = len(mygraphs.keys())
@@ -166,18 +183,19 @@ def shortest_path(request):
 	response['target'] = gene2
 	response['exp'] = exp_id
 	try:
-		gene1 = Gene(identifier=gene1)
-		gene1.check()
+		gene1 = Gene(identifier=gene1).check()
 	except NodeNotFound as err:
 		response['error'] = err
 	try:
-		gene2 = Gene(identifier=gene2)
-		gene2.check()
+		gene2 = Gene(identifier=gene2).check()
 	except NodeNotFound as err:
 		response['error'] = err
-
 	if response['error'] is False:
 		allpaths = gene1.path_to_gene(gene2)
+		experiment = Experiment(exp_id).check()
+		for path in allpaths:
+			path.get_expression(experiment)
+			path.change_expression_color(experiment)
 		response['plen'] = len(allpaths[0].interactions)
 		response['numpaths'] = len(allpaths)
 		response['pathways'] = { idx:allpaths[idx].to_json() for idx in range(0, len(allpaths)) }
@@ -213,12 +231,9 @@ def change_expression(request):
 		exp_id = request.POST['exp_id']
 		genes = [ Gene(identifier=ident) for ident in node_ids ]
 		expressions = { gene.identifier: gene.get_expression(exp_id) for gene in genes }
-		experiment = Experiment(identifier=exp_id)
-		experiment.check()
+		experiment = Experiment(identifier=exp_id).check()
 		for gene, expval in expressions.iteritems():
 			expressions[gene] = experiment.color_from_value(expval)
-
-		print(expressions)
 		return HttpResponse(json.dumps(expressions), content_type="application/json")
 	else:
 		return render(request, 'rpform/404.html')

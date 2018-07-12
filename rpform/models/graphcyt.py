@@ -37,7 +37,6 @@ class GraphCyt(object):
                 self.merge(neighbours)
             except Exception as err:
                 print(err)
-                print("WHAAAT: %s" % NEO)
                 print("Node %s not found" % identifier)
                 continue
 
@@ -81,6 +80,24 @@ class GraphCyt(object):
         }
         self.json = json.dumps(graphelements)
         return self.json
+
+    def get_expression(self, experiment):
+        '''
+        Gets gene expression for all genes in graph
+        '''
+        for gene in self.genes:
+            gene.get_expression(experiment.identifier)
+            
+    def change_expression_color(self, experiment):
+        '''
+        Changes color of all genes in graph based on 'experiment'
+        '''
+        for gene in self.genes:
+            if gene.expression != "NA":
+                gene.color = experiment.color_from_value(gene.expression)
+            else:
+                gene.color = "#000000"
+        return self
 
     def add_gene(self, gene):
         """

@@ -11,7 +11,7 @@ var stylesheet = cytoscape.stylesheet()
             'content': 'data(name)',
             'text-valign': 'bottom',
             'text-halign': 'center',
-            'background-color': '#2CA089',
+            'background-color': 'data(color)',
             "font-size": 14,
             'text-outline-width': 2,
             "text-outline-color": "#FFFFFF",

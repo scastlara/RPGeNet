@@ -539,10 +539,10 @@ class NeoDriver(object):
         results = query.get_results()
         if results:
             for exp in results:
-                experiment = cls(results['identifier'])
-                experiment.min = results['min']
-                experiment.max = results['max']
-                experiment.cmap_type = results['cmap_type']
+                experiment = cls(exp['identifier'])
+                experiment.min = exp['min']
+                experiment.max = exp['max']
+                experiment.cmap_type = exp['cmap_type']
                 experiments.append(experiment)
         else:
             print("No Experiments yet.")

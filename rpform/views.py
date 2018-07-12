@@ -11,8 +11,8 @@ def index_view(request):
 	Index view
 	'''
 	response = dict()
-	experiments = Experiment.all_from_database()
-	print(experiments)
+	#experiments = Experiment.all_from_database()
+	#print(experiments)
 	return render(request, 'rpform/index.html', response)
 
 

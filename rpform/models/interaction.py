@@ -34,6 +34,7 @@ class Interaction(object):
         Queries the interaction on the DB and fills all the attributes
         '''
         NEO.query_by_int(self)
+        return self
 
     def fill_attributes(self, interaction_dict, prefix):
         '''

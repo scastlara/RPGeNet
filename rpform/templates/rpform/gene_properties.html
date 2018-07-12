@@ -65,22 +65,16 @@
 <h3>Expression Data</h3>
 <hr>
 <table class="table table-bordered">
-	<tr>
-		<td>
-			<b>Absolute</b>
-		</td>
-		<td>
-			Num
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<b>Relative</b>
-		</td>
-		<td>
-			Num
-		</td>
-	</tr>
+	{% for exp, value in exp_data.items %}
+		<tr>
+			<td>
+				<b>{{ exp }}</b>
+			</td>
+			<td>
+				{{ value }}
+			</td>
+		</tr>
+	{% endfor %}
 </table>
 
 <br>

@@ -16,7 +16,7 @@ class NeoQueryFactory(object):
             'label', 'parent', 
             'child', 'expression', 
             'gos', 'int_type', 
-            'aliases',
+            'aliases', 'color',
             'summary', 'summary_source'])
         return_clause = ", ".join(['%s.%s as %s_%s' % (elem_name, attr, elem_name, attr) 
                                    for attr in attributes if attr not in non_attributes])
@@ -57,7 +57,7 @@ class NeoQueryFactory(object):
             WHERE  node.identifier = '%s'
             AND    exp.identifier = '%s'
             RETURN r.value as expvalue
-        """ % (nodeobj.label, nodeobj.identifier, nodeobj.identifier)
+        """ % (nodeobj.label, nodeobj.identifier, exp_id)
         return NeoQuery(self.driver, cypher)
 
     def build_query_get_connections(self, genelist, level):
@@ -88,17 +88,22 @@ class NeoQueryFactory(object):
         """ % (nodeobj.label, nodeobj.identifier)
         return NeoQuery(self.driver, cypher)
 
-    def build_query_get_neighbours(self, nodeobj, level, dist, exp_id):
+    def build_query_get_neighbours(self, nodeobj, level, exp_id):
         '''
         Creates query to get neighbours to a particular node 
         in a level and at a distance
         '''
+        n_attributes = nodeobj.__dict__.keys()
+        e_attributes = Interaction().__dict__.keys()
         cypher = """
-            MATCH  p=(node1:GENE)-[rels:INTERACTS_WITH*1..%s]-(node2:GENE)
+            MATCH  (node1:GENE)-[r:INTERACTS_WITH]-(node2:GENE)
             WHERE  node1.identifier = '%s'
-            AND    all(r IN rels WHERE r.level<=%s)
-            RETURN p as pathway, extract(r IN relationships(p)| startnode(r).identifier) as thestart
-        """ % (dist, nodeobj.identifier, level)
+            AND    r.level<=%s
+            RETURN startNode(r).identifier as start, 
+        """ % (nodeobj.identifier, level)
+        cypher += self._return_by_attributes('node1', n_attributes)
+        cypher += ", " + self._return_by_attributes('r', e_attributes)
+        cypher += ", " + self._return_by_attributes('node2', n_attributes)
         return NeoQuery(self.driver, cypher)
 
     def build_query_path_to_level(self, nodeobj, level):
@@ -177,7 +182,7 @@ class NeoQueryFactory(object):
         cypher = """
             MATCH (n:EXPERIMENT)
             WHERE n.identifier = '%s'
-            RETURN n.max, n.min
+            RETURN n.max AS max, n.min AS min, n.cmap_type AS cmap_type
         """ % experiment.identifier
         return NeoQuery(self.driver, cypher)
 
@@ -309,13 +314,12 @@ class NeoDriver(object):
         '''
         Gets expression value for nodeobj
         '''
+        expression = "NA"
         query = self.query_factory.build_query_expression(nodeobj, exp_id)
         results = query.get_results()
-        #print("Expression %s" % results)
         if results:
             expression = results[0]['expvalue']
         else:
-            print("NOEXPRESSIOOOOON")
             expression = 'NA'
         return expression
 
@@ -358,26 +362,20 @@ class NeoDriver(object):
         '''
         neighbour_graph = GraphCyt()
         neighbour_graph.genes.add(nodeobj)
-        query = self.query_factory.build_query_get_neighbours(nodeobj, level, dist, exp_id)
+        query = self.query_factory.build_query_get_neighbours(nodeobj, level, exp_id)
         results = query.get_results()
         if results:
             # Add genes first
             for row in results:
-                nodes = row['pathway'].nodes()
-                rels  = row['pathway'].relationships()
-                for i in range(0, len(nodes) - 1):
-                    gene1 = Gene(nodes[i]['identifier'])
-                    gene1.fill_attributes(nodes[i], None)
-                    gene2 = Gene(nodes[i+1]['identifier'])
-                    gene2.fill_attributes(nodes[i+1], None)
-                    neighbour_graph.add_gene(gene1)
-                    neighbour_graph.add_gene(gene2)
-                    if gene1.identifier == row['thestart'][-1]:
-                        interaction_obj = Interaction(parent=gene1, child=gene2)
-                    else:
-                        interaction_obj = Interaction(parent=gene2, child=gene1)
-                    interaction_obj.fill_attributes(rels[i], None)
-                    neighbour_graph.add_interaction(interaction_obj)
+                gene2 = Gene(row['node2_identifier'])
+                gene2.fill_attributes(row, "node2")
+                neighbour_graph.add_gene(gene2)
+                if nodeobj.identifier == row['start']:
+                    interaction_obj = Interaction(parent=nodeobj, child=gene2)
+                else:
+                    interaction_obj = Interaction(parent=gene2, child=nodeobj)
+                interaction_obj.fill_attributes(row, "r")
+                neighbour_graph.add_interaction(interaction_obj)
             return neighbour_graph
         else:
             raise Exception
@@ -509,10 +507,11 @@ class NeoDriver(object):
         Checks Experiment in DB and returns the Experiment max and min values.
         '''
         query = self.query_factory.build_query_experiment(experiment)
-        print(query)
         results = query.get_results()
         if results:
-            pass
+            experiment.max = results[0]['max']
+            experiment.min = results[0]['min']
+            experiment.cmap_type = results[0]['cmap_type']
         else:
             raise ExperimentNotFound(experiment)
 

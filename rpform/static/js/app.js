@@ -221,6 +221,7 @@ expandOnClick = function(cy, node) {
             $("#loading").show();
         },
         success : function(data) {
+            console.log(data);
             ur.do("add", data);
             ur.do("layout", { options: {name: 'cola'} });
             $("#loading").hide();
@@ -454,6 +455,7 @@ function getCookie(name) {
 changeExpression = function(cy, exp_id) {
     var csrftoken = getCookie('csrftoken');
     var nodeIds   = getNodeIds(cy);
+    window.expId = exp_id;
     $.ajax({
         type: "POST",
         url: window.ROOT + "/change_expression",
@@ -469,12 +471,15 @@ changeExpression = function(cy, exp_id) {
         },
         success : function(data) {
             var nodes = cy.nodes();
+            console.log(data);
             for (var i = 0; i < nodes.length; i++) {
                 nodeId = nodes[i].data().name;
                 if (data.hasOwnProperty(nodeId)) {
-                    nodes[i].data().exp = "RED";
+                    nodes[i].data().color = data[nodeId];
+                    nodes[i].css("background-color", data[nodeId]);
                 } else {
-                    nodes[i].data().exp = "NA";
+                    nodes[i].data().color = "NA";
+                    nodes[i].css("background-color", "#000000");
                 }
             }
             $("#loading").hide();

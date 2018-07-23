@@ -438,7 +438,8 @@ function getCookie(name) {
  */
  searchNode = function(cy, term) {
     if (term) {
-        var terms = term.split(",").map(function(x){ return x.toUpperCase() });
+        var terms = term.split(RegExp("[,\\s]")).map(function(x){ return x.toUpperCase() });
+        console.log(terms);
         cy.nodes().filter(function(ele, eidx, eles) {
             if (terms.indexOf(ele.data("name").toUpperCase()) !== -1) {
                 return true;

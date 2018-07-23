@@ -48,7 +48,17 @@ body 			{ font-size: 12px; height: 100vh; }
 .navbar-container {
 	text-align: center;
 	width: 100%;
+}
 
+@media screen and (max-width: 768px) {
+	.navbar-container {
+		text-align: center;
+		width: 100%;
+		margin-top: 100px;
+	}
+	#title-text {
+		text-align: center;
+	}
 }
 
 .thenavbar {
@@ -93,9 +103,6 @@ body 			{ font-size: 12px; height: 100vh; }
 	float: left;
 }
 
-
-
-
 .cgl-links-footer {
 	display: inline-block;
 	float: left; 
@@ -122,6 +129,40 @@ body 			{ font-size: 12px; height: 100vh; }
 img[class *='-logo-footer']:hover { opacity: 0.8;     }
 
 
+@media screen and (max-width: 1260px) {
+	.footer-right {
+		float: left;
+		width: 600px;
+		margin-top: 50px;
+		margin-left: 80px;
+	}
+	#footer {
+		margin-top: 100px;
+		height: 300px;
+	}
+
+}
+
+
+
+@media screen and (max-width: 768px) {
+	.footer-right {
+		float: left;
+		width: 600px;
+		margin-top: 50px;
+		margin-left: 80px;
+	}
+	#footer {
+		margin-top: 100px;
+		height: 500px;
+	}
+
+	.logo-container .col-sm-4 {
+		margin-bottom: 20px;
+	}
+
+}
+
 /* BODY
 ================================== */
 
@@ -145,6 +186,27 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 	width: 30px !important;
 }
 
+
+@media screen and (min-device-width: 1144px) and (max-width: 1502px) {
+	.app-panel {
+		width: 400px !important;
+		height: 320px !important;
+	}
+}
+
+@media screen and (max-width: 1144px) {
+	.app-panel {
+		float: none !important;
+		width: 400px !important;
+		height: 320px !important;
+		margin-bottom: 15px !important;
+	}
+
+}
+
+
+
+
 .app-panel-container {
 	width: 100%;
 	margin: auto;
@@ -167,7 +229,7 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 	padding: 2%;
 	height: 285px;
 	text-align: left !important;
-	width: 520px !important;
+	max-width: 520px;
 	background-image: url('../Images/app-panel.png') !important;
 	border-radius: 10px;
 }

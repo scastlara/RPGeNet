@@ -4,7 +4,7 @@
 
 /* BASE 
 ================================== */
-body 			{ font-size: 12px;}
+body 			{ font-size: 12px; height: 100vh; }
 
 
 /* HEADER
@@ -339,9 +339,11 @@ input[type=number]::-webkit-inner-spin-button {
 
 /* GEXPLORER
 ================================== */
+
 #cyt {
 	float: left;
-	width: 75%;
+	width: 74%;
+	min-width: 600px;
 	height: 100%;
 	background-color: #FAFAFA;
 }
@@ -350,8 +352,9 @@ input[type=number]::-webkit-inner-spin-button {
 	padding-right: 30px;
 	padding-left: 30px;
 	text-align: center;
+	margin-left: 2px;
 	float: left;
-	min-width: 330px;
+	overflow-y: scroll;
 	width: 25%;
 	height: 100vh;
 	background-color: #FAFAFA;
@@ -359,6 +362,26 @@ input[type=number]::-webkit-inner-spin-button {
 	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;            
   	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;    
 }
+
+@media screen and (max-width: 1150px) {
+	#cyt {
+		width: 59%;
+		min-width: 300px;
+	}
+
+	#cyt-controls {
+		width: 40%;
+		height: 100%;
+
+	}
+
+	#top-indicators {
+		right: 42% !important;
+
+	}
+}
+
+
 
 #gexplorer-topbtns { margin-top: 10px; }
 #gexplorer-logo    { width: 60px; }
@@ -377,7 +400,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 
 
-.behaviour-btn       { min-height: 30px; }
+.behaviour-btn       { min-height: 30px; font-size: 12px;}
 .behaviour-btn:hover { cursor: pointer; }
 .behaviour-btn-text  { line-height: 30px; }
 .cyt-controls-block  { margin-top: 30px; }
@@ -803,7 +826,7 @@ span#undo {
 #top-indicators {
 	position: fixed;
 	top: 15px;
-	right: 25%;
+	right: 28%;
 	z-index: 2;
 	width: 120px;
 }

@@ -998,3 +998,70 @@ span#undo {
 	width: 120px;
 	display: none;
 }
+
+.table-data {
+	font-size: 11px;
+	text-align: right;
+}
+
+.table-data-header {
+	text-align: center;
+	font-weight: bold;
+}
+
+table.data-genename {
+	width: 600px;
+	float: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+table.data-genename  tr th ,
+table.data-genename tr:first-child td {
+	text-align: center;
+	background-color: #4C4C4C;
+	color: #FFFFFF;
+}
+table.data-genename tr th {
+	font-weight: normal;
+}
+table.data-genename tr:first-child td {
+    text-align: center;
+    font-weight: bold;
+}
+table.data-genename tr td {
+	text-align: right;
+	color: #000000;
+	background-color: #FFFFFF;
+}
+
+.string_graph {
+	width: 60%;
+	height: auto;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+}
+
+.string_factor_graph {
+	width: 80%;
+	height: auto;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;	
+}
+
+.ppaxe_graph {
+	width: 80%;
+	height: auto;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+}
+
+.circos_graph {
+	width: 100%;
+	height: auto;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+}

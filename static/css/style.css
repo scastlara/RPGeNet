@@ -4,7 +4,7 @@
 
 /* BASE 
 ================================== */
-body 			{ font-size: 12px;}
+body 			{ font-size: 12px; height: 100vh; }
 
 
 /* HEADER
@@ -48,12 +48,22 @@ body 			{ font-size: 12px;}
 .navbar-container {
 	text-align: center;
 	width: 100%;
+}
 
+@media screen and (max-width: 768px) {
+	.navbar-container {
+		text-align: center;
+		width: 100%;
+		margin-top: 100px;
+	}
+	#title-text {
+		text-align: center;
+	}
 }
 
 .thenavbar {
 	display: inline-block;
-	width: 306px; /* 4x nav-elem.width + 2px */
+	width: 315px; /* 5x nav-elem.width + 4px */
 }
 
 .navbar-inner {
@@ -93,9 +103,6 @@ body 			{ font-size: 12px;}
 	float: left;
 }
 
-
-
-
 .cgl-links-footer {
 	display: inline-block;
 	float: left; 
@@ -122,6 +129,40 @@ body 			{ font-size: 12px;}
 img[class *='-logo-footer']:hover { opacity: 0.8;     }
 
 
+@media screen and (max-width: 1260px) {
+	.footer-right {
+		float: left;
+		width: 600px;
+		margin-top: 50px;
+		margin-left: 80px;
+	}
+	#footer {
+		margin-top: 100px;
+		height: 300px;
+	}
+
+}
+
+
+
+@media screen and (max-width: 768px) {
+	.footer-right {
+		float: left;
+		width: 600px;
+		margin-top: 50px;
+		margin-left: 80px;
+	}
+	#footer {
+		margin-top: 100px;
+		height: 500px;
+	}
+
+	.logo-container .col-sm-4 {
+		margin-bottom: 20px;
+	}
+
+}
+
 /* BODY
 ================================== */
 
@@ -145,6 +186,27 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 	width: 30px !important;
 }
 
+
+@media screen and (min-device-width: 1144px) and (max-width: 1502px) {
+	.app-panel {
+		width: 400px !important;
+		height: 320px !important;
+	}
+}
+
+@media screen and (max-width: 1144px) {
+	.app-panel {
+		float: none !important;
+		width: 400px !important;
+		height: 320px !important;
+		margin-bottom: 15px !important;
+	}
+
+}
+
+
+
+
 .app-panel-container {
 	width: 100%;
 	margin: auto;
@@ -167,7 +229,7 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 	padding: 2%;
 	height: 285px;
 	text-align: left !important;
-	width: 520px !important;
+	max-width: 520px;
 	background-image: url('../Images/app-panel.png') !important;
 	border-radius: 10px;
 }
@@ -239,6 +301,7 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 	text-align: center;
 	margin-top: 5%;
 	color: #555;
+	width: 95%;
 
 	/*width: 940px;
 	margin-left: 65px;*/
@@ -338,9 +401,11 @@ input[type=number]::-webkit-inner-spin-button {
 
 /* GEXPLORER
 ================================== */
+
 #cyt {
 	float: left;
-	width: 75%;
+	width: 74%;
+	min-width: 600px;
 	height: 100%;
 	background-color: #FAFAFA;
 }
@@ -349,8 +414,9 @@ input[type=number]::-webkit-inner-spin-button {
 	padding-right: 30px;
 	padding-left: 30px;
 	text-align: center;
+	margin-left: 2px;
 	float: left;
-	min-width: 330px;
+	overflow-y: scroll;
 	width: 25%;
 	height: 100vh;
 	background-color: #FAFAFA;
@@ -358,6 +424,26 @@ input[type=number]::-webkit-inner-spin-button {
 	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;            
   	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;    
 }
+
+@media screen and (max-width: 1150px) {
+	#cyt {
+		width: 59%;
+		min-width: 300px;
+	}
+
+	#cyt-controls {
+		width: 40%;
+		height: 100%;
+
+	}
+
+	#top-indicators {
+		right: 42% !important;
+
+	}
+}
+
+
 
 #gexplorer-topbtns { margin-top: 10px; }
 #gexplorer-logo    { width: 60px; }
@@ -373,75 +459,10 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 
-#lvl-indicator-title {
-	position: fixed;
-	right: 26%;
-	top: 15px;
-	text-align: center;
-	vertical-align: center;
-	font-size: 15px;
-	z-index: 2;
-	width: 140px;
-	height: 25px;
-	background-color: #3A9F88;
-	border: 1px solid #ccc;
-	color: white;
-    border-radius: 4px;
-}
-
-#lvl-indicator { 
-	position: fixed;
-	right: 26%;
-	top: 40px;
-	text-align: center;
-	vertical-align: center;
-	font-size: 15px;
-	z-index: 2;
-	width: 140px;
-	height: 35px;
-	padding: 5px;
-	background-color: white;
-	border: 1px solid #ccc;
-	color: #777;
-    border-radius: 4px;
-}
 
 
-#exp-indicator-title {
-	position: fixed;
-	right: 26%;
-	top: 85px;
-	text-align: center;
-	vertical-align: center;
-	font-size: 15px;
-	z-index: 2;
-	width: 140px;
-	height: 25px;
-	background-color: #3A9F88;
-	border: 1px solid #ccc;
-	color: white;
-    border-radius: 4px;
-}
 
-#exp-indicator {
-	position: fixed;
-	right: 26%;
-	top: 100px;
-	text-align: center;
-	vertical-align: center;
-	font-size: 15px;
-	z-index: 2;
-	width: 140px;
-	height: 35px;
-	padding: 5px;
-	background-color: white;
-	border: 1px solid #ccc;
-	color: #777;
-    border-radius: 4px;
-}
-
-
-.behaviour-btn       { min-height: 30px; }
+.behaviour-btn       { min-height: 30px; font-size: 12px;}
 .behaviour-btn:hover { cursor: pointer; }
 .behaviour-btn-text  { line-height: 30px; }
 .cyt-controls-block  { margin-top: 30px; }
@@ -850,4 +871,197 @@ input[type=number]::-webkit-inner-spin-button {
 
 .center-text {
 	text-align: center;
+}
+
+.panel-rp .panel-heading {
+	background-color: #2ca089 !important;
+	color: white !important;
+	font-weight: bold;
+}
+
+
+span#undo {
+	transform: rotateY(180deg);
+}
+
+
+#top-indicators {
+	position: fixed;
+	top: 15px;
+	right: 28%;
+	z-index: 2;
+	width: 120px;
+}
+
+#undo-redo-indicator {
+	height: 30px;
+	text-align: center;
+	margin-left: 5px;
+	
+}
+
+#undo-indicator { 
+	display: inline-block;
+	text-align: center;
+	vertical-align: center;
+	font-size: 18px;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+	background-color: white;
+	border: 1px solid #ccc;
+	color: #777;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 0 !important;
+}
+
+#redo-indicator { 
+	display: inline-block;
+	text-align: center;
+	vertical-align: center;
+	font-size: 18px;
+    height: 40px;
+    width: 40px;
+	background-color: white;
+	border: 1px solid #ccc;
+	color: #777;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 0 !important;
+}
+#redo {	line-height: 40px; }
+#undo {	line-height: 40px; }
+
+#undo-indicator:hover { background-color: #e6e6e6; }
+#redo-indicator:hover { background-color: #e6e6e6; }
+/*
+#redo-indicator:hover { cursor: pointer; background-color: #e6e6e6; border-color: #adadad; }
+#undo-indicator:hover { cursor: pointer; background-color: #e6e6e6; border-color: #adadad;}
+#redo-indicator:active { cursor: pointer; background-color: #e6e6e6; border-color: #adadad; }
+#undo-indicator:active { cursor: pointer; background-color: #e6e6e6; border-color: #adadad;}
+*/
+#lvl-indicator-title {
+	display: inline-block;
+	text-align: center;
+	vertical-align: center;
+	font-size: 15px;
+	background-color: #3A9F88;
+	border: 1px solid #ccc;
+	color: white;
+    border-radius: 4px;
+    width: 100%;
+}
+
+#lvl-indicator { 
+	text-align: center;
+	vertical-align: center;
+	font-size: 15px;
+	height: 35px;
+	background-color: white;
+	border: 1px solid #ccc;
+	color: #777;
+    border-radius: 4px;
+    width: 100%;
+}
+
+
+#exp-indicator-title {
+	display: inline-block;
+	margin-top: 10px;
+	margin-bottom: 0px;
+	text-align: center;
+	vertical-align: center;
+	font-size: 15px;
+	height: 25px;
+	background-color: #3A9F88;
+	border: 1px solid #ccc;
+	color: white;
+    border-radius: 4px;
+    width: 100%;
+}
+
+#exp-indicator {
+	text-align: center;
+	vertical-align: center;
+	font-size: 15px;
+	height: 35px;
+	background-color: white;
+	border: 1px solid #ccc;
+	color: #777;
+    border-radius: 4px;
+    width: 100%;
+    margin-top: 0px;
+}
+
+#loading {
+	width: 120px;
+	display: none;
+}
+
+.table-data {
+	font-size: 11px;
+	text-align: right;
+}
+
+.table-data-header {
+	text-align: center;
+	font-weight: bold;
+}
+
+table.data-genename {
+	width: 600px;
+	float: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+table.data-genename  tr th ,
+table.data-genename tr:first-child td {
+	text-align: center;
+	background-color: #4C4C4C;
+	color: #FFFFFF;
+}
+table.data-genename tr th {
+	font-weight: normal;
+}
+table.data-genename tr:first-child td {
+    text-align: center;
+    font-weight: bold;
+}
+table.data-genename tr td {
+	text-align: right;
+	color: #000000;
+	background-color: #FFFFFF;
+}
+
+.string_graph {
+	width: 60%;
+	height: auto;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+}
+
+.string_factor_graph {
+	width: 80%;
+	height: auto;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;	
+}
+
+.ppaxe_graph {
+	width: 80%;
+	height: auto;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+}
+
+.circos_graph {
+	width: 100%;
+	height: auto;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
 }

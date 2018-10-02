@@ -2,7 +2,7 @@
 	Styles for RPGeNet v2
 */
 
-/* BASE 
+/* BASE
 ================================== */
 body 			{ font-size: 12px; height: 100vh; }
 
@@ -10,10 +10,10 @@ body 			{ font-size: 12px; height: 100vh; }
 /* HEADER
 ================================== */
 
-#title-div { 
-	margin-top: 40px; 
-	width: 100%; 
-	height: 120px; 
+#title-div {
+	margin-top: 40px;
+	width: 100%;
+	height: 120px;
 	text-align: center;
 }
 
@@ -105,10 +105,10 @@ body 			{ font-size: 12px; height: 100vh; }
 
 .cgl-links-footer {
 	display: inline-block;
-	float: left; 
+	float: left;
 	margin-left: 20px;
 	margin-top: 20px;
-} 
+}
 
 .copyright { font-size: 12px; margin-top: 5px; }
 
@@ -167,7 +167,6 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 ================================== */
 
 .content {
-	min-height: 40%;
 	margin-top: 0.5%;
 	margin-left: 15%;
 	margin-right: 15%;
@@ -299,7 +298,7 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 #forms-container {
 	display: inline-block;
 	text-align: center;
-	margin-top: 5%;
+	margin-top: 3.5%;
 	color: #555;
 	width: 95%;
 
@@ -421,8 +420,8 @@ input[type=number]::-webkit-inner-spin-button {
 	height: 100vh;
 	background-color: #FAFAFA;
 	box-shadow: -2px 2px 8px 2px #E1E1E1;
-	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;            
-  	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;    
+	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;
+  	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;
 }
 
 @media screen and (max-width: 1150px) {
@@ -481,11 +480,11 @@ input[type=number]::-webkit-inner-spin-button {
 #upload-level2           { text-align: center; }
 #no-results-dialog #upload-form             { display: inline-block; width: 100%; }
 
-#no-results-dialog       { 
-	width: 40%; 
-	height: 195px; 
-	display: none; 
-	position: fixed; 
+#no-results-dialog       {
+	width: 40%;
+	height: 195px;
+	display: none;
+	position: fixed;
 	padding: 25px;
 	left: 17.5%;
 	top: 200px;
@@ -495,11 +494,11 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 
-#legend-dialog       { 
-	width: 40%; 
-	height: 500px; 
-	display: none; 
-	position: fixed; 
+#legend-dialog       {
+	width: 40%;
+	height: 500px;
+	display: none;
+	position: fixed;
 	padding: 25px;
 	left: 17.5%;
 	top: 125px;
@@ -507,11 +506,11 @@ input[type=number]::-webkit-inner-spin-button {
 	background-color: #FAFAFA;
 }
 
-.card-dialog { 
-	width: 40%; 
-	height: 500px; 
-	display: none; 
-	position: fixed; 
+.card-dialog {
+	width: 40%;
+	height: 500px;
+	display: none;
+	position: fixed;
 	padding: 25px;
 	left: 30%;
 	top: 125px;
@@ -539,7 +538,7 @@ input[type=number]::-webkit-inner-spin-button {
       width: 1px; /* Line width */
       background-color: #AFAFAF; /* Line color */
       height: 50px; /* Override in-line if you want specific height. */
-      float: left; /* Causes the line to float to left of content. 
+      float: left; /* Causes the line to float to left of content.
         You can instead use position:absolute or display:inline-block
         if this fits better with your design */
     }
@@ -676,8 +675,8 @@ input[type=number]::-webkit-inner-spin-button {
 .body-card {
 	background-color: #FAFAFA;
 	box-shadow: -2px 2px 8px 2px #E1E1E1;
-	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;            
-  	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;    
+	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;
+  	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;
   	padding: 2%;
 	width: 80%;
 	margin-left: 10%;
@@ -703,8 +702,8 @@ input[type=number]::-webkit-inner-spin-button {
 	display: inline-block;
 	background-color: #FAFAFA;
 	box-shadow: -2px 2px 8px 2px #E1E1E1;
-	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;            
-  	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;    
+	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;
+  	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;
   	padding: 2%;
 	width: 250px;
 	margin-top: 25px;
@@ -717,8 +716,8 @@ input[type=number]::-webkit-inner-spin-button {
 .app-title-container {
 	background-color: #FAFAFA;
 	box-shadow: -2px 2px 8px 2px #E1E1E1;
-	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;            
-  	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;    
+	-moz-box-shadow: -2px 2px 8px 2px #E1E1E1;
+  	-webkit-box-shadow: -2px 2px 8px 2px #E1E1E1;
   	padding: 2%;
 	width: 80%;
 	margin-left: 10%;
@@ -851,7 +850,7 @@ input[type=number]::-webkit-inner-spin-button {
 .toc {
 	background-color: white;
 	width: 40%;
-	min-width: 400px; 
+	min-width: 400px;
 	padding: 20px;
 	border: 1px solid transparent;
 	border: 1px solid #CCC;
@@ -897,10 +896,10 @@ span#undo {
 	height: 30px;
 	text-align: center;
 	margin-left: 5px;
-	
+
 }
 
-#undo-indicator { 
+#undo-indicator {
 	display: inline-block;
 	text-align: center;
 	vertical-align: center;
@@ -916,7 +915,7 @@ span#undo {
     padding: 0 !important;
 }
 
-#redo-indicator { 
+#redo-indicator {
 	display: inline-block;
 	text-align: center;
 	vertical-align: center;
@@ -953,7 +952,7 @@ span#undo {
     width: 100%;
 }
 
-#lvl-indicator { 
+#lvl-indicator {
 	text-align: center;
 	vertical-align: center;
 	font-size: 15px;
@@ -1047,7 +1046,7 @@ table.data-genename tr td {
 	height: auto;
 	display: block;
 	margin-left: auto;
-    margin-right: auto;	
+    margin-right: auto;
 }
 
 .ppaxe_graph {

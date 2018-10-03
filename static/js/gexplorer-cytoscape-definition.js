@@ -11,7 +11,7 @@ var stylesheet = cytoscape.stylesheet()
             'content': 'data(name)',
             'text-valign': 'bottom',
             'text-halign': 'center',
-            'background-color': '#2CA089',
+            'background-color': 'data(color)',
             "font-size": 14,
             'text-outline-width': 2,
             "text-outline-color": "#FFFFFF",
@@ -23,8 +23,13 @@ var stylesheet = cytoscape.stylesheet()
         })
     .selector(':selected')
         .css({
-            'background-color': 'black',
-            'color': 'black',
+            "background-color": "#3A9F88",
+            "font-size": 18,
+            "color": "#3A9F88",
+            "text-background-opacity": 1,
+            "text-background-color": "#ccc",
+            "text-background-shape": "roundrectangle",
+
         })
     .selector('.driver')
         .css({
@@ -48,28 +53,25 @@ var stylesheet = cytoscape.stylesheet()
         })
     .selector('.lvl1')
      .css({
-        "border-color": "#E0FFE8",
+        "border-color": "#C0EFBA",
         })
     .selector('.lvl2')
      .css({
-        "border-color": "#86DD9C",
+        "border-color": "#5AD55A",
         })
     .selector('.lvl3')
      .css({
-        "border-color": "#59BC72",
-        })
-    .selector('.lvl4')
-     .css({
-        "border-color": "#2C9B48",
+        "border-color": "#0A945C",
         })
     .selector('.lvl5')
      .css({
-        "border-color": "#007A1F",
+        "border-color": "#1E3610",
     })
     .selector('edge')
         .css({
             'color': "#4F8ABA",
             'line-color': '#4F8ABA',
+            'curve-style': 'bezier',
             'target-arrow-color': '#4F8ABA',
             'target-arrow-shape': 'triangle',
             "width": "mapData(ewidth, 1, 9, 1, 5)",
@@ -90,6 +92,16 @@ var stylesheet = cytoscape.stylesheet()
             'line-color': '#5B5B5B',
             'target-arrow-color': '#5B5B5B',
         })
+    .selector(':selected')
+        .css({
+            'line-color': '#3A9F88',
+            'target-arrow-color': '#3A9F88',
+        })
+    .selector('.no-node-size')
+        .css({
+            'width':  '30',
+            'height': '30'
+        });
     
 
 
@@ -101,3 +113,13 @@ var cy = cytoscape({
     boxSelectionEnabled: true,  
     ready: function() {}
 });
+var urOptions = {
+            isDebug: false, // Debug mode for console messages
+            actions: {},// actions to be added
+            undoableDrag: true, // Whether dragging nodes are undoable can be a function as well
+            stackSizeLimit: 5, // Size limit of undo stack, note that the size of redo stack cannot exceed size of undo stack
+            ready: function () { // callback when undo-redo is ready
+
+    }
+};
+var ur = cy.undoRedo(urOptions);

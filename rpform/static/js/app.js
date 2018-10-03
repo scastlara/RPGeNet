@@ -12,6 +12,7 @@ window.ROOT = '';
 window.drag = false;
 window.cy;
 window.layout;
+window.nodeSize = "ns-enable";
 
 
 // FUNCTIONS
@@ -23,6 +24,19 @@ window.layout;
 changeClickBehaviour = function() {
     var behaviour = $('input[name=behaviour]:checked', '#behaviour-form').val();
     window.clickBehaviour = window.clickBehaviourOpts[behaviour];
+}
+
+
+/*
+ * Change Node Size
+ */
+changeNodeSize = function(cy) {
+    window.nodeSize = $('input[name=node-size]:checked', '#node-size-form').val();
+    if (window.nodeSize == "ns-enable") {
+        cy.nodes().removeClass("no-node-size");
+    } else {
+        cy.nodes().addClass("no-node-size");
+    }
 }
 
 /*
@@ -224,7 +238,9 @@ expandOnClick = function(cy, node) {
             console.log(data);
             ur.do("add", data);
             ur.do("layout", { options: {name: 'cola'} });
+            changeNodeSize(cy);
             $("#loading").hide();
+
             //window.layout.stop()
             //window.layout = cy.layout({ name: 'cola' });
             //window.layout.run();
@@ -512,6 +528,7 @@ reDo = function() {
 // BUTTONS AND EVENTS
 //==================================================
 $('#behaviour-form').on("change", changeClickBehaviour);
+$('#node-size-form').on("change", function() { changeNodeSize(window.cy) });
 $("#layout").on("change", function() { changeLayout(window.cy, $(this).val())});
 $("#fitscreen-btn").on("click", function() { fitScreen(window.cy) });
 $("#save-img").on("click", function() { saveImg(window.cy, $('#save-image-link')) });

@@ -3,14 +3,16 @@ app.js - Main script for the basic functionality of
          Netengine graph visualizations.
 ==================================================*/
 
-
 // GLOBALS
 //==================================================
 window.clickBehaviourOpts = {"properties":1, "addition":2, "deletion":3 }
 Object.freeze(window.clickBehaviourOpts);
 window.clickBehaviour = window.clickBehaviourOpts.properties; // Default behaviour
+window.ROOT = '';
 window.drag = false;
 window.cy;
+window.layout;
+window.nodeSize = "ns-enable";
 
 
 // FUNCTIONS
@@ -24,12 +26,27 @@ changeClickBehaviour = function() {
     window.clickBehaviour = window.clickBehaviourOpts[behaviour];
 }
 
+
+/*
+ * Change Node Size
+ */
+changeNodeSize = function(cy) {
+    window.nodeSize = $('input[name=node-size]:checked', '#node-size-form').val();
+    if (window.nodeSize == "ns-enable") {
+        cy.nodes().removeClass("no-node-size");
+    } else {
+        cy.nodes().addClass("no-node-size");
+    }
+}
+
 /*
  * Change Layout
  */
  changeLayout = function(cy, layout) {
     layout = layout.toLowerCase();
- 	cy.layout( { name: layout } );
+    ur.do("layout", { options: {name: layout } });
+ 	//var thelayout = cy.layout( { name: layout } );
+    //thelayout.run();
  }
 
 /*
@@ -104,20 +121,23 @@ function b64ToBlob(b64Data, contentType, sliceSize) {
  	var jsonGraph = cy.json().elements;
  	var nodes     = {};
  	var edges     = {};
+    /*
  	for (var key in jsonGraph.nodes) {
  		var node = jsonGraph.nodes[key].data.id;
  		nodes[node] = 1;
  	}
+    */
     nodes = Object.keys(nodes).join("\n"); // to string
-
+    edges['Parent\tChild\tType\tLevel\tEvidences'] = 1;
     for (var ekey in jsonGraph.edges) {
         var edge = jsonGraph.edges[ekey].data.id;
-        edge = edge.replace("-", "\t");
-        edge = edge + "\t" + jsonGraph.edges[ekey].data.probability;
+        edge = edge.replace(/-/g, "\t");
+        edge = edge + "\t" + jsonGraph.edges[ekey].data.level;
+        edge = edge + "\t" + jsonGraph.edges[ekey].data.ewidth;
         edges[edge] = 1;
     }
     edges = Object.keys(edges).join("\n"); // to string
-    tblString = nodes + "\n" + edges;
+    tblString = edges;
     var blob = new Blob([tblString], {type: "text/plain;charset=utf-8"});
     saveAs(blob, "graph-export.tbl");
 };
@@ -164,7 +184,8 @@ exportJSON = function(cy) {
             }
         }
         if (! withpos) {
-            cy.layout({ name:  $("#layout").val().toLowerCase() });
+            window.layout = cy.layout({ name:  $("#layout").val().toLowerCase() });
+            window.layout.run();
         }
         window.jsongraph = {};
         var defaults = ({
@@ -202,46 +223,36 @@ expandOnClick = function(cy, node) {
     }
     $.ajax({
         type: "GET",
-        url: "/add_neighbours",
+        url: window.ROOT + "/add_neighbours",
         cache: true,
         data: {
             'gene': node.data().name,
             'level': window.level,
             'exp': window.expId,
-            'x':   node.position('x'),
-            'y':   node.position('y'),
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
         beforeSend: function() {
-            
+            $("#loading").show();
         },
         success : function(data) {
-            cy.add(data);
-            cy.layout({ 
-                name: 'cose',
-                maxSimulationTime: 3000,
-                fit: true,
-                directed: false,
-                padding: 40 
-            });
-            //cy.layout({ 
-            //    name: 'cose',
-            //    animateFilter: function ( node, i ){ 
-            //        if (eles.getElementById(node.data().id)) { 
-            //            return false;
-            //        } else { 
-            //            return false;
-            //        } 
-            //    },
-            //});
+            console.log(data);
+            ur.do("add", data);
+            ur.do("layout", { options: {name: 'cola'} });
+            changeNodeSize(cy);
+            $("#loading").hide();
+
+            //window.layout.stop()
+            //window.layout = cy.layout({ name: 'cola' });
+            //window.layout.run();
         }, 
         statusCode: {
             404: function() {
-
+                $("#loading").hide();
             },
         },
         error: function(request, status, error) {
             alert(request.responseText);
+            $("#loading").hide();
         }
     });
     //body
@@ -253,27 +264,29 @@ expandOnClick = function(cy, node) {
 nPropertiesOnClick = function(cy, node) {
     $.ajax({
         type: "GET",
-        url: "/get_properties",
+        url: window.ROOT + "/get_properties",
         cache: true,
         data: {
             'gene': node.data().name,
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
         beforeSend: function() {
-
+            $("#loading").show();
         },
         success : function(data) {
             $('.card-overlay').html(data);
             $('.card-overlay').slideToggle(450);
             $('.close-overlay').slideToggle(450);
+            $("#loading").hide();
         }, 
         statusCode: {
             404: function() {
-
+                $("#loading").hide();
             },
         },
         error: function(xhr, status, error) {
             alert(xhr.responseText);
+            $("#loading").hide();
         }
     });
 }
@@ -284,27 +297,29 @@ nPropertiesOnClick = function(cy, node) {
 ePropertiesOnClick = function(cy, edge) {
     $.ajax({
         type: "GET",
-        url: "/get_properties",
+        url: window.ROOT + "/get_properties",
         cache: true,
         data: {
             'interaction': edge.data().id,
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
         beforeSend: function() {
-
+            $("#loading").show();
         },
         success : function(data) {
             $('.card-overlay').html(data);
             $('.card-overlay').slideToggle(450);
             $('.close-overlay').slideToggle(450);
+            $("#loading").hide();
         }, 
         statusCode: {
             404: function() {
-
+                $("#loading").hide();
             },
         },
         error: function(xhr, status, error) {
             alert(xhr.responseText);
+            $("#loading").hide();
         }
     });
 }
@@ -326,7 +341,7 @@ onNodeClick = function(cy, node) {
         expandOnClick(cy, node);
     } else if (window.clickBehaviour == window.clickBehaviourOpts.deletion) {
         if (cy.nodes(':selected').intersection(node).length) {
-            cy.nodes(':selected').remove();
+            ur.do("remove", cy.nodes(':selected'));
         } else {
             document.getElementById("cyt").style.cursor = 'not-allowed';
         }
@@ -387,39 +402,49 @@ function getCookie(name) {
 }
 
 /*
- * Connects genes on visualization
+ * Get node Identifiers from cytoscape
  */
- showConnections = function(cy) {
+ getNodeIds = function(cy) {
     var nodes     = cy.nodes();
-    var csrftoken = getCookie('csrftoken');
     var node_ids  = [];
     for (var i = 0; i < nodes.length; i++) {
         node_ids.push( nodes[i].data().name );
     }
-    node_ids = node_ids.join(",");
+    return node_ids.join(",");
+ }
+
+/*
+ * Connects genes on visualization
+ */
+ showConnections = function(cy) {
+    var csrftoken = getCookie('csrftoken');
+    var nodeIds   = getNodeIds(cy);
     $.ajax({
         type: "POST",
-        url: "/show_connections",
+        url: window.ROOT + "/show_connections",
         cache: true,
         data: {
-            'nodes': node_ids,
+            'nodes': nodeIds,
             'level': window.level,
             'csrfmiddlewaretoken': csrftoken
         },
         beforeSend: function() {
+            $("#loading").show();
 
         },
         success : function(data) {
-            cy.add(data);
-            cy.layout( { name: 'cose' } );
+            ur.do("add", data);
+            cy.layout( { name: 'cola' } );
+            $("#loading").hide();
         }, 
         statusCode: {
             404: function() {
-
+                $("#loading").hide();
             },
         },
         error: function(xhr, status, error) {
             alert(xhr.responseText);
+            $("#loading").hide();
         }
     });
  }
@@ -429,8 +454,9 @@ function getCookie(name) {
  */
  searchNode = function(cy, term) {
     if (term) {
-        var terms = term.split(",").map(function(x){ return x.toUpperCase() });
-        cy.nodes().filter(function(eidx, ele) {
+        var terms = term.split(RegExp("[,\\s]")).map(function(x){ return x.toUpperCase() });
+        console.log(terms);
+        cy.nodes().filter(function(ele, eidx, eles) {
             if (terms.indexOf(ele.data("name").toUpperCase()) !== -1) {
                 return true;
             } else {
@@ -440,9 +466,69 @@ function getCookie(name) {
     }
  }
 
+/*
+ * Changing expression color
+ */ 
+changeExpression = function(cy, exp_id) {
+    var csrftoken = getCookie('csrftoken');
+    var nodeIds   = getNodeIds(cy);
+    window.expId = exp_id;
+    $.ajax({
+        type: "POST",
+        url: window.ROOT + "/change_expression",
+        cache: true,
+        data: {
+            'nodes': nodeIds,
+            'level': window.level,
+            'exp_id': exp_id,
+            'csrfmiddlewaretoken': csrftoken
+        },
+        beforeSend: function() {
+            $("#loading").show();
+        },
+        success : function(data) {
+            var nodes = cy.nodes();
+            console.log(data);
+            for (var i = 0; i < nodes.length; i++) {
+                nodeId = nodes[i].data().name;
+                if (data.hasOwnProperty(nodeId)) {
+                    nodes[i].data().color = data[nodeId];
+                    nodes[i].css("background-color", data[nodeId]);
+                } else {
+                    nodes[i].data().color = "NA";
+                    nodes[i].css("background-color", "#000000");
+                }
+            }
+            $("#loading").hide();
+        }, 
+        statusCode: {
+            404: function() {
+                $("#loading").hide();
+            },
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText);
+            $("#loading").hide();
+        }
+    });
+}
+
+unDo = function() {
+    console.log("Undoing");
+    ur.undo();
+    fitScreen(window.cy);
+}
+
+reDo = function() {
+    console.log("Redoing");
+    ur.redo();
+    fitScreen(window.cy);
+}
+
 // BUTTONS AND EVENTS
 //==================================================
 $('#behaviour-form').on("change", changeClickBehaviour);
+$('#node-size-form').on("change", function() { changeNodeSize(window.cy) });
 $("#layout").on("change", function() { changeLayout(window.cy, $(this).val())});
 $("#fitscreen-btn").on("click", function() { fitScreen(window.cy) });
 $("#save-img").on("click", function() { saveImg(window.cy, $('#save-image-link')) });
@@ -453,6 +539,9 @@ $("#bsize").on("change", function() { changeBsize(window.cy, $(this).val()) });
 $("#get-connections").on('click', function() { showConnections(window.cy) });
 $("#search-node-btn").on("click", function(){ searchNode(window.cy, $("#search-node-term").val()) });
 $("#removesearch").on("click", function(){ window.cy.nodes().unselect() });
+$("#exp-indicator").on("change", function(){ changeExpression(window.cy, $(this).val())});
+$("#undo-indicator").on("click", function(){ unDo(); });
+$("#redo-indicator").on("click", function(){ reDo(); });
 window.cy.on( 'click', 'node', function() { onNodeClick(window.cy, this) });
 window.cy.on( 'click', 'edge', function() { onEdgeClick(window.cy, this) });
 window.cy.on('mouseover', 'node', function() { onNodeMouseOver(window.cy, this) });

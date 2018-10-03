@@ -292,7 +292,8 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 }
 
 #forms-container-container {
-	padding-left: 2.5%;
+	padding-left: 10%;
+        padding-right: 10%;
 	text-align: center;
 }
 #forms-container {

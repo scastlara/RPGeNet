@@ -44,9 +44,12 @@
 
     <div class="toc">
       <h3>Table of Contents</h3>
-  
+
       <ol>
-        <li><a href="#color-legend">Color Legends</a></li>
+        <li><a href="#legend">Color Legends</a></li>
+        <ul>
+          <li><a href="#color-legend">Color Legend</a></li>
+          <li><a href="#shape-legend">Shape Legend</a></li>
         <li><a href="#network-explorer">Network Explorer</a></li>
         <ul>
           <li><a href="#network-explorer-form">Form Options</a></li>
@@ -70,13 +73,19 @@
       </ol>
     </div>
 
-  <h3 id="color-legend">Color Legends</h3>
+  <h3 id="legend">Legend</h3>
   <hr>
-  
+
+  <h4 id="color-legend">Color Legend</h4>
+    <p>
+    </p>
+  <h4 id="shape-legend">Shape Legend</h4>
+    <p>
+    </p>
 
   <h3 id="metwork-explorer">Network Explorer</h3>
   <hr>
-   
+
    <p>
     The Network Explorer allows you to explore the different levels of the Retinitis Pigmentosa (RP) network by selecting one or several genes and retrieving all their interactions.
   </p>
@@ -92,7 +101,7 @@
 
    <br><br>
    <ol>
-    <li id="form-gene"><b>Gene/s</b>. </li> 
+    <li id="form-gene"><b>Gene/s</b>. </li>
     <p>
       Here is where you can input one or several genes of interest related or unrelated to Retinitis Pigmentosa (RP) (althought if is not related there is a big change that it won't have interactors, since the network is using RP genes as seeds). If the input are multiple genes, then those genes have to be separated be a comma "," or a blank space " " between them.
     </p>
@@ -130,7 +139,7 @@
      </p>
      <li id="options-connect"><b>Connect Genes.</b></li>
      <p>
-        This button will add all the interactions in the current level between all the genes displayed on the visualization. 
+        This button will add all the interactions in the current level between all the genes displayed on the visualization.
       </p>
      <li id="options-border"><b>Border size.</b></li>
      <p>
@@ -157,7 +166,7 @@
   </div>
   <br>
   <p>
-    Pathway to Level allows you to get the shortest paths between a specified Gene and either 'Driver Genes' or 'Skeleton Genes'. If there is more than one target gene with the same path length (the same number of interactions until reaching that gene), all the pathways will be displayed on the results page. 
+    Pathway to Level allows you to get the shortest paths between a specified Gene and either 'Driver Genes' or 'Skeleton Genes'. If there is more than one target gene with the same path length (the same number of interactions until reaching that gene), all the pathways will be displayed on the results page.
   </p>
   <p>
     Pathway to level is useful when trying to assess the importance of a particular gene to Retinitis Pigmentosa, or to have an idea of how close a gene is to other genes related to Retinitis Pigmentosa (in terms of signalling and protein pathways).
@@ -200,13 +209,13 @@
 
 
 
-    
+
   </div>
 
 
 
 
-  
+
 
   <div id="footer">
     <div class="footer-left">
@@ -216,10 +225,10 @@
         </a>
       </div>
       <div class="cgl-links-footer">
-        <a target="_blank" href="https://compgen.bio.ub.edu">Home</a> · 
-        <a target="_blank" href="https://compgen.bio.ub.edu/Research">Research</a> · 
-        <a target="_blank" href="https://compgen.bio.ub.edu/Acknowledgements">Acknowledgements</a> · 
-        <a target="_blank" href="https://compgen.bio.ub.edu/contact">Contact</a> 
+        <a target="_blank" href="https://compgen.bio.ub.edu">Home</a> ·
+        <a target="_blank" href="https://compgen.bio.ub.edu/Research">Research</a> ·
+        <a target="_blank" href="https://compgen.bio.ub.edu/Acknowledgements">Acknowledgements</a> ·
+        <a target="_blank" href="https://compgen.bio.ub.edu/contact">Contact</a>
         <p class="copyright">Computational Genomics Lab © 2015-2018</p>
       </div>
     </div>
@@ -235,7 +244,7 @@
             <img class="ibub-logo-footer" src="{% static 'Images/ibub-logo.png' %}">
           </a>
         </div>
-        <div class="col-sm-4">      
+        <div class="col-sm-4">
           <a target="_blank"  href="http://www.ciberer.es/en">
             <img class="ciberer-logo-footer" src="{% static 'Images/ciberer-logo.png' %}">
           </a>

@@ -1082,3 +1082,8 @@ table.data-genename tr td {
 	margin-left: auto;
     margin-right: auto;
 }
+
+.node-size {
+	width: 50%;
+	margin-left: 25%;
+}

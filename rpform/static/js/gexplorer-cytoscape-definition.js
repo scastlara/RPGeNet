@@ -97,6 +97,11 @@ var stylesheet = cytoscape.stylesheet()
             'line-color': '#3A9F88',
             'target-arrow-color': '#3A9F88',
         })
+    .selector('.no-node-size')
+        .css({
+            'width':  '30',
+            'height': '30'
+        });
     
 
 

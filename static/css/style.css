@@ -1087,3 +1087,7 @@ table.data-genename tr td {
 	width: 50%;
 	margin-left: 25%;
 }
+
+.node-size:hover {
+	cursor: pointer;
+}

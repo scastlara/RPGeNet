@@ -497,6 +497,7 @@ input[type=number]::-webkit-inner-spin-button {
 #legend-dialog       {
 	width: 40%;
 	height: 500px;
+	overflow-y: scroll;
 	display: none;
 	position: fixed;
 	padding: 25px;
@@ -531,7 +532,8 @@ input[type=number]::-webkit-inner-spin-button {
 	right: 25px;
 }
 
-.legend-img { width: 40px; }
+.legend-img       { width: 40px; }
+.legend-img-large { width: 90%;  }
 
 #show-legend-btn { padding-top: 15px; }
 .vertical-line{

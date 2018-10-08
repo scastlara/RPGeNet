@@ -1075,3 +1075,7 @@ table.data-genename tr td {
 .node-size-btn:hover {
 	cursor: pointer;
 }
+
+.data-img {
+	max-width: 600px;
+}

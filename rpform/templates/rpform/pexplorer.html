@@ -78,7 +78,10 @@
 		<br><br>
 		<div class="allpaths-container">
 			{% for target, path in pathways.items %}
-
+			<!-- path is a tuple
+					[0] = json graph
+					[1] = maxlvl
+			-->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<div class="row">
@@ -92,8 +95,8 @@
 							<div class="path-right-btns col-sm-2">
 								<a href="#" class="info-tooltip" title="View on NetExplorer">
                                     <form class="explore-network-form" method="POST" action="{% url upload_graph %}" target="_blank"> {% csrf_token %}
-                                        <input type="hidden" name="myfile" value='{{ path|safe }}' />
-                                        <input type="hidden" name="upload-level" value='5'/>
+                                        <input type="hidden" name="myfile" value='{{ path.0|safe }}' />
+                                        <input type="hidden" name="upload-level" value='{{ path.1 }}'/>
                                         <input type="hidden" name="exp_id" value='{{ exp }}'/>
                                         <button class="btn btn-default" type="submit">
                                         	Explore network
@@ -159,7 +162,11 @@
 {% if pathways %}
     {% for target, path in pathways.items %}
             <script>
-            	var path = {{ path|safe }};
+            	// Remember that path is a tuple 
+            	// [0] == the json graph
+            	// [1] == maxlvl
+            	var path = {{ path.0|safe }};
+            	delete(path.maxlvl); // We delete the maxlvl key to avoid problems with Cytoscape.js
             	var plen = path['nodes'].length;
                 $(document).ready(function(){
                     var cy = cytoscape({
@@ -169,7 +176,7 @@
                         container: document.getElementById('path-{{ forloop.counter }}'),
                         ready: function() {}
                     });
-                    var elements = {{ path|safe }};
+                    var elements = {{ path.0|safe }};
                     cy.add(elements)
                     var thelayout = cy.layout({
                         name: 'grid',

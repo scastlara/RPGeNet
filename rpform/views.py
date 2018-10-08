@@ -165,7 +165,9 @@ def pathway_explorer(request):
     if mygraphs:
         response['plen'] = len(mygraphs[mygraphs.keys()[0]].interactions)
         response['numpaths'] = len(mygraphs.keys())
-        response['pathways'] = { target: graph.to_json() for target, graph in mygraphs.iteritems() }
+        # dictionary:
+        # target: (json_graph, maxlvl)
+        response['pathways'] = { target: (graph.to_json(), graph.get_max_lvl()) for target, graph in mygraphs.iteritems() }
     return render(request, 'rpform/pexplorer.html', response)
 
 
@@ -198,7 +200,9 @@ def shortest_path(request):
             path.change_expression_color(experiment)
         response['plen'] = len(allpaths[0].interactions)
         response['numpaths'] = len(allpaths)
-        response['pathways'] = { idx:allpaths[idx].to_json() for idx in range(0, len(allpaths)) }
+        # dictionary:
+        # target: (json_graph, maxlvl)
+        response['pathways'] = { idx: (allpaths[idx].to_json(), allpaths[idx].get_max_lvl()) for idx in range(0, len(allpaths)) }
     return render(request, 'rpform/pexplorer.html', response)
 
 

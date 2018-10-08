@@ -1079,3 +1079,15 @@ table.data-genename tr td {
 .data-img {
 	max-width: 600px;
 }
+
+/* Range input */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	input[type='range']::-webkit-slider-runnable-track {
+      color: #555555;
+    }
+}
+input[type="range"]::-moz-range-track {  
+  background-color: #555555;
+}
+
+

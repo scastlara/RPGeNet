@@ -1070,6 +1070,6 @@ table.data-genename tr td {
 	margin-left: 25%;
 }
 
-.node-size:hover {
+.node-size-btn:hover {
 	cursor: pointer;
 }

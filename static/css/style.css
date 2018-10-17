@@ -892,10 +892,20 @@ input[type=number]::-webkit-inner-spin-button {
 	width: 400px;
 }
 
+.tutorial-img-medium {
+	width: 600px;
+}
+
 .tutorial-img-large {
 	width: 800px;
 }
 
+.tutorial-img-large-center {
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+
+}
 
 .center-text {
 	text-align: center;

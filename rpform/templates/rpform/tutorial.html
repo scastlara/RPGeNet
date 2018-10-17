@@ -47,12 +47,9 @@
       <h3>Table of Contents</h3>
 
       <ol>
-        <li><a href="#legend">Color Legends</a></li>
-        <ul>
-          <li><a href="#color-legend">Color Legend</a></li>
-          <li><a href="#shape-legend">Shape Legend</a></li>
+        <li><a href="#legend">Legend</a></li>
         <li><a href="#network-explorer">Network Explorer</a></li>
-        <ul>
+          <ul>
           <li><a href="#network-explorer-form">Form Options</a></li>
           <ol>
               <li><a href="#form-gene">Gene/s</a></li>
@@ -71,25 +68,34 @@
         </ul>
         <li><a href="#pathway-to-level">Pathway to Level</a></li>
         <li><a href="#shortest-path">Shortest Path Between Genes</a></li>
+        <li><a href="#guided-tutorial">Guided Tutorial with CERKL</a></li>
+          <ul>
+            <li><a href="#network-explorer-guided">Network Explorer</a></li>
+            <li><a href="#pathway-guided">Pathway to Level</a></li>
+            <li><a href="#shortest-guided">Shortest Path Between Genes</a></li>
+          </ul>
       </ol>
     </div>
 
   <h3 id="legend">Legend</h3>
   <hr>
-
-  <h4 id="color-legend">Color Legend</h4>
     <p>
+
     </p>
-  <h4 id="shape-legend">Shape Legend</h4>
+    <img class="rpgenet_legend" src="{% static 'Images/rpgenet_legend.png' %}">
+
+    <h4 id="expression-legend">Expression Legend</h4>
     <p>
+      RPGeNet offers multiple display options for expression of genes in the network. A color scheme is used to display the different levels of expression between the genes.
     </p>
 
-  <h3 id="metwork-explorer">Network Explorer</h3>
+
+  <h3 id="network-explorer">Network Explorer</h3>
   <hr>
 
    <p>
     The Network Explorer allows you to explore the different levels of the Retinitis Pigmentosa (RP) network by selecting one or several genes and retrieving all their interactions.
-  </p>
+   </p>
 
   <br><br>
   <h4 id="network-explorer-form">Form options</h4>
@@ -199,6 +205,23 @@
   </p>
 
 
+  <h3 id="guided-tutorial">Guided Tutorial with CERKL</h3>
+  <hr>
+    <p>
+    This guided tutorial will show you how to:
+      <ol>
+        <li>find your gene of interest in the network</li>
+        <li>learn how to edit, expand or contract a graph in network explorer</li>
+        <li>learn to set and change the expression visualized</li>
+        <li>learn to find the shortest paths between two genes of interest</li>
+        <li>learn to find all the pathways between your genes of interest to drivers/skeleton</li>
+      </ol>
+    </p>
+    <p>
+      Starting from the RPGeNet homepage we see three options available to users
+      so you can use: Network Explorer, Pathway to Level and Shortest Paths. Below
+      we will go through each on of these options and guide you through the process.
+    </p>
 
     <h4 id="network-explorer-guided">Network Explorer</h4>
     <p>

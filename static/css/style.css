@@ -12,7 +12,6 @@ body 			{ font-size: 12px; height: 100vh; }
 
 #title-div {
 	margin-top: 40px;
-	width: 100%;
 	height: 120px;
 	text-align: center;
 }
@@ -58,7 +57,11 @@ body 			{ font-size: 12px; height: 100vh; }
 	}
 	#title-text {
 		text-align: center;
+		font-size: 40px;
+		padding-left: 0px;
 	}
+
+
 }
 
 .thenavbar {
@@ -292,8 +295,7 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 }
 
 #forms-container-container {
-	padding-left: 10%;
-        padding-right: 10%;
+	padding-left: 2.5%;
 	text-align: center;
 }
 #forms-container {
@@ -532,6 +534,7 @@ input[type=number]::-webkit-inner-spin-button {
 	top: 25px;
 	right: 25px;
 }
+
 
 .legend-img       { width: 40px; }
 .legend-img-large { width: 90%;  }
@@ -899,9 +902,10 @@ span#undo {
 	height: 30px;
 	text-align: center;
 	margin-left: 5px;
+
 }
 
-#undo-indicator { 
+#undo-indicator {
 	display: inline-block;
 	text-align: center;
 	vertical-align: center;
@@ -917,7 +921,7 @@ span#undo {
     padding: 0 !important;
 }
 
-#redo-indicator { 
+#redo-indicator {
 	display: inline-block;
 	text-align: center;
 	vertical-align: center;
@@ -1048,7 +1052,7 @@ table.data-genename tr td {
 	height: auto;
 	display: block;
 	margin-left: auto;
-    margin-right: auto;	
+    margin-right: auto;
 }
 
 .ppaxe_graph {

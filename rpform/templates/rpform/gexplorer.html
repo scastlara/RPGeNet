@@ -4,6 +4,7 @@
 	<title>RPGeNet v2.0 - Retinitis Pigmentosa Gene Network</title>
 	<meta name="description" content="RPGeNet v2.0 - Retinitis Pigmentosa Gene Network: interacting with the network of genes related to retinitis pigmentosa genes.">
 	<meta name="keywords" content="RPGeNet,retinitis pigmentosa,RP,interaction network,retinal disease,driver genes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 	<link rel="shortcut icon" href="{%  static 'Images/favicon.png' %}">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 	<link rel="stylesheet" href="{% static 'css/cytoscape-navigator.css' %}">
@@ -35,12 +36,12 @@
 	<!-- No results -->
 		<script type="text/javascript">
 			window.noresults = true;
-		</script> 
+		</script>
     {% endif %}
 </head>
 
 <body>
-	
+
 	<!-- CYTOSCAPE VIEWER -->
 	<div id="cyt"></div>
 	<div id="top-indicators">
@@ -54,19 +55,19 @@
 				<span id="redo" class="glyphicon glyphicon-share-alt"></span>
 			</div>
 		</div>
-		
+
 
 		<!-- INTERACTION LVL INDICATOR -->
 		{% if level != None %}
 			<span id="lvl-indicator-title">Level</span>
 			<div id="lvl-indicator">
-				{% if level == 0 %} 
+				{% if level == 0 %}
 					Skeleton
-				{% elif level == 5 %} 
+				{% elif level == 5 %}
 					WholeGraph
-				{% else %} 
+				{% else %}
 					{{ level }}
-				{% endif %} 
+				{% endif %}
 			</div>
 			<script>
 				window.level = {{ level }};
@@ -78,7 +79,7 @@
 				<option {% if exp_id == exp %}selected="selected"{% endif %} class="exp-option">{{ exp }}</option>
 			{% endfor %}
 		</select>
-		
+
 		<img id="loading" src="{% static 'Images/loading.gif' %}">
 	</div>
 
@@ -89,7 +90,7 @@
 		</script>
 	{% endif %}
 
-	
+
 
 	<!-- Get info Card on click -->
     <!-- Gene Card -->
@@ -117,21 +118,19 @@
         </div>
       </div>
     </div>
-    
+
 	<!-- CYTOSCAPE CONTROLS -->
 	<div id="cyt-controls">
 
-		<!-- Top buttons -->
-		<div id="gexplorer-topbtns">
-			<a href="{% url index_view %}"><div class="btn btn-default"><span class="glyphicon glyphicon-home"> </span> Home</div></a>
-			<a href="{% url tutorial %}"><div class="btn btn-default"><span class="glyphicon glyphicon-question-sign"> </span> Tutorial</div></a>
-		</div>
+
 
 		<!-- Logo -->
-		<div id="gexplorer-logo-container">
-			<img id="gexplorer-logo" src="{% static 'Images/logo.png' %}">
-			<span id="gexplorer-title">RPGeNet</span>
-		</div>
+		<a href="{% url index_view %}" title="Home">
+			<div id="gexplorer-logo-container">
+				<img id="gexplorer-logo" src="{% static 'Images/logo.png' %}">
+				<span id="gexplorer-title">RPGeNet</span>
+			</div>
+		</a>
 
 		<!-- On click -->
 		<div class="cyt-controls-block">
@@ -196,7 +195,7 @@
 
 
 		<!-- Disable width -->
-		<div class="cyt-controls-block">
+		<div class="cyt-controls-ndsz">
 			<span class="cyt-controls-title">Node Size</span><br>
 			<fieldset>
 				<div class="switch-toggle switch-candy node-size">
@@ -271,7 +270,7 @@
 				<div class="col-sm-3"> </div>
 			</div>
 
-			<hr>
+			<!--<hr>
 			<div class="gexplorer-row row">
 				<div class="col-sm-2"> </div>
 				<div class="col-sm-8">
@@ -282,6 +281,12 @@
 				</div>
 				<div class="col-sm-2"> </div>
 			</div>
+		</div>-->
+
+		<!-- Top buttons -->
+		<div id="gexplorer-topbtns">
+			<div id="show-legend-btn" class="btn btn-default"><span class="glyphicon glyphicon-question-sign"> </span> Legend</div>
+			<a href="{% url tutorial %}"><div class="btn btn-default"><span class="glyphicon glyphicon-book"> </span> Tutorial</div></a>
 		</div>
 
 	</div>
@@ -350,7 +355,7 @@
 					<li><img class="legend-img" src="{% static 'Images/unknown.png' %}"> Unknown interaction</li>
 				</ul>
 			</div>
-		
+
 
 		<div id="close-legend-btn" class="btn btn-danger">
 			<span class="glyphicon glyphicon-remove"></span>
@@ -372,7 +377,7 @@
 	<script src="{% static 'js/cytoscape-arbor.js' %}"></script>
 	<script src="{% static 'js/cytoscape-euler.js' %}"></script>
 	<script src="{% static 'js/cola.js' %}"></script>
-    <script src="{% static 'js/cytoscape-cola.js' %}"></script>
+  <script src="{% static 'js/cytoscape-cola.js' %}"></script>
 	<script src="{% static 'js/bootstrap-min.js' %}"></script>
 	<script src="{% static 'js/stoopidoverlay.js' %}"></script>
 	<script src="{% static 'js/FileSaver.js' %}"></script>

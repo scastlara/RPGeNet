@@ -232,7 +232,11 @@
       in our gene(s) of interest, choose the interaction level,
       the gene distance and the expression dataset.
     </p>
-    <!--<img class="" src="{% static 'Images/' %}">-->
+    <div class="center-text">
+      <a href="{% static 'Images/guided_tutorial/netexplorer.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/netexplorer.png' %}">
+      </a>
+    </div>
     <p>
       In the gene section, we will type in the gene CERKL but do note that you
       can type in multiple genes and not only one.
@@ -252,7 +256,11 @@
       search through but also an increase in noise as you move further away to
       interactions not as vital to retinitis pigmentosa.
     </p>
-    <!--<img class="interaction_level_option" src="{% static 'Images/' %}">-->
+    <div class="center-text">
+      <a href="{% static 'Images/guided_tutorial/Menu_007.png' %}" target="_blank">
+        <img src="{% static 'Images/guided_tutorial/Menu_007.png' %}">
+      </a>
+    </div>
     <p>
       For the purpose of this guided tutorial, we will keep it simple and chose skeleton.
     </p>
@@ -273,13 +281,17 @@
       values between retina and all non-retinal tissues. Lastly, the final option
       is the relative expression between retina and the liver.
     </p>
-    <!--<img class="" src="{% static 'Images/' %}">-->
+    <div class="center-text">
+      <a href="{% static 'Images/guided_tutorial/Menu_009.png' %}" target="_blank">
+        <img src="{% static 'Images/guided_tutorial/Menu_009.png' %}">
+      </a>
+    </div>
     <p>
       We will chose the absolute expression option and then click on explore network.
     </p>
     <div class="center-text">
-      <a href="{% static 'Images/guided_tutorial/net-explorer-cerkl.png' %}" target="_blank">
-        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/net-explorer-cerkl.png' %}">
+      <a href="{% static 'Images/guided_tutorial/retabsdisplay.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/retabsdisplay.png' %}">
       </a>
     </div>
     <p>
@@ -293,23 +305,16 @@
       Lets take a look at the control panel to the right hand side of the screen.
     </p>
     <div class="center-text">
-      <a href="{% static 'Images/guided_tutorial/show-properties.png' %}" target="_blank">
-        <img class="tutorial-img" src="{% static 'Images/guided_tutorial/show-properties.png' %}">
+      <a href="{% static 'Images/guided_tutorial/command.png' %}" target="_blank">
+        <img src="{% static 'Images/guided_tutorial/command.png' %}">
       </a>
     </div>
     <p>
       The control panel offers helpful tools to help navigate the network, edit
       your graph and save the graph as an image or for later use. We will go through
-      each button starting from the top.
-    </p>
-    <!--<div class="center-text">
-      <a href="{% static 'Images/guided_tutorial/show-properties.png' %}" target="_blank">
-        <img class="tutorial-img" src="{% static 'Images/guided_tutorial/show-properties.png' %}">
-      </a>
-    </div>-->
-    <p>
-      The first section, called "On click", has three buttons and affects the output
-      of your click when clicking on nodes of your graph.
+      each button starting from the top. The first section, called "On click",
+      has three buttons and affects the output of your click when clicking on
+      nodes of your graph.
     </p>
     <div class="center-text">
       <a href="{% static 'Images/guided_tutorial/on-click.png' %}" target="_blank">
@@ -423,6 +428,15 @@
       the "Upload" button under "Controls".
     </p>
     <p>
+    If you need help or are lost, the legend and tutorial buttons are available,
+    found at the bottom of the control panel.
+    </p>
+    <div class="center-text">
+      <a href="{% static 'Images/guided_tutorial/legend-tutorial.png' %}" target="_blank">
+        <img src="{% static 'Images/guided_tutorial/legend-tutorial.png' %}">
+      </a>
+    </div>
+    <p>
     You will notice that the nodes have different shapes and colors as do the
     interactions. We can quickly check what the colors and shapes mean by looking
     at the legend, that is found scrolling down the control panel on the right.
@@ -450,8 +464,8 @@
       click on "Show Legend" for the color scale.
     </p>
     <div class="center-text">
-      <a href="{% static 'Images/guided_tutorial/expression-netexpl-all.png' %}" target="_blank">
-        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/expression-netexpl-all.png' %}">
+      <a href="{% static 'Images/guided_tutorial/retalldisplay.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/retalldisplay.png' %}">
       </a>
     </div>
 
@@ -463,12 +477,21 @@
       This is useful for genes that may not be a driver or part of the skeleton
       and you want to predict how relevant it may be.
     </p>
-    <!--<img class="legend-netexp" src="{% static 'Images/' %}">-->
+    <div class="center-text">
+      <a href="{% static 'Images/guided_tutorial/getpath.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/getpath.png' %}">
+      </a>
+    </div>
     <p>
       You can type in a gene of interest or try out the gene "RAX". In the "Path to"
       section, you must chose between finding a pathway to the skeleton or to driver
       genes.
     </p>
+    <div class="center-text">
+      <a href="{% static 'Images/guided_tutorial/pathto.png' %}" target="_blank">
+        <img src="{% static 'Images/guided_tutorial/pathto.png' %}">
+      </a>
+    </div>
     <p>
       We will keep the default, drivers, for the "Path to" section. Like in Network
       Explorer, you also have to chose the expression data. We will also keep the
@@ -479,17 +502,22 @@
       The output should be a list of pathways between the gene inserted and drivers
       if the pathways exist. In the case of RAX, we have three pathways.
     </p>
-    <!--<img class="legend-netexp" src="{% static 'Images/' %}">-->
+    <div class="center-text">
+      <a href="{% static 'Images/guided_tutorial/getpathwayoutput.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/getpathwayoutput.png' %}">
+      </a>
+    </div>
     <p>
       When you find a pathway that interests you, you can transfer the pathway to
       Network Explorer by clicking "Explore Network" on the top right of the
-      pathway.
-    </p>
-    <p>
-      The output should be your chosen pathway on Network Explorer. Here you can
+      pathway. The output should be your chosen pathway on Network Explorer. Here you can
       use all the tools we used in the Network Explorer tutorial (above).
     </p>
-
+    <div class="center-text">
+      <a href="{% static 'Images/guided_tutorial/getexplr-rax.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/getexplr-rax.png' %}">
+      </a>
+    </div>
     <h4 id="shortest-guided">Shortest Path Between Genes</h4>
     <p>
       The final option is the Shortest Path Between Genes. This option is great
@@ -503,13 +531,25 @@
       options and can choose the one best for you or keep the default for this
       tutorial. Than click "Get Shortest Paths".
     </p>
-    <!--<img class="legend-netexp" src="{% static 'Images/' %}">-->
+    <div class="center-text">
+      <a href="{% static 'Images/guided_tutorial/shortestpath.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/shortestpath.png' %}">
+      </a>
+    </div>
     <p>
       Like in Pathway to Level, we get a list of pathways, if they exist. In the
       CERKL to RHO example, there are three shortest pathways. We can transfer
       the pathway that interest us to Network Explorer by clicking "Exlore Network".
     </p>
-
+    <div class="center-text">
+      <a href="{% static 'Images/guided_tutorial/netexplr-cerkl-rho.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/netexplr-cerkl-rho.png' %}">
+      </a>
+    </div>
+    <p></p>
+    <p>
+      This concludes our guided tutorial of RPGeNet.
+    </p>
 
   </div>
 

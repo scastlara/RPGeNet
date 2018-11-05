@@ -292,9 +292,32 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 }
 
 #forms-container-container {
+	width: 70%;
+	margin-left: 15%;
 	padding-left: 2.5%;
 	text-align: center;
 }
+
+
+@media screen and (max-width: 1550px) {
+	#forms-container-container {
+		width: 80%;
+		margin-left: 10%;
+		padding-left: 2.5%;
+		text-align: center;
+	}
+}
+
+@media screen and (max-width: 770px) {
+	#title-container {
+		width: 300px;
+	}
+	#title-text {
+		font-size: 40px;
+	}
+}
+
+
 #forms-container {
 	display: inline-block;
 	text-align: center;
@@ -446,9 +469,19 @@ input[type=number]::-webkit-inner-spin-button {
 
 #gexplorer-topbtns { margin-top: 10px; }
 #gexplorer-logo    { width: 60px; }
+
+
+
+
 #gexplorer-logo-container {
 	display: inline-block;
-	margin-top: 40px;
+	margin-top: 25px;
+	color: #555555;
+}
+
+
+#gexplorer-logo-container:hover {
+	opacity: 0.8;
 }
 
 #gexplorer-title {
@@ -460,11 +493,11 @@ input[type=number]::-webkit-inner-spin-button {
 
 
 
-
 .behaviour-btn       { min-height: 30px; font-size: 12px;}
 .behaviour-btn:hover { cursor: pointer; }
 .behaviour-btn-text  { line-height: 30px; }
-.cyt-controls-block  { margin-top: 30px; }
+.cyt-controls-ndsz  { margin-top: -10px; }
+.cyt-controls-block  { margin-top: 25px; }
 .cyt-controls-title  { font-size: 20px; color: #707070; }
 .lvl-btn { width: 100%; }
 .gexplorer-lvl-container { margin-top: 10px; }
@@ -533,6 +566,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 .legend-img { width: 40px; }
 
+/*
 #show-legend-btn { padding-top: 15px; }
 .vertical-line{
       width: 1px; /* Line width */
@@ -542,19 +576,8 @@ input[type=number]::-webkit-inner-spin-button {
         You can instead use position:absolute or display:inline-block
         if this fits better with your design */
     }
+*/
 
-#blur-effect {
-	display: none;
-	position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: #000;
-    opacity: 0.5;
-    z-index: 2;
-    filter: alpha(opacity = 50); /* required for opacity to work in IE */
-}
 
 
 #gfiltermean {
@@ -1078,4 +1101,18 @@ table.data-genename tr td {
 .node-size {
 	width: 50%;
 	margin-left: 25%;
+}
+
+
+#blur-effect {
+	display: none;
+	position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: #000;
+    opacity: 0.5;
+    z-index: 2;
+    filter: alpha(opacity = 50); /* required for opacity to work in IE */
 }

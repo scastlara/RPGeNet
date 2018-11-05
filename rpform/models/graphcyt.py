@@ -18,6 +18,7 @@ class GraphCyt(object):
         self.interactions = set()
         self.order = dict()
         self.json = ""
+        self.maxlvl = 0
 
     def get_genes_in_level(self, identifiers, level=1, dist=1, exp_id="ABSOLUTE"):
         '''
@@ -74,12 +75,25 @@ class GraphCyt(object):
             genes = self.genes_to_list()
         else:
             genes = self.genes
+        self.get_max_lvl()
         graphelements = {
             'nodes': [ gene.to_json_dict(positions) for gene in genes ],
-            'edges': edges
+            'edges': edges,
+            'maxlvl': self.maxlvl
         }
         self.json = json.dumps(graphelements)
         return self.json
+
+    def get_max_lvl(self):
+        """
+        Computes max level of a given graph object
+        """
+        maxlvl = 0
+        for edge in self.interactions:
+            if maxlvl < edge.level:
+                maxlvl = edge.level
+        self.maxlvl = int(maxlvl)
+        return self.maxlvl
 
     def get_expression(self, experiment):
         '''

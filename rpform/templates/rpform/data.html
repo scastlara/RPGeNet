@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" href="{% static 'css/bootstrap-min.css' %}">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 </head>
 
 
@@ -94,17 +95,17 @@
 
     <p>BioGRID is a genetic and protein interaction database that contains experimentally verified interactions for a plethora of species. STRING is only a protein interaction database that contains both verified interactions and non-verifed predictions. The databases were filterd by species to ensure only human interactions were included in the network. STRING, containing many non-experimentally verified predictions, had all interactions with no evidence filtered out.</p>
 
-    <img class="string_graph" src="{% static 'Images/data/string_scores_distribution.png' %}" alt="STRING Score Distribution">
+    <a href="{% static 'Images/data/string_scores_distribution.png' %}" target="_blank"><img class="data-img string_graph" src="{% static 'Images/data/string_scores_distribution.png' %}" alt="STRING Score Distribution"></a>
 
     <p>The graph shows the distribution of scores (between 0 and 1000) given by STRING to the reliability of interactions in their database. Most of the lower scores correspond to predicted interactions.</p>
 
-    <img class="string_factor_graph" src="{% static 'Images/data/string_scores_distribution_byfactor.png' %}" alt="STRING Score Distribution by Factors">
+    <a href="{% static 'Images/data/string_scores_distribution_byfactor.png' %}" target="_blank"><img class="data-img string_factor_graph" src="{% static 'Images/data/string_scores_distribution_byfactor.png' %}" alt="STRING Score Distribution by Factors"></a>
 
     <p>This figure is a more detailed version of the figure above. It shows the distribution of STRING score but categorized by a combination of evidence type. The combination code, found on the top of every subset, is a seven digit binary string where 0 means no and 1 means yes. Each of the seven digits of the combination code is representative of a different category: the first digit represents whether or not there is self-interaction; the next digit is whether or not it is bidirectional; followed by if there is PubMed evidence and then if there is INTC evidences; the third to last, is whether or not there is reactome evidence and is followed by if there is a Gene Ontology DB annotation. Finally, the last digit represents if there is other supporting evidence. With seven digits there are a large number of possible subsets but only 27 subsets have interactions with the equivalent combination code. The first subset clearly shows that there are no evidence for a large number of interactions in STRING. Despite most of the interactions in the first subsection scoring low, there are still some, with no evidence, that retain a high score.</p>
 
     <p>PPaxe mines for protein interactions within found in articles within PubMed. We used PPaxe to scout out protein interactions found within academic articles on retinitis pigmentosa and articles that contained any of the 276 associated with retinitis pigmentosa (driver genes). To reduce the number of false positive interactions, the PPaxe output was filtered to exclude any prospective protein symbol that was not found within the HGNC database. We also filtered out any interaction with a score below 65 to ensure a better interactions network.</p>
 
-    <img class="ppaxe_graph" src="{% static 'Images/data/ppaxe_filter_cutoff_plots.png' %}" alt="PPaxe Score Distribution">
+    <a href="{% static 'Images/data/ppaxe_filter_cutoff_plots.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/ppaxe_filter_cutoff_plots.png' %}" alt="PPaxe Score Distribution"></a>
 
     <p>The graph shows the distribution of the PPaxe score given to the interactions detected, the number of PPaxe interactions and the average score depending on the cutoff score chosen. In an attempt to optimize the number interactions while reducing false positive interactions and increasing false-negatives, the cutoff score chosen was 0.65.</p>
 
@@ -112,7 +113,7 @@
     <hr>
     <p>To build the complete network, it was first needed to create the skeleton: a graph network that connects all the driver genes through their shortest paths between them. There are levels above the skeleton that are an extension of the graph. The first level is an extension of the skeleton with the addition of parents and children genes that connect to the skeleton but are not themselves within the skeleton. The next level includes parents and children of the genes found within the first level that are not already in the skeleton and level one. The same pattern continues until there is a saturation (no more higher levels) except for the wholegraph that includes genes that do not connect with the network.</p>
 
-    <img class="circos_graph "src="{% static 'Images/data/RPgenes-x-alldbs_graph_allpaths.dot.geneconnections.circos2018.s.png' %}" alt="Circos Graph">
+    <a href="{% static 'Images/data/RPgenes-x-alldbs_graph_allpaths.dot.geneconnections.circos2018.s.png' %}" target="_blank"><img class="data-img circos_graph" src="{% static 'Images/data/RPgenes-x-alldbs_graph_allpaths.dot.geneconnections.circos2018.s.png' %}" alt="Circos Graph"></a>
 
     <!-- Level        Node    Interactions -->
     <!-- Wholegraph   18705   739122       -->
@@ -132,7 +133,7 @@
     <hr>
     <p>Unfortunately, there are few multitissue microarray expression experiments that include retina within their list of tissues. We had to rely on a relatively old microarray experiment (GSE7905) that includes thirty-two different tissues including the retina, liver, brain, skeletal muscle and others. Although the experiment is not recent, the expression values are still useful in finding potentially important pathways associated with retinitis pigmentosa by looking to see if the genes in a pathway all express within the retina. We hope to soon be able to have an updated multitissue expression experiment to use.</p>
 
-    <img class="ppaxe_graph" src="{% static 'Images/data/GSE7905_gea.sampledistmatrix.png' %}" alt="Distribution Matrix">
+    <a href="{% static 'Images/data/GSE7905_gea.sampledistmatrix.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/GSE7905_gea.sampledistmatrix.png' %}" alt="Distribution Matrix"></a>
 
     <p></p>
 

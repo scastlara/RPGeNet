@@ -4,7 +4,7 @@
 	<title>RPGeNet v2.0 - Retinitis Pigmentosa Gene Network</title>
 	<meta name="description" content="RPGeNet v2.0 - Retinitis Pigmentosa Gene Network: interacting with the network of genes related to retinitis pigmentosa genes.">
 	<meta name="keywords" content="RPGeNet,retinitis pigmentosa,RP,interaction network,retinal disease,driver genes">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="{%  static 'Images/favicon.png' %}">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 	<link rel="stylesheet" href="{% static 'css/cytoscape-navigator.css' %}">
@@ -328,6 +328,9 @@
 	</div>
 
 	<div id="legend-dialog">
+		<div id="close-legend-btn" class="btn btn-danger">
+			<span class="glyphicon glyphicon-remove"></span>
+		</div>
 		<h2>Legend</h2>
 		<hr>
 
@@ -341,6 +344,7 @@
 					<li><img class="legend-img" src="{% static 'Images/lvl4.png' %}"> Level 4</li>
 					<li><img class="legend-img" src="{% static 'Images/lvl5.png' %}"> Level 5</li>
 				</ul>
+				<br><br>
 			</div>
 			<div class="col-sm-7">
 				<ul>
@@ -354,11 +358,33 @@
 					<li><img class="legend-img" src="{% static 'Images/genetic.png' %}"> Genetic interaction</li>
 					<li><img class="legend-img" src="{% static 'Images/unknown.png' %}"> Unknown interaction</li>
 				</ul>
+
 			</div>
 
+	</div>
+	<div class="row">
+		<hr>
+		<div class="col-sm-5">
+			<ul>
+				<li><img class="legend-img" src="{% static 'Images/node-size-legend.png' %}"> Number of Variants (larger equals more variants)</li>
+			</ul>
+		</div>
+		<div class="col-sm-7">
+		<ul>
+			<li><img class="legend-img" src="{% static 'Images/edge-width.png' %}"> Interaction evidence</li>
+		</ul>
+		<br><br>
+		</div>
 
-		<div id="close-legend-btn" class="btn btn-danger">
-			<span class="glyphicon glyphicon-remove"></span>
+		<div class="col-sm-12">
+			<h4>Expression</h4>
+			<hr>
+			<img class="legend-img-large" src="{% static 'Images/expression-legend.png' %}">
+			<br><br><br>
+		</div>
+		<div class="col-sm-12 centered">
+			<a href="{% url tutorial %}" target="_blank">For more information, visit the tutorial.</a>
+			<br><br><br>
 		</div>
 	</div>
 

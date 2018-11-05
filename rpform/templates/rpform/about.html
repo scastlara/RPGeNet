@@ -8,6 +8,7 @@
   <link rel="shortcut icon" href="{%  static 'Images/favicon.png' %}">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" href="{% static 'css/bootstrap-min.css' %}">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 </head>
 
 
@@ -41,13 +42,13 @@
   <div class="body-card">
     <h1>About</h1>
     <hr>
-    <p>Retinitis pigmentosa is a highly heterogenous disease with now over 200 known driver genes. With such high hetergeneity, RPGeNet, a web application tool, was created to help users find new potential driver genes of retinitis pigmentosa and help better visualize the complex interaction network of the retina. The interaction database is formed by the merger of self-curated <a href="https://thebiogrid.org/">BioGRID</a>, <a href="https://string-db.org/">STRING</a> and text-mining (<a href="https://compgen.bio.ub.edu/PPaxe/" target="_blank">PPaxe</a>) interaction data. The database is managed by <a href="https://neo4j.com/">neo4j</a> and the graph's visual display is created by <a href="http://js.cytoscape.org/">Cytoscape.js</a>.</p>
-    <p>Currently, RPGeNet counts with 275 driver genes, X total genes and X interactions. Further information is available on our <a href="{% url data %}">data</a> page and our <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0135307">published paper</a>.</p>
-    <p>RPGeNet was created by <a href="https://compgen.bio.ub.edu/">Compgen Lab</a> and <a href="http://www.ub.edu/genetica/humana/marfany.htm">Marfany Laboratory</a> at the <a href="https://www.ub.edu/web/ub/en/index.html">University of Barcelona</a>.</p>
+    <p>Retinitis pigmentosa is a highly heterogenous disease with now over 200 known driver genes. With such high hetergeneity, RPGeNet, a web application tool, was created to help users find new potential driver genes of retinitis pigmentosa and help better visualize the complex interaction network of the retina. The interaction database is formed by the merger of self-curated <a target="_blank" href="https://thebiogrid.org/">BioGRID</a>, <a target="_blank" href="https://string-db.org/">STRING</a> and text-mining (<a href="https://compgen.bio.ub.edu/PPaxe/" target="_blank">PPaxe</a>) interaction data. The database is managed by <a target="_blank" href="https://neo4j.com/">neo4j</a> and the graph's visual display is created by <a target="_blank" href="http://js.cytoscape.org/">Cytoscape.js</a>.</p>
+    <p>Currently, RPGeNet counts with 275 driver genes, X total genes and X interactions. Further information is available on our <a href="{% url data %}">data</a> page and our <a target="_blank" href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0135307">published paper</a>.</p>
+    <p>RPGeNet was created by <a target="_blank" href="https://compgen.bio.ub.edu/">Compgen Lab</a> and <a target="_blank" href="http://www.ub.edu/genetica/humana/marfany.htm">Marfany Laboratory</a> at the <a target="_blank" href="https://www.ub.edu/web/ub/en/index.html">University of Barcelona</a>.</p>
     <h3>Citing RPGeNet</h3>
     <hr>
     <blockquote>
-      <p><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0135307">Distilling a Visual Network of Retinitis Pigmentosa Gene-Protein Interactions to Uncover New Disease Candidates.</a>
+      <p><a target="_blank" href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0135307">Distilling a Visual Network of Retinitis Pigmentosa Gene-Protein Interactions to Uncover New Disease Candidates.</a>
         <br>Daniel Boloc, Sergio Castillo-Lara, Gemma Marfany, Roser Gonzàlez-Duarte and Josep F. Abril.
         <br><i>PLoS ONE</i>, 2015, 10(8): e0135307
       </p>

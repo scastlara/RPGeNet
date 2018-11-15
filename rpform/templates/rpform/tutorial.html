@@ -8,7 +8,7 @@
   <link rel="shortcut icon" href="{%  static 'Images/favicon.png' %}">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" href="{% static 'css/bootstrap-min.css' %}">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 
@@ -47,10 +47,9 @@
       <h3>Table of Contents</h3>
 
       <ol>
-        <li><a href="#legend">Legend</a></li>
         <li><a href="#network-explorer">Network Explorer</a></li>
           <ul>
-          <li><a href="#network-explorer-form">Form Options</a></li>
+            <li><a href="#network-explorer-form">Form Options</a></li>
           <ol>
               <li><a href="#form-gene">Gene/s</a></li>
               <li><a href="#form-int">Interaction Level</a></li>
@@ -59,12 +58,15 @@
             </ol>
           <li><a href="#controls">Navigation options</a></li>
             <ol>
+              <li><a href="#options-home">Home</a></li>
               <li><a href="#options-click">On Click</a></li>
               <li><a href="#options-layout">Layout Selection</a></li>
               <li><a href="#options-connect">Connect Genes</a></li>
               <li><a href="#options-border">Border size</a></li>
               <li><a href="#options-export">More Controls</a></li>
+              <li><a href="#options-legend">Legend and Tutorial</a></li>
             </ol>
+          <li><a href="#legend">Legend</a></li>
         </ul>
         <li><a href="#pathway-to-level">Pathway to Level</a></li>
         <li><a href="#shortest-path">Shortest Path Between Genes</a></li>
@@ -77,17 +79,7 @@
       </ol>
     </div>
 
-  <h3 id="legend">Legend</h3>
-  <hr>
-    <p>
 
-    </p>
-    <img class="rpgenet_legend" src="{% static 'Images/rpgenet_legend.png' %}">
-
-    <h4 id="expression-legend">Expression Legend</h4>
-    <p>
-      RPGeNet offers multiple display options for expression of genes in the network. A color scheme is used to display the different levels of expression between the genes.
-    </p>
 
 
   <h3 id="network-explorer">Network Explorer</h3>
@@ -97,7 +89,7 @@
     The Network Explorer allows you to explore the different levels of the Retinitis Pigmentosa (RP) network by selecting one or several genes and retrieving all their interactions.
    </p>
 
-  <br><br>
+  <br>
   <h4 id="network-explorer-form">Form options</h4>
 
     <div class="center-text">
@@ -130,38 +122,101 @@
   <br><br>
   <h4 id="controls">Navigation Options</h4>
   <div class="center-text">
-    <a href="{% static 'Images/navoptions.png' %}" target="_blank"><img class="tutorial-img" src="{% static 'Images/navoptions.png' %}"></a>
+    <a href="{% static 'Images/navoptions.png' %}" target="_blank">
+      <img class="tutorial-img" src="{% static 'Images/command_tutorial.png' %}">
+    </a>
   </div>
    In Network Explorer you have several options and controls to modify the graph visualization.
 
    <br><br>
    <ol>
-     <li id="options-click"><b>On Click.</b></li>
+     <li id="options-home"><b>Home:</b></li>
+     <p>
+        The logo image is a button to return to the home page.
+      </p>
+     <li id="options-click"><b>On Click:</b></li>
      <p>
         This option defines three different behaviours when clicking on Nodes or Edges. "Show Properties" will display an overlay with information about the gene or the interaction. "Node Addition" will add all the interactors to the clicked node to the visualization. Finally, "Node Deletion" will delete the clicked node from the visualization; please, not that this process is irreversible.
       </p>
-     <li id="options-layout"><b>Layout Selection.</b></li>
+     <li id="options-layout"><b>Layout Selection:</b></li>
      <p>
       Change the layout of the nodes and interactions. Available layouts are: 'Dagre', 'Cose', 'Grid', 'Circle', and 'Concentric'.
      </p>
-     <li id="options-connect"><b>Connect Genes.</b></li>
+     <li id="options-connect"><b>Connect Genes:</b></li>
      <p>
         This button will add all the interactions in the current level between all the genes displayed on the visualization.
       </p>
-     <li id="options-border"><b>Border size.</b></li>
+     <li id="options-border"><b>Border size:</b></li>
      <p>
       Increase or decrease the border size of genes.
      </p>
-     <li id="options-export"><b>More Controls.</b></li>
+     <li id="options-node-size"><b>Node size:</b></li>
+     <p>
+      Increase or decrease the border size of genes.
+     </p>
+     <li id="options-export"><b>More Controls:</b></li>
      <ul>
-        <li><b>Fit.</b> Fit all the nodes in the drawing area to make them visible.</li>
-        <li><b>Drag.</b> Enables or disables the ability to move the visualization when dragging it with the mouse.</li>
-        <li><b>Export.</b> Export the graph as a csv file to be used elsewhere (e.g.: Excel).</li>
-        <li><b>Save.</b> Save the graph in JSON format to be able to upload it later.</li>
-        <li><b>Image.</b> Export a png image of the graph.</li>
-        <li><b>Upload.</b> Upload a previously exported JSON graph (using the 'Export' button).</li>
+        <li><b>Fit:</b> Fit all the nodes in the drawing area to make them visible.</li>
+        <li><b>Image:</b> Export a png image of the graph.</li>
+        <li><b>Export:</b> Export the graph as a csv file to be used elsewhere (e.g.: Excel).</li>
+        <li><b>Save:</b> Save the graph in JSON format to be able to upload it later.</li>
+        <li><b>Upload:</b> Upload a previously exported JSON graph (using the 'Export' button).</li>
+     </ul>
+     <li id="options-legend"><b>Legend and Tutorial:</b></li>
+      <ul>
+        <li><b>Legend:</b> This button opens a window with a legend detailing the meaning of the shapes and colors within the network explorer.</li>
+        <li><b>Tutorial:</b> This buttons sends you to the tutorial page you are currently on</li>
      </ul>
    </ol>
+
+   <br>
+   <h4 id="legend">Legend</h4>
+   <p>
+     The roots of the RPGeNet network begin with the driver genes of retinitis
+     pigmentosa. All driver genes are purple borders. Some driver genes are
+     associated with syndromic genetic disorders and are square shaped within the
+     network explorer. Non-syndromic driver genes are diamond shaped. Driver genes
+     that are syndromic and non-syndromic are star shaped.
+   </p>
+   <div class="center-text">
+     <a href="{% static 'Images/guided_tutorial/levels.png' %}" target="_blank">
+       <img class="rpgenet_legend" src="{% static 'Images/guided_tutorial/driver_nodes_nb.png' %}">
+     </a>
+   </div>
+   <br>
+   <p>
+     Non-driver nodes are all circular and have borders that indicate the level, where
+     the gene is found within the network, by the color.
+   </p>
+   <div class="center-text">
+     <a href="{% static 'Images/guided_tutorial/levels.png' %}" target="_blank">
+       <img class="rpgenet_legend" src="{% static 'Images/guided_tutorial/levels_nb.png' %}">
+     </a>
+   </div>
+   <p>
+     The arrows that connect nodes within the network are color-coded to indicate
+     whether they are physical, genetic or unknown interactions.
+   </p>
+   <br>
+   <div class="center-text">
+     <a href="{% static 'Images/guided_tutorial/interactions.png' %}" target="_blank">
+       <img class="rpgenet_legend" src="{% static 'Images/guided_tutorial/interactions_nb.png' %}">
+     </a>
+   </div>
+   <br>
+   <p>
+     All nodes, driver and non-driver genes, have a colored interior that represents
+     their expression depending on the expression data used. Absolute expression is
+     the raw expression within the retina. The RET-ALL option is the relative expression
+     within the retina in comparison with all 32 tissues of the microarray experiment.
+     The RET-OTHER is the relative expression within the retina in comparison with all
+     the tissues minus the retina.
+   </p>
+   <div class="center-text">
+     <a href="{% static 'Images/expression-legend.png' %}" target="_blank">
+       <img class="rpgenet_legend" src="{% static 'Images/expression-legend.png' %}">
+     </a>
+   </div>
 
   <br><br>
   <h3 id="pathway-to-level">Pathway to Level</h3>

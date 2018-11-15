@@ -1,4 +1,4 @@
-/*
+Go/*
 	Styles for RPGeNet v2
 */
 
@@ -301,11 +301,10 @@ img[class *='-logo-footer']:hover { opacity: 0.8;     }
 	text-align: center;
 }
 
-
 @media screen and (max-width: 1550px) {
 	#forms-container-container {
-		width: 80%;
-		margin-left: 10%;
+		width: 85%;
+		margin-left: 6.5%;
 		padding-left: 2.5%;
 		text-align: center;
 	}
@@ -517,16 +516,17 @@ input[type=number]::-webkit-inner-spin-button {
 #no-results-dialog #upload-form             { display: inline-block; width: 100%; }
 
 #no-results-dialog       {
-	width: 40%;
+	width: 50%;
+	max-width:
 	height: 195px;
 	display: none;
 	position: fixed;
 	padding: 25px;
-	left: 17.5%;
-	top: 200px;
+	left: 22.5%;
+	top: 250px;
 	z-index: 3;
 	background-color: #FAFAFA;
-
+	max-width: 615px;
 }
 
 
@@ -1144,4 +1144,20 @@ input[type="range"]::-moz-range-track {
 
  #legend-dialog ul {
  	list-style: none;
+ }
+
+ #upload-json {
+	 height: 58px;
+ }
+
+#no-results-dialog #upload-json {
+	 height: 58px;
+	 width: 135px;
+	 line-height: 48px;
+ }
+
+ #no-results-dialog #go-back {
+	 height: 58px;
+	 width: 135px;
+	 line-height: 48px;
  }

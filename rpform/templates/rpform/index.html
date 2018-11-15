@@ -5,11 +5,11 @@
 	<title>RPGeNet v2.0 - Retinitis Pigmentosa Gene Network</title>
 	<meta name="description" content="RPGeNet v2.0 - Retinitis Pigmentosa Gene Network: interacting with the network of genes related to retinitis pigmentosa genes.">
 	<meta name="keywords" content="RPGeNet,retinitis pigmentosa,RP,interaction network,retinal disease,driver genes">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="{%  static 'Images/favicon.png' %}">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 	<link rel="stylesheet" href="{% static 'css/bootstrap-min.css' %}">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 
@@ -132,12 +132,12 @@
 						<h3 class="f-title">Network Explorer</h3>
 						<form id="f1" action="{% url gene_explorer %}">
 
-							<div class="col-sm-3">
+							<div class="col-lg-3">
 								<label for="f1-genename">Gene/s <span class="inputgenes-btn glyphicon glyphicon-question-sign question-badge"></span></label>
 								<input type="text" name="gene" id="f1-genename" class="form-control" placeholder="CERKL"/>
 							</div>
 
-							<div class="col-sm-2">
+							<div class="col-lg-2">
 								<label for="f1-lvl">Interaction level <span class="intlvl-btn glyphicon glyphicon-question-sign question-badge"></span></label>
 								<select name="level" class="form-control" id="f1-lvl">
 									<option value="0">Skeleton</option>
@@ -147,11 +147,11 @@
 									<option value="5">WholeGraph</option>
 								</select>
 							</div>
-							<div class="col-sm-2">
+							<div class="col-lg-2">
 								<label for="f1-distance">Gene distance <span class="genedistance-btn glyphicon glyphicon-question-sign question-badge"></span></label>
 								<input type="number" name="dist" id="f1-distance" value="1" min="1" max="2" step="1" />
 							</div>
-							<div class="col-sm-2">
+							<div class="col-lg-2">
 								<label for="f1-expression">Expression <span class="genexp-btn glyphicon glyphicon-question-sign question-badge"></span></label>
 								<select name="exp" class="form-control" id="f1-expression">
 									{% for exp in experiments %}
@@ -159,7 +159,7 @@
 									{% endfor %}
 								</select>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-lg-3">
 								<label for="created_at_lt">&nbsp;</label>
 								<input type="submit" value="Explore Network" class="btn btn-f1 form-control" />
 							</div>
@@ -173,11 +173,11 @@
 					<div class="panel-body panel-form">
 						<h3 class="f-title">Pathway to Level</h3>
 						<form id="f2" action="{% url pathway_explorer %}">
-							<div class="col-sm-3">
+							<div class="col-lg-3">
 								<label for="f2-genename">Gene <span class="inputgenes-btn glyphicon glyphicon-question-sign question-badge"></span></label>
 								<input type="text" name="gene" id="f2-genename" class="form-control" placeholder="PMM2"/>
 							</div>
-							<div class="col-sm-2">
+							<div class="col-lg-2">
 								<label for="f2-lvl">Path to <span class="intlvl-btn glyphicon glyphicon-question-sign question-badge"></span><br></label>
 
 								<select name="path-to" class="form-control" id="f2-lvl">
@@ -186,7 +186,7 @@
 								</select>
 							</div>
 
-							<div class="col-sm-2">
+							<div class="col-lg-2">
 								<label for="f2-expression">Expression <span class="genexp-btn glyphicon glyphicon-question-sign question-badge"></span></label>
 								<select name="exp" class="form-control" id="f2-expression">
 									{% for exp in experiments %}
@@ -195,7 +195,7 @@
 								</select>
 							</div>
 
-							<div class="col-sm-3">
+							<div class="col-lg-3">
 								<label for="created_at_lt">&nbsp;</label>
 								<input type="submit" value="Get Path to Level" class="btn btn-f2 form-control" />
 							</div>
@@ -210,15 +210,15 @@
 					<div class="panel-body panel-form">
 						<h3 class="f-title">Shortest Path between Genes</h3>
 						<form id="f3" action="{% url shortest_path %}">
-							<div class="col-sm-3">
+							<div class="col-lg-3">
 								<label for="f3-genename1">Source gene<span class="inputgenes-btn glyphicon glyphicon-question-sign question-badge"></span></label>
 								<input type="text" name="gene1" id="f3-genename1" class="form-control" placeholder="CERKL"/>
 							</div>
-							<div class="col-sm-2">
+							<div class="col-lg-2">
 								<label for="f3-genename2">Target gene<span class="inputgenes-btn glyphicon glyphicon-question-sign question-badge"></span></label>
 								<input type="text" name="gene2" id="f3-genename2" class="form-control" placeholder="RHO"/>
 							</div>
-							<div class="col-sm-2">
+							<div class="col-lg-2">
 								<label for="f3-expression">Expression <span class="genexp-btn glyphicon glyphicon-question-sign question-badge"></span></label>
 								<select name="exp" class="form-control" id="f3-expression">
 									{% for exp in experiments %}
@@ -226,7 +226,7 @@
 									{% endfor %}
 								</select>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-lg-3">
 								<label for="created_at_lt">&nbsp;</label>
 								<input type="submit" value="Get Shortest Paths" class="btn btn-f3 form-control" />
 							</div>

@@ -298,31 +298,29 @@
 		<h2 id="no-results-title"><span class="glyphicon glyphicon-warning-sign text-danger"></span> No Results</h2>
 		<hr>
 		<div class="row">
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<a href="{% url index_view %}">
-					<div class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Go Back</div>
+					<div id="go-back" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Go Back</div>
 				</a>
 			</div>
-			<div class="vertical-line"></div>
-			<div class="col-sm-8">
+			<div class="col-sm-4">
 				<form enctype="multipart/form-data" method="post" action="{% url upload_graph %}" id="upload-form2">
 					{% csrf_token %}
-					<div class="col-sm-5">
 						<label for="myfile2" id="upload-json" class="btn btn-default">
 							<span class="glyphicon glyphicon-cloud-upload"></span>
 							<span class="gexplorer-btn-txt">Upload Graph</span>
 						</label>
 						<input style="display:none" type="file" onchange="this.form.submit()" name="myfile" id="myfile2" class="upload" style="box-sizing:border-box;">
-					</div>
 
-					<div class="col-sm-5">
+				</div>
 						<!-- INTERACTION LEVEL -->
+						<div class="col-sm-4">
 						<label for="upload-level">
 							Interaction level
 						</label>
 						<input type="number" name="upload-level" id="upload-level2" value="0" min="0" max="5" step="1">
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -18,7 +18,7 @@ PLoS ONE, 2015, 10(8): e0135307.
 ## Copyright
 ```
 RPGeNet web application to explore the gene-protein interactions relevant to retinitis pigmentosa.
-Copyright (C) 2016  Sergio CASTILLO LARA and Rodrigo ARENAS GALNARES.
+Copyright (C) 2018  Sergio CASTILLO LARA and Rodrigo ARENAS GALNARES.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

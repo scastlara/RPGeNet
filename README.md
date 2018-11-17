@@ -16,6 +16,7 @@ PLoS ONE, 2015, 10(8): e0135307.
 - [Rodrigo Arenas Galnares](https://github.com/rodarenas) @ [Computational Genomics Lab, UB](https://compgen.bio.ub.edu).
 
 ## Copyright
+```
 RPGeNet web application to explore the gene-protein interactions relevant to retinitis pigmentosa.
 Copyright (C) 2016  Sergio CASTILLO LARA and Rodrigo ARENAS GALNARES.
 
@@ -31,3 +32,4 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+```

@@ -91,5 +91,15 @@ class Experiment(Node):
         return NEO.query_expression(gene, self.identifier)
 
 
+    def __lt__(self, other):
+        '''
+        Sorts experiments alphabetically (but LIVER always goes last).
+        '''
+        if 'LIVER' in other.identifier:
+            return True
+        else:
+            return self.identifier < other.identifier
+
+
     def __str__(self):
         return "Experiment %s of type %s\n\tmin: %s\n\tmax:%s\n" % (self.identifier, self.cmap_type, self.min, self.max)

@@ -60,7 +60,7 @@
 					<br>
 				</ul>
 			</div>
-		
+
 		{% if pathways %}
 			<div class="col-sm-3">
 				<h2 class="app-title"> Summary</h2>
@@ -85,24 +85,24 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<div class="row">
-							<div class="col-sm-10">
+							<div class="col-sm-8">
 								<h3>Pathway #{{ forloop.counter }}</h3>
 								{% if appname == "Pathway to Level" %}
 									<a href="{% url shortest_path %}?gene1={{ gene }}&gene2={{ target }}&exp={{ exp }}" target="_blank">All shortest paths</a>
 								{% endif %}
 							</div>
 
-							<div class="path-right-btns col-sm-2">
+							<div class="col-sm-4 pathways-btns">
 								<a href="#" class="info-tooltip" title="View on NetExplorer">
-                                    <form class="explore-network-form" method="POST" action="{% url upload_graph %}" target="_blank"> {% csrf_token %}
-                                        <input type="hidden" name="myfile" value='{{ path.0|safe }}' />
-                                        <input type="hidden" name="upload-level" value='{{ path.1 }}'/>
-                                        <input type="hidden" name="exp_id" value='{{ exp }}'/>
-                                        <button class="btn btn-default" type="submit">
-                                        	Explore network
-                                        </button>
-                                    </form>
-                                </a>
+            			<form class="explore-network-form" method="POST" action="{% url upload_graph %}" target="_blank"> {% csrf_token %}
+                			<input type="hidden" name="myfile" value='{{ path.0|safe }}' />
+                			<input type="hidden" name="upload-level" value='{{ path.1 }}'/>
+                			<input type="hidden" name="exp_id" value='{{ exp }}'/>
+                			<button id="explore-network-btn" class="btn btn-default" type="submit">
+                				Explore network
+                			</button>
+            			</form>
+                </a>
 							</div>
 						</div>
 					</div>
@@ -162,7 +162,7 @@
 {% if pathways %}
     {% for target, path in pathways.items %}
             <script>
-            	// Remember that path is a tuple 
+            	// Remember that path is a tuple
             	// [0] == the json graph
             	// [1] == maxlvl
             	var path = {{ path.0|safe }};
@@ -194,7 +194,7 @@
             </script>
         {% endfor %}
 
-        
+
     {% endif %}
 
 
@@ -206,10 +206,10 @@
 				</a>
 			</div>
 			<div class="cgl-links-footer">
-				<a target="_blank" href="https://compgen.bio.ub.edu">Home</a> · 
-				<a target="_blank" href="https://compgen.bio.ub.edu/Research">Research</a> · 
-				<a target="_blank" href="https://compgen.bio.ub.edu/Acknowledgements">Acknowledgements</a> · 
-				<a target="_blank" href="https://compgen.bio.ub.edu/contact">Contact</a> 
+				<a target="_blank" href="https://compgen.bio.ub.edu">Home</a> ·
+				<a target="_blank" href="https://compgen.bio.ub.edu/Research">Research</a> ·
+				<a target="_blank" href="https://compgen.bio.ub.edu/Acknowledgements">Acknowledgements</a> ·
+				<a target="_blank" href="https://compgen.bio.ub.edu/contact">Contact</a>
 				<p class="copyright">Computational Genomics Lab © 2015-2018</p>
 			</div>
 		</div>
@@ -225,7 +225,7 @@
 						<img class="ibub-logo-footer" src="{% static 'Images/ibub-logo.png' %}">
 					</a>
 				</div>
-				<div class="col-sm-4">			
+				<div class="col-sm-4">
 					<a target="_blank"  href="http://www.ciberer.es/en">
 						<img class="ciberer-logo-footer" src="{% static 'Images/ciberer-logo.png' %}">
 					</a>

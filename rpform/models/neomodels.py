@@ -13,12 +13,12 @@ class NeoQueryFactory(object):
         Constructor of return clause based on a list of attributes for neo4j
         '''
         non_attributes = set([
-            'label', 'parent', 
-            'child', 'expression', 
-            'gos', 'int_type', 
+            'label', 'parent',
+            'child', 'expression',
+            'gos', 'int_type',
             'aliases', 'color',
             'summary', 'summary_source'])
-        return_clause = ", ".join(['%s.%s as %s_%s' % (elem_name, attr, elem_name, attr) 
+        return_clause = ", ".join(['%s.%s as %s_%s' % (elem_name, attr, elem_name, attr)
                                    for attr in attributes if attr not in non_attributes])
         return return_clause
 
@@ -30,7 +30,7 @@ class NeoQueryFactory(object):
         cypher = """
             MATCH (node:%s)
             WHERE node.identifier = '%s'
-            RETURN 
+            RETURN
         """ % (nodeobj.label, nodeobj.identifier)
         cypher = cypher + self._return_by_attributes('node', attributes)
         return NeoQuery(self.driver, cypher)
@@ -81,8 +81,8 @@ class NeoQueryFactory(object):
         cypher = """
             MATCH  (node:%s)-[r:HAS_GO]->(go:GO)
             WHERE  node.identifier = '%s'
-            RETURN go.accession as accession, 
-                   go.description as description, 
+            RETURN go.accession as accession,
+                   go.description as description,
                    go.domain as domain
             ORDER BY go.domain
         """ % (nodeobj.label, nodeobj.identifier)
@@ -90,7 +90,7 @@ class NeoQueryFactory(object):
 
     def build_query_get_neighbours(self, nodeobj, level, exp_id):
         '''
-        Creates query to get neighbours to a particular node 
+        Creates query to get neighbours to a particular node
         in a level and at a distance
         '''
         n_attributes = nodeobj.__dict__.keys()
@@ -99,7 +99,7 @@ class NeoQueryFactory(object):
             MATCH  (node1:GENE)-[r:INTERACTS_WITH]-(node2:GENE)
             WHERE  node1.identifier = '%s'
             AND    r.level<=%s
-            RETURN startNode(r).identifier as start, 
+            RETURN startNode(r).identifier as start,
         """ % (nodeobj.identifier, level)
         cypher += self._return_by_attributes('node1', n_attributes)
         cypher += ", " + self._return_by_attributes('r', e_attributes)
@@ -119,7 +119,7 @@ class NeoQueryFactory(object):
             MATCH (gene2:GENE)-[p2:IS_IN_PATH]->(path)
             MATCH (gene1)-[inter:INTERACTS_WITH]->(gene2)
             WHERE toInteger(p1.order) = toInteger(p2.order) - 1
-            RETURN 
+            RETURN
         """ % (nodeobj.identifier, level)
         n_attributes = nodeobj.__dict__.keys()
         e_attributes = Interaction().__dict__.keys()
@@ -198,8 +198,8 @@ class NeoQueryFactory(object):
         cypher = """
             MATCH (n:GENE)
             WHERE n.gene_disease > 0
-            RETURN 
-        """ 
+            RETURN
+        """
         cypher += self._return_by_attributes("n", n_attributes)
         cypher += " ORDER BY n.identifier"
         return NeoQuery(self.driver, cypher)
@@ -211,7 +211,7 @@ class NeoQueryFactory(object):
         cypher = """
             MATCH (n:EXPERIMENT)
             RETURN n.identifier as identifier,
-                   n.max as max, 
+                   n.max as max,
                    n.min as min,
                    n.cmap_type as cmap_type
         """
@@ -271,18 +271,18 @@ class NeoDriver(object):
         Constructor of return clause based on a list of attributes for neo4j
         '''
         non_attributes = set([
-            'label', 'parent', 
-            'child', 'expression', 
-            'gos', 'int_type', 
+            'label', 'parent',
+            'child', 'expression',
+            'gos', 'int_type',
             'aliases',
             'summary', 'summary_source'])
-        return_clause = ", ".join(['%s.%s as %s_%s' % (elem_name, attr, elem_name, attr) 
+        return_clause = ", ".join(['%s.%s as %s_%s' % (elem_name, attr, elem_name, attr)
                                    for attr in attributes if attr not in non_attributes])
         return return_clause
 
     def query_by_id(self, nodeobj):
         '''
-        Gets ONE node object of class 
+        Gets ONE node object of class
         '''
         query = self.query_factory.build_query_by_id(nodeobj)
         results = query.get_results()
@@ -350,8 +350,8 @@ class NeoDriver(object):
         results = query.get_results()
         if results:
             for go in results:
-                go_list.append(GO(accession=go['accession'], 
-                                  description=go['description'], 
+                go_list.append(GO(accession=go['accession'],
+                                  description=go['description'],
                                   domain=go['domain']))
         return go_list
 
@@ -545,6 +545,7 @@ class NeoDriver(object):
                 experiments.append(experiment)
         else:
             print("No Experiments yet.")
+        experiments.sort()
         return experiments
 
 # NEO4J CONNECTION
@@ -552,6 +553,6 @@ NEO = NeoDriver('192.168.0.2', 8474, 8687, 'neo4j', 'p0tat0+')
 
 
 # Do this to avoid import errors
-# see: 
+# see:
 # https://stackoverflow.com/questions/11698530/two-python-modules-require-each-others-contents-can-that-work
 from graphcyt import *

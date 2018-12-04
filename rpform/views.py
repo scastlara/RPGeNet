@@ -47,7 +47,7 @@ def upload_graph(request):
         except ValueError:
             response['not_json'] = True;
     return render(request, template, response)
-        
+
 
 def gene_explorer(request):
     '''
@@ -67,6 +67,7 @@ def gene_explorer(request):
         experiment = Experiment(exp_id).check()
         wholegraph.change_expression_color(experiment)
         experiments = Experiment.all_from_database()
+        print(experiments)
         exp_names = [ experiment.identifier for experiment in experiments ]
         response['experiments'] = exp_names
         if wholegraph:

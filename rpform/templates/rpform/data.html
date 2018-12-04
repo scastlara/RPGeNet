@@ -67,6 +67,7 @@
         <li><a href="#network">Network</a></li>
         <li><a href="#comparison">Comparison with previous version</a></li>
         <li><a href="#expression">Expression</a></li>
+        <li><a href="#update_notes">Update Notes</a></li>
       </ol>
     </div>
 
@@ -133,78 +134,94 @@
     <hr>
     <p>Unfortunately, there are few multitissue microarray expression experiments that include retina within their list of tissues. We had to rely on a relatively old microarray experiment (GSE7905) that includes thirty-two different tissues including the retina, liver, brain, skeletal muscle and others. Although the experiment is not recent, the expression values are still useful in finding potentially important pathways associated with retinitis pigmentosa by looking to see if the genes in a pathway all express within the retina. We hope to soon be able to have an updated multitissue expression experiment to use.</p>
 
-    <!--<a href="{% static 'Images/data/GSE7905_gea.sampledistmatrix.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/GSE7905_gea.sampledistmatrix.png' %}" alt="Distribution Matrix"></a>-->
-    
-    <p></p>
-
     <p>Volcano chart</p>
+    <a href="{% static 'Images/data/volcano_plot_RPGeNet_rt-all.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/volcano_plot_RPGeNet_rt-all.png' %}" alt="Distribution Matrix"></a>
+    <br>
+    <p>Heatmap</p>
     <a href="{% static 'Images/data/GSE7905_gea.sampledistmatrix.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/GSE7905_gea.sampledistmatrix.png' %}" alt="Distribution Matrix"></a>
 
     <p>Top twenty relatively overexpressed genes in retina in comparison to all tissues:</p>
 
-    <table class="table table-bordered table-data">
-      <tr class="table-data-header"><td>Gene Symbol</td><td>Average Expression</td><td>t</td><td>logFC</td><td>P. Value</td><td>Adjusted P. Value</td></tr>
-      <tr><td class="data-genename">TMEM98</td><td>15.4275983956743</td><td>119.506244411586</td><td>3.76379255700586</td><td>1.71574028035552e-78</td><td>5.64101089375289e-74</td></tr>
-      <tr><td class="data-genename">ADGRA2</td><td>15.1703656151253</td><td>61.2170318856771</td><td>2.4125085844894</td><td>1.30740852707074e-59</td><td>2.04690369300152e-56</td></tr>
-    </table>
+    <div class="table-responsive">
+      <table class="table table-bordered table-data data-genename">
+        <tr class="table-data-header"><td>Gene Symbol</td><td>Average Expression</td><td>t</td><td>logFC</td><td>P. Value</td><td>Adjusted P. Value</td></tr>
+        <tr><th class="th-gene">TMEM98</td><td>15.4275983956743</td><td>119.506244411586</td><td>3.76379255700586</td><td>1.71574028035552e-78</td><td>5.64101089375289e-74</td></tr>
+        <tr><th class="th-gene">ADGRA2</td><td>15.1703656151253</td><td>61.2170318856771</td><td>2.4125085844894</td><td>1.30740852707074e-59</td><td>2.04690369300152e-56</td></tr>
+      </table>
+    </div>
 
     <p>Top twenty relatively overexpressed genes in retina in comparison to all tissues:</p>
+    <!--<div class="table-data-op">-->
+      <div class="table-responsive">
+        <table class="table table-bordered table-data data-genename">
 
-    <table class="table table-bordered table-data data-genename">
+          <tr class="table-data-header"><th>Gene Symbol</th><th>Average Expression</th><th>t</th><th>logFC</th><th>P. Value</th><th>Adjusted P. Value</th></tr>
 
-      <tr class="table-data-header"><td>Gene Symbol</td><td>Average Expression</td><td>t</td><td>logFC</td><td>P. Value</td><td>Adjusted P. Value</td></tr>
+          <tr><th class="th-gene"> TMEM98         </th><td>   1.54276e+01 </td><td>   1.19506e+02 </td><td>   3.76379e+00 </td><td>   1.71574e-78 </td><td>   5.64101e-74 </td></tr>
+          <tr><th class="th-gene"> UNC119         </th><td>   1.52132e+01 </td><td>   1.09719e+02 </td><td>   4.60785e+00 </td><td>   4.54282e-76 </td><td>   7.46795e-72 </td></tr>
+          <tr><th class="th-gene"> GPX3           </th><td>   1.57962e+01 </td><td>   9.99257e+01 </td><td>   3.96335e+00 </td><td>   2.02176e-73 </td><td>   2.21571e-69 </td></tr>
+          <tr><th class="th-gene"> EFEMP1         </th><td>   1.57655e+01 </td><td>   8.30937e+01 </td><td>   4.06639e+00 </td><td>   3.31868e-68 </td><td>   2.72779e-64 </td></tr>
+          <tr><th class="th-gene"> APOD           </th><td>   1.54900e+01 </td><td>   8.08101e+01 </td><td>   4.20815e+00 </td><td>   2.02969e-67 </td><td>   1.33464e-63 </td></tr>
+          <tr><th class="th-gene"> AOC3           </th><td>   1.46594e+01 </td><td>   7.49936e+01 </td><td>   3.50441e+00 </td><td>   2.59104e-65 </td><td>   1.41980e-61 </td></tr>
+          <tr><th class="th-gene"> INPP5K         </th><td>   1.47864e+01 </td><td>   7.08373e+01 </td><td>   2.84811e+00 </td><td>   1.04379e-63 </td><td>   4.90255e-60 </td></tr>
+          <tr><th class="th-gene"> SERPINF1       </th><td>   1.79001e+01 </td><td>   7.02973e+01 </td><td>   3.10665e+00 </td><td>   1.71338e-63 </td><td>   7.04158e-60 </td></tr>
+          <tr><th class="th-gene"> SLC22A17       </th><td>   1.58003e+01 </td><td>   6.94541e+01 </td><td>   2.91467e+00 </td><td>   3.74310e-63 </td><td>   1.36740e-59 </td></tr>
+          <tr><th class="th-gene"> SEPT4          </th><td>   1.48751e+01 </td><td>   6.85776e+01 </td><td>   2.78186e+00 </td><td>   8.51682e-63 </td><td>   2.72644e-59 </td></tr>
+          <tr><th class="th-gene"> GJA1           </th><td>   1.59067e+01 </td><td>   6.85049e+01 </td><td>   3.09793e+00 </td><td>   9.12187e-63 </td><td>   2.72644e-59 </td></tr>
+          <tr><th class="th-gene"> FOXC1          </th><td>   1.50100e+01 </td><td>   6.81441e+01 </td><td>   3.80321e+00 </td><td>   1.28380e-62 </td><td>   3.51741e-59 </td></tr>
+          <tr><th class="th-gene"> MGP            </th><td>   1.71069e+01 </td><td>   6.79695e+01 </td><td>   2.87181e+00 </td><td>   1.51573e-62 </td><td>   3.64205e-59 </td></tr>
+          <tr><th class="th-gene"> PTP4A3         </th><td>   1.45879e+01 </td><td>   6.79454e+01 </td><td>   2.45700e+00 </td><td>   1.55084e-62 </td><td>   3.64205e-59 </td></tr>
+          <tr><th class="th-gene"> RNASE1         </th><td>   1.63907e+01 </td><td>   6.58746e+01 </td><td>   2.92969e+00 </td><td>   1.14808e-61 </td><td>   2.51644e-58 </td></tr>
+          <tr><th class="th-gene"> CHCHD6         </th><td>   1.51307e+01 </td><td>   6.55999e+01 </td><td>   2.70855e+00 </td><td>   1.50417e-61 </td><td>   2.90906e-58 </td></tr>
+          <tr><th class="th-gene"> C1QTNF5        </th><td>   1.29306e+01 </td><td>   6.26564e+01 </td><td>   4.17481e+00 </td><td>   2.91860e-60 </td><td>   5.33098e-57 </td></tr>
+          <tr><th class="th-gene"> KANK2          </th><td>   1.67269e+01 </td><td>   6.20026e+01 </td><td>   2.52482e+00 </td><td>   5.74309e-60 </td><td>   9.93797e-57 </td></tr>
+          <tr><th class="th-gene"> GPNMB          </th><td>   1.56794e+01 </td><td>   6.17375e+01 </td><td>   3.23300e+00 </td><td>   7.57265e-60 </td><td>   1.24487e-56 </td></tr>
+          <tr><th class="th-gene"> ADGRA2         </th><td>   1.51704e+01 </td><td>   6.12170e+01 </td><td>   2.41251e+00 </td><td>   1.30741e-59 </td><td>   2.04690e-56 </td></tr>
 
-      <tr><th> TMEM98         </th><td>   1.54276e+01 </td><td>   1.19506e+02 </td><td>   3.76379e+00 </td><td>   1.71574e-78 </td><td>   5.64101e-74 </td></tr>
-      <tr><th> UNC119         </th><td>   1.52132e+01 </td><td>   1.09719e+02 </td><td>   4.60785e+00 </td><td>   4.54282e-76 </td><td>   7.46795e-72 </td></tr>
-      <tr><th> GPX3           </th><td>   1.57962e+01 </td><td>   9.99257e+01 </td><td>   3.96335e+00 </td><td>   2.02176e-73 </td><td>   2.21571e-69 </td></tr>
-      <tr><th> EFEMP1         </th><td>   1.57655e+01 </td><td>   8.30937e+01 </td><td>   4.06639e+00 </td><td>   3.31868e-68 </td><td>   2.72779e-64 </td></tr>
-      <tr><th> APOD           </th><td>   1.54900e+01 </td><td>   8.08101e+01 </td><td>   4.20815e+00 </td><td>   2.02969e-67 </td><td>   1.33464e-63 </td></tr>
-      <tr><th> AOC3           </th><td>   1.46594e+01 </td><td>   7.49936e+01 </td><td>   3.50441e+00 </td><td>   2.59104e-65 </td><td>   1.41980e-61 </td></tr>
-      <tr><th> INPP5K         </th><td>   1.47864e+01 </td><td>   7.08373e+01 </td><td>   2.84811e+00 </td><td>   1.04379e-63 </td><td>   4.90255e-60 </td></tr>
-      <tr><th> SERPINF1       </th><td>   1.79001e+01 </td><td>   7.02973e+01 </td><td>   3.10665e+00 </td><td>   1.71338e-63 </td><td>   7.04158e-60 </td></tr>
-      <tr><th> SLC22A17       </th><td>   1.58003e+01 </td><td>   6.94541e+01 </td><td>   2.91467e+00 </td><td>   3.74310e-63 </td><td>   1.36740e-59 </td></tr>
-      <tr><th> SEPT4          </th><td>   1.48751e+01 </td><td>   6.85776e+01 </td><td>   2.78186e+00 </td><td>   8.51682e-63 </td><td>   2.72644e-59 </td></tr>
-      <tr><th> GJA1           </th><td>   1.59067e+01 </td><td>   6.85049e+01 </td><td>   3.09793e+00 </td><td>   9.12187e-63 </td><td>   2.72644e-59 </td></tr>
-      <tr><th> FOXC1          </th><td>   1.50100e+01 </td><td>   6.81441e+01 </td><td>   3.80321e+00 </td><td>   1.28380e-62 </td><td>   3.51741e-59 </td></tr>
-      <tr><th> MGP            </th><td>   1.71069e+01 </td><td>   6.79695e+01 </td><td>   2.87181e+00 </td><td>   1.51573e-62 </td><td>   3.64205e-59 </td></tr>
-      <tr><th> PTP4A3         </th><td>   1.45879e+01 </td><td>   6.79454e+01 </td><td>   2.45700e+00 </td><td>   1.55084e-62 </td><td>   3.64205e-59 </td></tr>
-      <tr><th> RNASE1         </th><td>   1.63907e+01 </td><td>   6.58746e+01 </td><td>   2.92969e+00 </td><td>   1.14808e-61 </td><td>   2.51644e-58 </td></tr>
-      <tr><th> CHCHD6         </th><td>   1.51307e+01 </td><td>   6.55999e+01 </td><td>   2.70855e+00 </td><td>   1.50417e-61 </td><td>   2.90906e-58 </td></tr>
-      <tr><th> C1QTNF5        </th><td>   1.29306e+01 </td><td>   6.26564e+01 </td><td>   4.17481e+00 </td><td>   2.91860e-60 </td><td>   5.33098e-57 </td></tr>
-      <tr><th> KANK2          </th><td>   1.67269e+01 </td><td>   6.20026e+01 </td><td>   2.52482e+00 </td><td>   5.74309e-60 </td><td>   9.93797e-57 </td></tr>
-      <tr><th> GPNMB          </th><td>   1.56794e+01 </td><td>   6.17375e+01 </td><td>   3.23300e+00 </td><td>   7.57265e-60 </td><td>   1.24487e-56 </td></tr>
-      <tr><th> ADGRA2         </th><td>   1.51704e+01 </td><td>   6.12170e+01 </td><td>   2.41251e+00 </td><td>   1.30741e-59 </td><td>   2.04690e-56 </td></tr>
-
-    </table>
-
+        </table>
+      </div>
+    <!--</div>-->
     <p>Top twenty relatively underexpressed genes in retina in comparison to all tissues:</p>
+    <div class="table-responsive">
+      <table class="table table-bordered table-data data-genename">
 
-    <table class="table table-bordered table-data data-genename">
+        <tr class="table-data-header"><td>Gene Symbol</td><td>Average Expression</td><td>t</td><td>logFC</td><td>P. Value</td><td>Adjusted P. Value</td></tr>
 
-      <tr class="table-data-header"><td>Gene Symbol</td><td>Average Expression</td><td>t</td><td>logFC</td><td>P. Value</td><td>Adjusted P. Value</td></tr>
+        <tr><th> SCN8A          </th><td>   9.21722e+00 </td><td>  -4.86829e-03 </td><td>  -1.27044e-03 </td><td>   9.96130e-01 </td><td>   9.97512e-01 </td></tr>
+        <tr><th> KRTAP10_4      </th><td>   1.08677e+01 </td><td>   4.86202e-03 </td><td>   8.24666e-04 </td><td>   9.96135e-01 </td><td>   9.97512e-01 </td></tr>
+        <tr><th> GLRX2          </th><td>   1.25596e+01 </td><td>   4.80925e-03 </td><td>   7.16169e-04 </td><td>   9.96177e-01 </td><td>   9.97512e-01 </td></tr>
+        <tr><th> INSL4          </th><td>   8.68381e+00 </td><td>  -4.72755e-03 </td><td>  -1.61184e-03 </td><td>   9.96242e-01 </td><td>   9.97521e-01 </td></tr>
+        <tr><th> EHMT1          </th><td>   1.11133e+01 </td><td>   4.72200e-03 </td><td>   1.00922e-03 </td><td>   9.96247e-01 </td><td>   9.97521e-01 </td></tr>
+        <tr><th> YPEL1          </th><td>   1.16304e+01 </td><td>   4.29957e-03 </td><td>   7.30017e-04 </td><td>   9.96582e-01 </td><td>   9.97766e-01 </td></tr>
+        <tr><th> RFX8           </th><td>   1.03852e+01 </td><td>   4.21322e-03 </td><td>   1.35426e-03 </td><td>   9.96651e-01 </td><td>   9.97774e-01 </td></tr>
+        <tr><th> DPF3           </th><td>   8.57543e+00 </td><td>  -3.91878e-03 </td><td>  -1.14387e-03 </td><td>   9.96885e-01 </td><td>   9.97948e-01 </td></tr>
+        <tr><th> BANF1          </th><td>   1.13208e+01 </td><td>  -3.85001e-03 </td><td>  -7.99110e-04 </td><td>   9.96940e-01 </td><td>   9.97972e-01 </td></tr>
+        <tr><th> PCDHGA6        </th><td>   9.22860e+00 </td><td>  -3.78145e-03 </td><td>  -1.30935e-03 </td><td>   9.96994e-01 </td><td>   9.97996e-01 </td></tr>
+        <tr><th> CSNK1G2_AS1    </th><td>   9.30784e+00 </td><td>  -3.46594e-03 </td><td>  -1.26328e-03 </td><td>   9.97245e-01 </td><td>   9.98214e-01 </td></tr>
+        <tr><th> WDR62          </th><td>   8.99319e+00 </td><td>   3.43087e-03 </td><td>   9.84490e-04 </td><td>   9.97273e-01 </td><td>   9.98214e-01 </td></tr>
+        <tr><th> FLJ34790       </th><td>   1.07538e+01 </td><td>  -3.28461e-03 </td><td>  -9.17140e-04 </td><td>   9.97389e-01 </td><td>   9.98252e-01 </td></tr>
+        <tr><th> PAM16          </th><td>   1.30554e+01 </td><td>   2.66893e-03 </td><td>   1.43794e-04 </td><td>   9.97879e-01 </td><td>   9.98577e-01 </td></tr>
+        <tr><th> NCBP2          </th><td>   1.30254e+01 </td><td>  -2.22164e-03 </td><td>  -1.40418e-04 </td><td>   9.98234e-01 </td><td>   9.98826e-01 </td></tr>
+        <tr><th> C1ORF127       </th><td>   1.00062e+01 </td><td>  -2.12662e-03 </td><td>  -8.15441e-04 </td><td>   9.98310e-01 </td><td>   9.98826e-01 </td></tr>
+        <tr><th> PYY2           </th><td>   9.13073e+00 </td><td>   1.54440e-03 </td><td>   5.05289e-04 </td><td>   9.98772e-01 </td><td>   9.99168e-01 </td></tr>
+        <tr><th> TEX11          </th><td>   9.41583e+00 </td><td>   7.98628e-04 </td><td>   2.32093e-04 </td><td>   9.99365e-01 </td><td>   9.99578e-01 </td></tr>
+        <tr><th> C17ORF49       </th><td>   1.52699e+01 </td><td>   3.14705e-04 </td><td>   1.48092e-05 </td><td>   9.99750e-01 </td><td>   9.99841e-01 </td></tr>
+        <tr><th> RERG           </th><td>   1.41530e+01 </td><td>  -8.51990e-05 </td><td>  -6.10756e-06 </td><td>   9.99932e-01 </td><td>   9.99934e-01 </td></tr>
 
-      <tr><th> SCN8A          </th><td>   9.21722e+00 </td><td>  -4.86829e-03 </td><td>  -1.27044e-03 </td><td>   9.96130e-01 </td><td>   9.97512e-01 </td></tr>
-      <tr><th> KRTAP10_4      </th><td>   1.08677e+01 </td><td>   4.86202e-03 </td><td>   8.24666e-04 </td><td>   9.96135e-01 </td><td>   9.97512e-01 </td></tr>
-      <tr><th> GLRX2          </th><td>   1.25596e+01 </td><td>   4.80925e-03 </td><td>   7.16169e-04 </td><td>   9.96177e-01 </td><td>   9.97512e-01 </td></tr>
-      <tr><th> INSL4          </th><td>   8.68381e+00 </td><td>  -4.72755e-03 </td><td>  -1.61184e-03 </td><td>   9.96242e-01 </td><td>   9.97521e-01 </td></tr>
-      <tr><th> EHMT1          </th><td>   1.11133e+01 </td><td>   4.72200e-03 </td><td>   1.00922e-03 </td><td>   9.96247e-01 </td><td>   9.97521e-01 </td></tr>
-      <tr><th> YPEL1          </th><td>   1.16304e+01 </td><td>   4.29957e-03 </td><td>   7.30017e-04 </td><td>   9.96582e-01 </td><td>   9.97766e-01 </td></tr>
-      <tr><th> RFX8           </th><td>   1.03852e+01 </td><td>   4.21322e-03 </td><td>   1.35426e-03 </td><td>   9.96651e-01 </td><td>   9.97774e-01 </td></tr>
-      <tr><th> DPF3           </th><td>   8.57543e+00 </td><td>  -3.91878e-03 </td><td>  -1.14387e-03 </td><td>   9.96885e-01 </td><td>   9.97948e-01 </td></tr>
-      <tr><th> BANF1          </th><td>   1.13208e+01 </td><td>  -3.85001e-03 </td><td>  -7.99110e-04 </td><td>   9.96940e-01 </td><td>   9.97972e-01 </td></tr>
-      <tr><th> PCDHGA6        </th><td>   9.22860e+00 </td><td>  -3.78145e-03 </td><td>  -1.30935e-03 </td><td>   9.96994e-01 </td><td>   9.97996e-01 </td></tr>
-      <tr><th> CSNK1G2_AS1    </th><td>   9.30784e+00 </td><td>  -3.46594e-03 </td><td>  -1.26328e-03 </td><td>   9.97245e-01 </td><td>   9.98214e-01 </td></tr>
-      <tr><th> WDR62          </th><td>   8.99319e+00 </td><td>   3.43087e-03 </td><td>   9.84490e-04 </td><td>   9.97273e-01 </td><td>   9.98214e-01 </td></tr>
-      <tr><th> FLJ34790       </th><td>   1.07538e+01 </td><td>  -3.28461e-03 </td><td>  -9.17140e-04 </td><td>   9.97389e-01 </td><td>   9.98252e-01 </td></tr>
-      <tr><th> PAM16          </th><td>   1.30554e+01 </td><td>   2.66893e-03 </td><td>   1.43794e-04 </td><td>   9.97879e-01 </td><td>   9.98577e-01 </td></tr>
-      <tr><th> NCBP2          </th><td>   1.30254e+01 </td><td>  -2.22164e-03 </td><td>  -1.40418e-04 </td><td>   9.98234e-01 </td><td>   9.98826e-01 </td></tr>
-      <tr><th> C1ORF127       </th><td>   1.00062e+01 </td><td>  -2.12662e-03 </td><td>  -8.15441e-04 </td><td>   9.98310e-01 </td><td>   9.98826e-01 </td></tr>
-      <tr><th> PYY2           </th><td>   9.13073e+00 </td><td>   1.54440e-03 </td><td>   5.05289e-04 </td><td>   9.98772e-01 </td><td>   9.99168e-01 </td></tr>
-      <tr><th> TEX11          </th><td>   9.41583e+00 </td><td>   7.98628e-04 </td><td>   2.32093e-04 </td><td>   9.99365e-01 </td><td>   9.99578e-01 </td></tr>
-      <tr><th> C17ORF49       </th><td>   1.52699e+01 </td><td>   3.14705e-04 </td><td>   1.48092e-05 </td><td>   9.99750e-01 </td><td>   9.99841e-01 </td></tr>
-      <tr><th> RERG           </th><td>   1.41530e+01 </td><td>  -8.51990e-05 </td><td>  -6.10756e-06 </td><td>   9.99932e-01 </td><td>   9.99934e-01 </td></tr>
-
-    </table>
+      </table>
+    </div>
+    <br>
+    <h3 id="update_notes">Update Notes</h3>
+    <hr>
+    <h4> October 20th, 2018 - Version 2.0 </h4>
+    <ul>
+      <li>The number of driver genes has increased to 276 from the original 75 genes</li>
+      <li>RPGeNet has revised its network with updated interactions from
+        BioGRID and STRING but also new interactions text-mined using PPaxe.</li>
+      <li>RPGeNet now has 3,865 genes and 26,341 interactions in its skeleton;
+        overall with 18,707 genes and 739,122 interactions in the network overall.</li>
+      <li>A new graph-base database manager, neo4j, has been implemented.</li>
+    </ul>
 
     <!-- RODRIGOOOO! -->
 
@@ -244,11 +261,15 @@
         </div>
       </div>
     </div>
+
+
+    <a href="#0" class="cd-top" title="Back to Top">Top</a>
   </div>
 
 
 <script src="{% static 'js/jquery-min.js' %}"></script>
 <script src="{% static 'js/bootstrap-min.js' %}"></script>
+<script src="{% static 'js/back-to-top.js' %}"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
 <script src="{% static 'js/stoopidoverlay.js' %}"></script>
 <script src="{% static 'js/overlays.js' %}"></script>

@@ -113,6 +113,15 @@ body 			{ font-size: 12px; height: 100vh; }
 	margin-top: 20px;
 }
 
+@media screen and (max-width: 582px) {
+	.footer-left {
+	float: left;
+	width: 250px;
+	margin-left: 80px;
+	margin-top: 50px;
+	}
+}
+
 .copyright { font-size: 12px; margin-top: 5px; }
 
 
@@ -889,22 +898,30 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .tutorial-img {
+	max-width: 100%;
 	width: 400px;
 }
 
 .tutorial-img-medium {
+	max-width: 100%;
 	width: 600px;
 }
 
 .tutorial-img-large {
+	max-width: 100%;
 	width: 800px;
 }
 
 .tutorial-img-large-center {
+	max-width: 100%;
 	width: 800px;
 	margin-left: auto;
 	margin-right: auto;
 
+}
+
+.rpgenet_legend{
+	max-width: 100%;
 }
 
 .center-text {
@@ -1037,14 +1054,20 @@ span#undo {
 	display: none;
 }
 
+.table-data-op {
+	max-width: 100%;
+	overflow-x: scroll;
+
+}
+
 .table-data {
 	font-size: 11px;
 	text-align: right;
 }
 
 .table-data-header {
-	text-align: center;
 	font-weight: bold;
+	text-align: center;
 }
 
 table.data-genename {
@@ -1161,3 +1184,33 @@ input[type="range"]::-moz-range-track {
 	 width: 135px;
 	 line-height: 48px;
  }
+
+
+
+@media screen
+and (min-width: 1199px)
+and (max-width: 1265px) {
+	.panel-form label {
+		font-size: 13px;
+	}
+
+	.panel-form .question-badge {
+		font-size: 11px;
+	}
+}
+
+
+.pathways-btns {
+	text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+	.pathways-btns {
+		text-align: left;
+	}
+}
+
+
+#explore-network-btn {
+	margin-top: 20px;
+}

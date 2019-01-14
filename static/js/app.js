@@ -1,5 +1,5 @@
 /*==================================================
-app.js - Main script for the basic functionality of 
+app.js - Main script for the basic functionality of
          Netengine graph visualizations.
 ==================================================*/
 
@@ -176,10 +176,10 @@ exportJSON = function(cy) {
     } else {
         if (window.jsongraph) {
             // Check that json graph file/data is correct
-            try   { 
+            try   {
                 cy.add(window.jsongraph);
-            } 
-            catch (error) { 
+            }
+            catch (error) {
                 jsonError();
             }
         }
@@ -243,7 +243,7 @@ expandOnClick = function(cy, node) {
             //window.layout.stop()
             //window.layout = cy.layout({ name: 'cola' });
             //window.layout.run();
-        }, 
+        },
         statusCode: {
             404: function() {
                 $("#loading").hide();
@@ -259,7 +259,7 @@ expandOnClick = function(cy, node) {
 
 /*
  * Show node properties on click
- */ 
+ */
 nPropertiesOnClick = function(cy, node) {
     $.ajax({
         type: "GET",
@@ -277,7 +277,7 @@ nPropertiesOnClick = function(cy, node) {
             $('.card-overlay').slideToggle(450);
             $('.close-overlay').slideToggle(450);
             $("#loading").hide();
-        }, 
+        },
         statusCode: {
             404: function() {
                 $("#loading").hide();
@@ -292,7 +292,7 @@ nPropertiesOnClick = function(cy, node) {
 
 /*
  * Show node properties on click
- */ 
+ */
 ePropertiesOnClick = function(cy, edge) {
     $.ajax({
         type: "GET",
@@ -310,7 +310,7 @@ ePropertiesOnClick = function(cy, edge) {
             $('.card-overlay').slideToggle(450);
             $('.close-overlay').slideToggle(450);
             $("#loading").hide();
-        }, 
+        },
         statusCode: {
             404: function() {
                 $("#loading").hide();
@@ -435,7 +435,7 @@ function getCookie(name) {
             ur.do("add", data);
             cy.layout( { name: 'cola' } );
             $("#loading").hide();
-        }, 
+        },
         statusCode: {
             404: function() {
                 $("#loading").hide();
@@ -446,6 +446,13 @@ function getCookie(name) {
             $("#loading").hide();
         }
     });
+ }
+
+/*
+ * Removes unconnected nodes in visualization
+ */
+ removeUnconnected = function(cy) {
+   cy.nodes('[[degree < 1]]').remove();
  }
 
 /*
@@ -467,7 +474,7 @@ function getCookie(name) {
 
 /*
  * Changing expression color
- */ 
+ */
 changeExpression = function(cy, exp_id) {
     var csrftoken = getCookie('csrftoken');
     var nodeIds   = getNodeIds(cy);
@@ -499,7 +506,7 @@ changeExpression = function(cy, exp_id) {
                 }
             }
             $("#loading").hide();
-        }, 
+        },
         statusCode: {
             404: function() {
                 $("#loading").hide();
@@ -536,6 +543,7 @@ $("#export-json").on("click", function() { exportJSON(window.cy) });
 $('#drag-btn').on("click", function(event) { changeDrag(window.cy, event, $(this)) });
 $("#bsize").on("change", function() { changeBsize(window.cy, $(this).val()) });
 $("#get-connections").on('click', function() { showConnections(window.cy) });
+$("#remove-unconnected").on('click', function() { removeUnconnected(window.cy) });
 $("#search-node-btn").on("click", function(){ searchNode(window.cy, $("#search-node-term").val()) });
 $("#removesearch").on("click", function(){ window.cy.nodes().unselect() });
 $("#exp-indicator").on("change", function(){ changeExpression(window.cy, $(this).val())});

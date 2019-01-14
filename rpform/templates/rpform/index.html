@@ -70,7 +70,7 @@
 			<p>
 				For example, when searching for <i>CEP290</i> and the "neighbours" is set to 1 (this is the default value), this set of genes can be obtained: <i>OFD1</i>, <i>RPGR</i>, <i>ANAPC2</i>, <i>ATF4</i>, <i>IQCB1</i>. This means that from <i>CEP290</i> one can only travel to nodes (say here genes) at distance 1. If "neighbours" is set to 2,further genes are retrieved apart from the previous ones, and now one can travel a distance of 2 to other genes.
 				<br><br>
-				See also tutorial page.
+				See also tutorial <a href="{% url tutorial %}" target="_blank">page</a>.
 			</p>
 	</div>
 
@@ -114,6 +114,19 @@
 			See also tutorial <a href="{% url tutorial %}" target="_blank">page</a>.
 	</div>
 
+	<!--<div id="pathto-dialog" class="card-dialog">
+		<div id="close-pathto-btn" class="close-card-btn btn btn-danger">
+			<span class="glyphicon glyphicon-remove"></span>
+		</div>
+
+		<h2>Interaction Level</h2>
+		<hr>
+			<p>Here you can specify up to what level you would like to include in your curated graph.<br /><br />There are <b>5</b> levels, starting with level 0 (the skeleton - made up of all the shortest interactions between driver genes). Each additional level increases the density of the graph with more interactions and genes. <br /><br />
+				It is important to <b>note</b> that the higher the level, the more noise you will find. <br /><br />
+			</p>
+			See also tutorial <a href="{% url tutorial %}" target="_blank">page</a>.
+	</div>-->
+
 	<div id="pathto-dialog" class="card-dialog">
 		<div id="close-pathto-btn" class="close-card-btn btn btn-danger">
 			<span class="glyphicon glyphicon-remove"></span>
@@ -122,10 +135,9 @@
 		<h2>Path to</h2>
 		<hr>
 			<p>
-				Here you can choose to between trying to find the shortest pathway between
-				you gene of interest and either directly to the driver genes or to the
-				skeleton.
-			</p>
+				Here you can choose between trying to find the shortest pathway between
+				your gene of interest and driver genes or to genes in the skeleton.
+			</p>pathto-bt
 				<br /><br />
 			</p>
 			See also tutorial <a href="{% url tutorial %}" target="_blank">page</a>.
@@ -199,8 +211,7 @@
 								<input type="text" name="gene" id="f2-genename" class="form-control" placeholder="PMM2"/>
 							</div>
 							<div class="col-lg-2">
-								<label for="f2-lvl">Path to <span class="pathto-btn glyphicon glyphicon-question-sign question-badge"></span><br></label>
-
+								<label for="f2-lvl">Path to <span class="pathto-btn glyphicon glyphicon-question-sign question-badge"></span></label>
 								<select name="path-to" class="form-control" id="f2-lvl">
 									<option value="-1">Drivers</option>
 									<option value="0">Skeleton (lvl 0)</option>

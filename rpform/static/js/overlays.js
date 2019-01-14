@@ -37,3 +37,12 @@ $(".genexp-btn").on("click", function() {
 $("#close-genexp-btn").on("click", function() {
 	$("#genexp-dialog").hide();
 });
+
+// PATHTO
+$(".pathto-btn").on("click", function() {
+	$("#pathto-dialog").slideToggle(450);
+});
+
+$("#close-pathto-btn").on("click", function() {
+	$("#pathto-dialog").hide();
+});

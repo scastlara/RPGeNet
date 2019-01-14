@@ -8,7 +8,7 @@ app.js - Main script for the basic functionality of
 window.clickBehaviourOpts = {"properties":1, "addition":2, "deletion":3 }
 Object.freeze(window.clickBehaviourOpts);
 window.clickBehaviour = window.clickBehaviourOpts.properties; // Default behaviour
-window.ROOT = '/datasets/RPGeNet_v2_201806'; // '';
+window.ROOT = '/RPGeNet'; // '';
 window.drag = false;
 window.cy;
 window.layout;

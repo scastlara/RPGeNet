@@ -1,4 +1,4 @@
-Go/*
+/*
 	Styles for RPGeNet v2
 */
 
@@ -1159,3 +1159,17 @@ input[type="range"]::-moz-range-track {
 	 width: 135px;
 	 line-height: 48px;
  }
+
+h3 {
+    margin-top: 25px !important;
+    margin-bottom: 0px !important;
+}
+hr {
+    margin-top: 2px !important;
+    margin-bottom: 4px !important;
+    padding: 0px;
+    line-height: 5px;
+    color: #CCCCCC;
+    border-color: inherit !important;
+}
+

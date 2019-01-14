@@ -452,7 +452,7 @@ function getCookie(name) {
  * Removes unconnected nodes in visualization
  */
  removeUnconnected = function(cy) {
-   cy.nodes('[[degree < 1]]').remove();
+   ur.do("remove", cy.nodes('[[degree < 1]]'));
  }
 
 /*

@@ -113,6 +113,15 @@ body 			{ font-size: 12px; height: 100vh; }
 	margin-top: 20px;
 }
 
+@media screen and (max-width: 582px) {
+	.footer-left {
+	float: left;
+	width: 250px;
+	margin-left: 80px;
+	margin-top: 50px;
+	}
+}
+
 .copyright { font-size: 12px; margin-top: 5px; }
 
 
@@ -500,6 +509,7 @@ input[type=number]::-webkit-inner-spin-button {
 .behaviour-btn-text  { line-height: 30px; }
 .cyt-controls-ndsz  { margin-top: -10px; }
 .cyt-controls-block  { margin-top: 25px; }
+.cyt-unconnected-btn { width: 169px; height: 49.6 !important; line-height: 30px !important; }
 .cyt-controls-title  { font-size: 20px; color: #707070; }
 .lvl-btn { width: 100%; }
 .gexplorer-lvl-container { margin-top: 10px; }
@@ -554,6 +564,7 @@ input[type=number]::-webkit-inner-spin-button {
 	z-index: 3;
 	background-color: #FAFAFA;
 	box-shadow: 0px 0px 180px 120px rgba(0,0,0,0.75);
+	overflow-y: scroll;
 }
 
 .close-card-btn {
@@ -889,22 +900,30 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .tutorial-img {
+	max-width: 100%;
 	width: 400px;
 }
 
 .tutorial-img-medium {
+	max-width: 100%;
 	width: 600px;
 }
 
 .tutorial-img-large {
+	max-width: 100%;
 	width: 800px;
 }
 
 .tutorial-img-large-center {
+	max-width: 100%;
 	width: 800px;
 	margin-left: auto;
 	margin-right: auto;
 
+}
+
+.rpgenet_legend{
+	max-width: 100%;
 }
 
 .center-text {
@@ -1037,14 +1056,20 @@ span#undo {
 	display: none;
 }
 
+.table-data-op {
+	max-width: 100%;
+	overflow-x: scroll;
+
+}
+
 .table-data {
 	font-size: 11px;
 	text-align: right;
 }
 
 .table-data-header {
-	text-align: center;
 	font-weight: bold;
+	text-align: center;
 }
 
 table.data-genename {
@@ -1161,3 +1186,33 @@ input[type="range"]::-moz-range-track {
 	 width: 135px;
 	 line-height: 48px;
  }
+
+
+
+@media screen
+and (min-width: 1199px)
+and (max-width: 1265px) {
+	.panel-form label {
+		font-size: 13px;
+	}
+
+	.panel-form .question-badge {
+		font-size: 11px;
+	}
+}
+
+
+.pathways-btns {
+	text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+	.pathways-btns {
+		text-align: left;
+	}
+}
+
+
+#explore-network-btn {
+	margin-top: 20px;
+}

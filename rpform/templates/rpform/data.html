@@ -128,7 +128,11 @@
     <hr>
     <p>With an addition of 175 new driver genes now known, RPGeNet was in need of an update. The increase in the number of driver genes partially precipitated an early saturation in the number of levels from the skeleton. Our new network, however, does have less interactions and genes in comparison to the previous network. This is mainly due to the extensive filtering of STRING. The previous network included the predictions but the updated network only includes interactions with evidences.</p>
 
-    <img src="" alt="Comparitive Bar Graph">
+    <!--<img src="" alt="Comparitive Bar Graph"> -->
+    <a href="{% static 'v1-x-v2_RPGeNet_wholegraph-nodes.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/v1-x-v2_RPGeNet_wholegraph-nodes.png' %}" alt="upset plot comparing the nodes in the previous version of RPGeNet with updated version"></a>
+    <br>
+    <a href="{% static 'v1-x-v2_RPGeNet_wholegraph-ints.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/v1-x-v2_RPGeNet_wholegraph-ints.png' %}" alt="upset plot comparing the interactions in the previous version of RPGeNet with updated version"></a>
+    <br>
 
     <h3 id="expression">Expression analysis</h3>
     <hr>
@@ -141,23 +145,13 @@
     <a href="{% static 'Images/data/GSE7905_gea.sampledistmatrix.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/GSE7905_gea.sampledistmatrix.png' %}" alt="Distribution Matrix"></a>
 
     <p>Top twenty relatively overexpressed genes in retina in comparison to all tissues:</p>
-
-    <div class="table-responsive">
-      <table class="table table-bordered table-data data-genename">
-        <tr class="table-data-header"><td>Gene Symbol</td><td>Average Expression</td><td>t</td><td>logFC</td><td>P. Value</td><td>Adjusted P. Value</td></tr>
-        <tr><th class="th-gene">TMEM98</td><td>15.4275983956743</td><td>119.506244411586</td><td>3.76379255700586</td><td>1.71574028035552e-78</td><td>5.64101089375289e-74</td></tr>
-        <tr><th class="th-gene">ADGRA2</td><td>15.1703656151253</td><td>61.2170318856771</td><td>2.4125085844894</td><td>1.30740852707074e-59</td><td>2.04690369300152e-56</td></tr>
-      </table>
-    </div>
-
-    <p>Top twenty relatively overexpressed genes in retina in comparison to all tissues:</p>
     <!--<div class="table-data-op">-->
       <div class="table-responsive">
         <table class="table table-bordered table-data data-genename">
 
           <tr class="table-data-header"><th>Gene Symbol</th><th>Average Expression</th><th>t</th><th>logFC</th><th>P. Value</th><th>Adjusted P. Value</th></tr>
 
-          <tr><th class="th-gene"> TMEM98         </th><td>   1.54276e+01 </td><td>   1.19506e+02 </td><td>   3.76379e+00 </td><td>   1.71574e-78 </td><td>   5.64101e-74 </td></tr>
+          <tr><th class="th-gene"> TMEM98         </th><td>s   1.54276e+01 </td><td>   1.19506e+02 </td><td>   3.76379e+00 </td><td>   1.71574e-78 </td><td>   5.64101e-74 </td></tr>
           <tr><th class="th-gene"> UNC119         </th><td>   1.52132e+01 </td><td>   1.09719e+02 </td><td>   4.60785e+00 </td><td>   4.54282e-76 </td><td>   7.46795e-72 </td></tr>
           <tr><th class="th-gene"> GPX3           </th><td>   1.57962e+01 </td><td>   9.99257e+01 </td><td>   3.96335e+00 </td><td>   2.02176e-73 </td><td>   2.21571e-69 </td></tr>
           <tr><th class="th-gene"> EFEMP1         </th><td>   1.57655e+01 </td><td>   8.30937e+01 </td><td>   4.06639e+00 </td><td>   3.31868e-68 </td><td>   2.72779e-64 </td></tr>
@@ -210,6 +204,8 @@
 
       </table>
     </div>
+
+
     <br>
     <h3 id="update_notes">Update Notes</h3>
     <hr>

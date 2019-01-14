@@ -509,6 +509,7 @@ input[type=number]::-webkit-inner-spin-button {
 .behaviour-btn-text  { line-height: 30px; }
 .cyt-controls-ndsz  { margin-top: -10px; }
 .cyt-controls-block  { margin-top: 25px; }
+.cyt-unconnected-btn { width: 169px; height: 49.6 !important; line-height: 30px !important; }
 .cyt-controls-title  { font-size: 20px; color: #707070; }
 .lvl-btn { width: 100%; }
 .gexplorer-lvl-container { margin-top: 10px; }
@@ -563,6 +564,7 @@ input[type=number]::-webkit-inner-spin-button {
 	z-index: 3;
 	background-color: #FAFAFA;
 	box-shadow: 0px 0px 180px 120px rgba(0,0,0,0.75);
+	overflow-y: scroll;
 }
 
 .close-card-btn {

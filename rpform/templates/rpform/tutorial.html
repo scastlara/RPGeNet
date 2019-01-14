@@ -122,8 +122,8 @@
   <br><br>
   <h4 id="controls">Navigation Options</h4>
   <div class="center-text">
-    <a href="{% static 'Images/navoptions.png' %}" target="_blank">
-      <img class="tutorial-img" src="{% static 'Images/command_tutorial.png' %}">
+    <a href="{% static 'Images/guided_tutorial/navoptions2.png' %}" target="_blank">
+      <img class="tutorial-img" src="{% static 'Images/guided_tutorial/navoptions2.png' %}">
     </a>
   </div>
    In Network Explorer you have several options and controls to modify the graph visualization.
@@ -145,6 +145,10 @@
      <li id="options-connect"><b>Connect Genes:</b></li>
      <p>
         This button will add all the interactions in the current level between all the genes displayed on the visualization.
+      </p>
+     <li id="options-unconnect"><b>Remove Unconnected Genes:</b></li>
+     <p>
+        This button will remove all the nodes that are currently not connected in the graph display.
       </p>
      <li id="options-border"><b>Border size:</b></li>
      <p>
@@ -346,8 +350,8 @@
       We will chose the absolute expression option and then click on explore network.
     </p>
     <div class="center-text">
-      <a href="{% static 'Images/guided_tutorial/retabsdisplay.png' %}" target="_blank">
-        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/retabsdisplay.png' %}">
+      <a href="{% static 'Images/guided_tutorial/retabsdisplay2.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/retabsdisplay2.png' %}">
       </a>
     </div>
     <p>
@@ -361,8 +365,8 @@
       Lets take a look at the control panel to the right hand side of the screen.
     </p>
     <div class="center-text">
-      <a href="{% static 'Images/guided_tutorial/command.png' %}" target="_blank">
-        <img class="rpgenet_legend" src="{% static 'Images/guided_tutorial/command.png' %}">
+      <a href="{% static 'Images/guided_tutorial/command2.png' %}" target="_blank">
+        <img class="rpgenet_legend" src="{% static 'Images/guided_tutorial/command2.png' %}">
       </a>
     </div>
     <p>
@@ -398,8 +402,8 @@
       PPM1A and PPM1B.
     </p>
     <div class="center-text">
-      <a href="{% static 'Images/guided_tutorial/node-addition-results.png' %}" target="_blank">
-        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/node-addition-results.png' %}">
+      <a href="{% static 'Images/guided_tutorial/node-addition-result2.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/node-addition-result2.png' %}">
       </a>
     </div>
     <p>
@@ -431,10 +435,22 @@
       you gene of interest interact with each other.
     </p>
     <div class="center-text">
-      <a href="{% static 'Images/guided_tutorial/connect-genes-result.png' %}" target="_blank">
-        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/connect-genes-result.png' %}">
+      <a href="{% static 'Images/guided_tutorial/connect-genes-result2.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/connect-genes-result2.png' %}">
       </a>
     </div>
+    <p>
+      When you delete nodes, you may end up with many unconnected nodes in the
+      graph display. We can use the Remove Unconnected button to remove any unconnected
+      nodes. Restarting with the original CERKL input on the netexplorer, we are
+      going to click on "Node Addition" and click on the gene SIRT1. We will then
+      click on "Node Deletion" and delete SIRT1. All of nodes connecting to SIRT1
+      will be unconnected. Now click "Remove Unconnected" and all the unconnected
+      nodes should be deleted from the graph display.
+    </p>
+    <a href="{% static 'Images/guided_tutorial/REMOVE_UNCONNECTED_ANIMATION.gif' %}" target="_blank">
+        <img class="tutorial-gif-large" src="{% static 'Images/guided_tutorial/REMOVE_UNCONNECTED_ANIMATION.gif' %}">
+      </a>
     <p>
       As you can see, each node has a border that tells us the lowest level the
       gene is found. The size of the border can be modified using "Border Size".
@@ -520,8 +536,8 @@
       click on "Show Legend" for the color scale.
     </p>
     <div class="center-text">
-      <a href="{% static 'Images/guided_tutorial/retalldisplay.png' %}" target="_blank">
-        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/retalldisplay.png' %}">
+      <a href="{% static 'Images/guided_tutorial/retalldisplay2.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/retalldisplay2.png' %}">
       </a>
     </div>
 
@@ -570,8 +586,8 @@
       use all the tools we used in the Network Explorer tutorial (above).
     </p>
     <div class="center-text">
-      <a href="{% static 'Images/guided_tutorial/getexplr-rax.png' %}" target="_blank">
-        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/getexplr-rax.png' %}">
+      <a href="{% static 'Images/guided_tutorial/getexplr-rax2.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/getexplr-rax2.png' %}">
       </a>
     </div>
     <h4 id="shortest-guided">Shortest Path Between Genes</h4>
@@ -598,8 +614,8 @@
       the pathway that interest us to Network Explorer by clicking "Exlore Network".
     </p>
     <div class="center-text">
-      <a href="{% static 'Images/guided_tutorial/netexplr-cerkl-rho.png' %}" target="_blank">
-        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/netexplr-cerkl-rho.png' %}">
+      <a href="{% static 'Images/guided_tutorial/netexplr-cerkl-rho2.png' %}" target="_blank">
+        <img class="tutorial-img-large" src="{% static 'Images/guided_tutorial/netexplr-cerkl-rho2.png' %}">
       </a>
     </div>
     <p></p>

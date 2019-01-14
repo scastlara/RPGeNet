@@ -565,6 +565,7 @@ input[type=number]::-webkit-inner-spin-button {
 	background-color: #FAFAFA;
 	box-shadow: 0px 0px 180px 120px rgba(0,0,0,0.75);
 	overflow-y: scroll;
+	color: #777777;
 }
 
 .close-card-btn {
@@ -625,6 +626,8 @@ input[type=number]::-webkit-inner-spin-button {
     box-shadow: 0px 0px 180px 120px rgba(0,0,0,0.75);
     color: #777777;
 }
+
+/* color: #777777 */
 
 .panel-form {
 	padding-top: 2px !important;
@@ -912,6 +915,14 @@ input[type=number]::-webkit-inner-spin-button {
 .tutorial-img-large {
 	max-width: 100%;
 	width: 800px;
+}
+
+.tutorial-gif-large {
+	max-width: 100%;
+	width: 800px;
+	display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tutorial-img-large-center {

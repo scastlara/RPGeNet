@@ -58,6 +58,8 @@ def gene_explorer(request):
     if request.method == "GET":
         genes = request.GET['gene']
         genes = re.sub(r'\s', '', genes)
+        genes = re.sub(r'\"', '', genes)
+        genes = re.sub(r"\'", '', genes)
         level = int(request.GET['level'])
         exp_id = request.GET['exp']
         dist = int(request.GET['dist'])
@@ -143,6 +145,7 @@ def pathway_explorer(request):
     Find Pathways from your genes to specific levels of the RPGeNet graph
     '''
     gene = request.GET['gene'].upper()
+    gene = re.sub(r'[\"\']', '', gene)
     level = int(request.GET['path-to'])
     exp_id = request.GET['exp']
     response = dict()
@@ -180,7 +183,9 @@ def shortest_path(request):
     response['error'] = False
     response['appname'] = "Shortest Paths"
     gene1 = request.GET['gene1'].upper()
+    gene1 = re.sub(r'[\"\']', '', gene1)
     gene2 = request.GET['gene2'].upper()
+    gene2 = re.sub(r'[\"\']', '', gene2)
     exp_id = request.GET['exp']
     response['source'] = gene1
     response['target'] = gene2

@@ -58,6 +58,7 @@ var stylesheet = cytoscape.stylesheet()
     .selector('edge')
         .css({
             "content": "data(level)",
+            'curve-style': 'bezier',
             'font-size': 14,
             'color': "#555555",
             "text-valign": "center",

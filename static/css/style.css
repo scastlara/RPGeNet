@@ -1,4 +1,4 @@
-/*
+Go/*
 	Styles for RPGeNet v2
 */
 
@@ -700,6 +700,35 @@ input[type=number]::-webkit-inner-spin-button {
   z-index: 1;
 }
 
+#search-node-results-container {
+	display: none;
+	position: fixed;
+	background-color: white;
+	text-align: left;
+	color: #777;
+	bottom: 0;
+	left: 200px;
+	padding: 10px;
+	height: 200px;
+	overflow-y: auto;
+}
+
+.search-term {
+	display: block;
+}
+
+.search-term.not-found {
+	color: #cb5362;
+}
+
+.search-term.found {
+	color: #3A9F88;
+}
+
+.search-term.found:hover {
+	opacity: 0.8;
+	cursor: pointer;
+}
 
 #search-node-term {
     height: 40px !important;
@@ -1145,6 +1174,20 @@ table.data-genename tr td {
 	margin-left: 25%;
 }
 
+
+#blur-effect {
+	display: none;
+	position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: #000;
+    opacity: 0.5;
+    z-index: 2;
+    filter: alpha(opacity = 50); /* required for opacity to work in IE */
+}
+
 .node-size-btn:hover {
 	cursor: pointer;
 }
@@ -1159,7 +1202,8 @@ table.data-genename tr td {
       color: #555555;
     }
 }
-input[type="range"]::-moz-range-track {  
+
+input[type="range"]::-moz-range-track {
   background-color: #555555;
 }
 
@@ -1180,7 +1224,8 @@ input[type="range"]::-moz-range-track {
     z-index: 2;
     filter: alpha(opacity = 50); /* required for opacity to work in IE */
 }
- #upload-json {
+
+#upload-json {
 	 height: 58px;
  }
 
@@ -1195,7 +1240,6 @@ input[type="range"]::-moz-range-track {
 	 width: 135px;
 	 line-height: 48px;
  }
-
 
 
 

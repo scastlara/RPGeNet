@@ -62,10 +62,13 @@ var stylesheet = cytoscape.stylesheet()
     .selector('.lvl3')
      .css({
         "border-color": "#0A945C",
+<<<<<<< HEAD
         })
     .selector('.lvl4')
      .css({
         "border-color": "#426A2B",
+=======
+>>>>>>> master
         })
     .selector('.lvl5')
      .css({
@@ -115,6 +118,7 @@ var cy = cytoscape({
     layout: { name: 'preset' },
     container: document.getElementById('cyt'),
     boxSelectionEnabled: true,  
+    wheelSensitivity: 0.3,
     ready: function() {}
 });
 var urOptions = {

@@ -58,6 +58,8 @@ def gene_explorer(request):
     if request.method == "GET":
         genes = request.GET['gene']
         genes = re.sub(r'\s', '', genes)
+        genes = re.sub(r'\"', '', genes)
+        genes = re.sub(r"\'", '', genes)
         level = int(request.GET['level'])
         exp_id = request.GET['exp']
         dist = int(request.GET['dist'])
@@ -143,6 +145,7 @@ def pathway_explorer(request):
     Find Pathways from your genes to specific levels of the RPGeNet graph
     '''
     gene = request.GET['gene'].upper()
+    gene = re.sub(r'[\"\']', '', gene)
     level = int(request.GET['path-to'])
     exp_id = request.GET['exp']
     response = dict()
@@ -160,15 +163,21 @@ def pathway_explorer(request):
         pass
     mygraphs = mygene.path_to_level(level) # list of GraphCytoscape objects
     experiment = Experiment(exp_id).check()
-    for target, graph in mygraphs.iteritems():
+    for graph in mygraphs:
         graph.get_expression(experiment)
         graph.change_expression_color(experiment)
-    if mygraphs:
-        response['plen'] = len(mygraphs[mygraphs.keys()[0]].interactions)
-        response['numpaths'] = len(mygraphs.keys())
+    if mygraphs and mygraphs[0].genes:
+        response['plen'] = len(mygraphs[0].interactions)
+        response['numpaths'] = len(mygraphs)
         # dictionary:
         # target: (json_graph, maxlvl)
-        response['pathways'] = { target: (graph.to_json(), graph.get_max_lvl()) for target, graph in mygraphs.iteritems() }
+        # Get last gene in each pathways     
+        target_genes = list()
+        for path in mygraphs:
+            sorted_g = sorted(path.order.keys(), key=lambda x: path.order[x])
+            target_genes.append(sorted_g[-1])
+
+        response['pathways'] = { target_genes[idx]: (mygraphs[idx].to_json(), mygraphs[idx].get_max_lvl()) for idx in range(0, len(mygraphs)) }
     return render(request, 'rpform/pexplorer.html', response)
 
 
@@ -180,7 +189,9 @@ def shortest_path(request):
     response['error'] = False
     response['appname'] = "Shortest Paths"
     gene1 = request.GET['gene1'].upper()
+    gene1 = re.sub(r'[\"\']', '', gene1)
     gene2 = request.GET['gene2'].upper()
+    gene2 = re.sub(r'[\"\']', '', gene2)
     exp_id = request.GET['exp']
     response['source'] = gene1
     response['target'] = gene2

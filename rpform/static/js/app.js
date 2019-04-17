@@ -8,7 +8,7 @@ app.js - Main script for the basic functionality of
 window.clickBehaviourOpts = {"properties":1, "addition":2, "deletion":3 }
 Object.freeze(window.clickBehaviourOpts);
 window.clickBehaviour = window.clickBehaviourOpts.properties; // Default behaviour
-window.ROOT = '/datasets/RPGeNet_v2_201806'; // '';
+window.ROOT = '/RPGeNet';
 window.drag = false;
 window.cy;
 window.layout;
@@ -460,16 +460,35 @@ function getCookie(name) {
  * Searches gene or genes on visualization
  */
  searchNode = function(cy, term) {
+    
+    $("#search-node-results").html("");
+
     if (term) {
+        $("#search-node-results-container").show();
         var terms = term.split(RegExp("[,\\s]")).map(function(x){ return x.toUpperCase() });
         console.log(terms);
+        // Add terms to list of search results
+        terms.forEach(element => {
+            var elementHTML = "<span class='search-term not-found'>" + element.toUpperCase() + "</span>";
+            $("#search-node-results").append(elementHTML);
+        });
+        
+
+        // Highlight on graph
         cy.nodes().filter(function(ele, eidx, eles) {
             if (terms.indexOf(ele.data("name").toUpperCase()) !== -1) {
+                var theSpan = $(".search-term:contains('" + ele.data("name").toUpperCase() + "')");
+                theSpan.removeClass('not-found');
+                theSpan.addClass('found');
+                theSpan.append(' <span class="glyphicon glyphicon-zoom-in"></span>')
                 return true;
+                
             } else {
                 return false;
             }
         }).select();
+    } else {
+        $("#search-node-results-container").hide();
     }
  }
 
@@ -546,10 +565,18 @@ $("#bsize").on("change", function() { changeBsize(window.cy, $(this).val()) });
 $("#get-connections").on('click', function() { showConnections(window.cy) });
 $("#remove-unconnected").on('click', function() { removeUnconnected(window.cy) });
 $("#search-node-btn").on("click", function(){ searchNode(window.cy, $("#search-node-term").val()) });
-$("#removesearch").on("click", function(){ window.cy.nodes().unselect() });
+$("#removesearch").on("click", function(){ window.cy.nodes().unselect(); $("#search-node-results").html(""); $("#search-node-results-container").hide();});
 $("#exp-indicator").on("change", function(){ changeExpression(window.cy, $(this).val())});
 $("#undo-indicator").on("click", function(){ unDo(); });
 $("#redo-indicator").on("click", function(){ reDo(); });
+$('body').on('click', 'span.search-term.found', function() {
+    // do something
+    var nodeName = $(this).text();
+    nodeName = nodeName.replace(/ /g, "");
+    var selectorTerm = '[name="' + nodeName + '"]';
+    cy.fit( cy.nodes(selectorTerm), 100); // 30 -> padding
+    
+});
 window.cy.on( 'click', 'node', function() { onNodeClick(window.cy, this) });
 window.cy.on( 'click', 'edge', function() { onEdgeClick(window.cy, this) });
 window.cy.on('mouseover', 'node', function() { onNodeMouseOver(window.cy, this) });

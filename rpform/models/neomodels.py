@@ -111,23 +111,18 @@ class NeoQueryFactory(object):
         Creates query for shortest path from node to a specific level
         '''
         cypher = """
-            MATCH (gene:GENE)-[p:HAS_PATH]->(path:PATHWAY)
-            WHERE gene.identifier = '%s'
-            AND   path.to_level = %s
-            WITH  gene, path
-            MATCH (gene1:GENE)-[p1:IS_IN_PATH]->(path)
-            MATCH (gene2:GENE)-[p2:IS_IN_PATH]->(path)
-            MATCH (gene1)-[inter:INTERACTS_WITH]->(gene2)
-            WHERE toInteger(p1.order) = toInteger(p2.order) - 1
-            RETURN
+           MATCH  p=allShortestPaths((s:GENE)-[r:INTERACTS_WITH|IS_IN_LEVEL*]->(l:LEVEL))
+           WHERE  s.identifier = '%s'
+           AND    l.identifier = %s
+           RETURN p
         """ % (nodeobj.identifier, level)
-        n_attributes = nodeobj.__dict__.keys()
-        e_attributes = Interaction().__dict__.keys()
-        cypher += self._return_by_attributes('gene1', n_attributes)
-        cypher += ", " + self._return_by_attributes('inter', e_attributes)
-        cypher += ", " + self._return_by_attributes('gene2', n_attributes)
-        cypher += ", " + "path.target AS target"
-        cypher += " ORDER BY path.target, p1.order"
+        #n_attributes = nodeobj.__dict__.keys()
+        #e_attributes = Interaction().__dict__.keys()
+        #cypher += self._return_by_attributes('gene1', n_attributes)
+        #cypher += ", " + self._return_by_attributes('inter', e_attributes)
+        #cypher += ", " + self._return_by_attributes('gene2', n_attributes)
+        #cypher += ", " + "path.target AS target"
+        #cypher += " ORDER BY path.target, p1.order"
         return NeoQuery(self.driver, cypher)
 
     def build_query_shortest_path(self, pobj, cobj):
@@ -384,37 +379,43 @@ class NeoDriver(object):
         '''
         Shortest paths between 'node' and any node in level 'level'
         '''
-        pathways = dict()
-        gene_order = 0
+        pathways = list()
         query = self.query_factory.build_query_path_to_level(nodeobj, level)
         results = query.get_results()
         if results:
-            for interaction in results:
-                if interaction['target'] not in pathways:
-                    pathways[interaction['target']] = GraphCyt()
-                    gene_order = 0
+            for path in results:
+                pathway = GraphCyt()
+                i = 0
+                order = 0
+                g1, g2 = None, None
+                for elem in walk(path['p']):
+                    if i % 2 != 0:
+                        rel = elem
+                    else:
+                        if not g1:
+                            # Gene 1
+                            g1 = Gene(elem['identifier'])
+                            g1.fill_attributes(elem, None)
 
-                if pathways[interaction['target']].return_gene(interaction['gene1_identifier']):
-                    gene1 = pathways[interaction['target']].return_gene(interaction['gene1_identifier'])
-                else:
-                    gene1 = Gene(interaction['gene1_identifier'])
-                    gene1.fill_attributes(interaction, 'gene1')
-                    pathways[interaction['target']].add_gene(gene1)
-                    pathways[interaction['target']].set_order(gene1, gene_order)
-                    gene_order += 1
-                if pathways[interaction['target']].return_gene(interaction['gene2_identifier']):
-                    gene2 = pathways[interaction['target']].return_gene(interaction['gene2_identifier'])
-                else:
-                    gene2 = Gene(interaction['gene2_identifier'])
-                    gene2.fill_attributes(interaction, 'gene2')
-                    pathways[interaction['target']].add_gene(gene2)
-                    pathways[interaction['target']].set_order(gene2, gene_order)
-                    gene_order += 1
-
-                # Adding interaction here
-                interaction_obj = Interaction(parent=gene1, child=gene2)
-                interaction_obj.fill_attributes(interaction, 'inter')
-                pathways[interaction['target']].add_interaction(interaction_obj)
+                        else:
+                            if elem['identifier'] == level:
+                                break
+                            g2 = Gene(elem['identifier'])
+                            g2.fill_attributes(elem, None)
+                            if g1 and g2:
+                                interaction_obj = Interaction(parent=g1, child=g2)
+                                interaction_obj.fill_attributes(rel, None)
+                                pathway.add_gene(g1)
+                                pathway.add_gene(g2)
+                                pathway.set_order(g1, order)
+                                order += 1
+                                pathway.set_order(g2, order)
+                                order += 1
+                                pathway.add_interaction(interaction_obj)
+                                g1 = g2
+                                g2 = None
+                    i += 1
+                pathways.append(pathway)
         return pathways
 
     def query_shortest_path(self, pobj, cobj):

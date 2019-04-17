@@ -163,15 +163,21 @@ def pathway_explorer(request):
         pass
     mygraphs = mygene.path_to_level(level) # list of GraphCytoscape objects
     experiment = Experiment(exp_id).check()
-    for target, graph in mygraphs.iteritems():
+    for graph in mygraphs:
         graph.get_expression(experiment)
         graph.change_expression_color(experiment)
-    if mygraphs:
-        response['plen'] = len(mygraphs[mygraphs.keys()[0]].interactions)
-        response['numpaths'] = len(mygraphs.keys())
+    if mygraphs and mygraphs[0].genes:
+        response['plen'] = len(mygraphs[0].interactions)
+        response['numpaths'] = len(mygraphs)
         # dictionary:
         # target: (json_graph, maxlvl)
-        response['pathways'] = { target: (graph.to_json(), graph.get_max_lvl()) for target, graph in mygraphs.iteritems() }
+        # Get last gene in each pathways     
+        target_genes = list()
+        for path in mygraphs:
+            sorted_g = sorted(path.order.keys(), key=lambda x: path.order[x])
+            target_genes.append(sorted_g[-1])
+
+        response['pathways'] = { target_genes[idx]: (mygraphs[idx].to_json(), mygraphs[idx].get_max_lvl()) for idx in range(0, len(mygraphs)) }
     return render(request, 'rpform/pexplorer.html', response)
 
 

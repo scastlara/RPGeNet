@@ -166,6 +166,7 @@
             	// [0] == the json graph
             	// [1] == maxlvl
             	var path = {{ path.0|safe }};
+				console.log(path);
             	delete(path.maxlvl); // We delete the maxlvl key to avoid problems with Cytoscape.js
             	var plen = path['nodes'].length;
                 $(document).ready(function(){

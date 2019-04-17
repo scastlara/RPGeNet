@@ -700,6 +700,35 @@ input[type=number]::-webkit-inner-spin-button {
   z-index: 1;
 }
 
+#search-node-results-container {
+	display: none;
+	position: fixed;
+	background-color: white;
+	text-align: left;
+	color: #777;
+	bottom: 0;
+	left: 200px;
+	padding: 10px;
+	height: 200px;
+	overflow-y: auto;
+}
+
+.search-term {
+	display: block;
+}
+
+.search-term.not-found {
+	color: #cb5362;
+}
+
+.search-term.found {
+	color: #3A9F88;
+}
+
+.search-term.found:hover {
+	opacity: 0.8;
+	cursor: pointer;
+}
 
 #search-node-term {
     height: 40px !important;

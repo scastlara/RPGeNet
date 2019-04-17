@@ -111,6 +111,7 @@ var cy = cytoscape({
     layout: { name: 'preset' },
     container: document.getElementById('cyt'),
     boxSelectionEnabled: true,  
+    wheelSensitivity: 0.3,
     ready: function() {}
 });
 var urOptions = {

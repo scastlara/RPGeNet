@@ -62,13 +62,6 @@ var stylesheet = cytoscape.stylesheet()
     .selector('.lvl3')
      .css({
         "border-color": "#0A945C",
-<<<<<<< HEAD
-        })
-    .selector('.lvl4')
-     .css({
-        "border-color": "#426A2B",
-=======
->>>>>>> master
         })
     .selector('.lvl5')
      .css({

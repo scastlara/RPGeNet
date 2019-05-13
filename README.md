@@ -1,4 +1,4 @@
-<img src="https://compgen.bio.ub.edu/datasets/RPGeNet_v2_201806/static/Images/logo.png"> 
+<img src="https://compgen.bio.ub.edu/RPGeNet/static/Images/logo.png"> 
 
 # RPGeNet v2
 

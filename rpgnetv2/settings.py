@@ -4,11 +4,11 @@ import logging
 
 ROOT_PATH = os.path.dirname(__file__)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-#          '/datasets/RPGeNet_v2_201806'
+#          '/RPGeNet'
 # os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #  + 
 # BASE_DIR=os.path.dirname(__file__)
-# BASE_DIR = '/www/compgen/compgen.bio.ub.edu.2018/datasets/RPGeNet_v2_201806'
+# BASE_DIR = '/www/compgen/compgen.bio.ub.edu.2018/RPGeNet'
 #            os.path.dirname(os.path.dirname(__file__))
 #  + 
 DEBUG = False
@@ -68,14 +68,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR + 'media')
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 # MEDIA_URL = '/media/'
-MEDIA_URL = 'https://compgen.bio.ub.edu/datasets/RPGeNet_v2_201806/media/'
+MEDIA_URL = 'https://compgen.bio.ub.edu/RPGeNet/media/'
 #           'https://compgen.bio.ub.edu/PlanNET/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT='/www/compgen/compgen.bio.ub.edu.2018/doc/datasets/RPGeNet_v2_201806/static/'
+STATIC_ROOT='/www/compgen/compgen.bio.ub.edu.2018/doc/RPGeNet/static/'
 #STATIC_ROOT= os.path.join(BASE_DIR, 'staticfiles')
 #
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -84,7 +84,7 @@ STATIC_ROOT='/www/compgen/compgen.bio.ub.edu.2018/doc/datasets/RPGeNet_v2_201806
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = 'https://compgen.bio.ub.edu/datasets/RPGeNet_v2_201806/static/'
+STATIC_URL = 'https://compgen.bio.ub.edu/RPGeNet/static/'
 #STATIC_URL = '/static/'
 # if THYSERVER == False:
 #     STATIC_URL = '/static/'

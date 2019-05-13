@@ -12,7 +12,7 @@ from django.contrib import admin
 
 admin.autodiscover()
 urlpatterns = [
-    url(r'^$', views.index_view, name='index_view'),
+    url(r'^RPGeNet$', views.index_view, name='index_view'),
     url(r'^RPGeNet/gexplorer$', views.gene_explorer, name='gene_explorer'), 
     url(r'^RPGeNet/pathways$', views.pathway_explorer, name='pathway_explorer'),
     url(r'^RPGeNet/shortest_path$', views.shortest_path, name='shortest_path'),

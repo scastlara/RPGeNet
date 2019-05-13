@@ -43,7 +43,7 @@
     <h1>About</h1>
     <hr>
     <p>Retinitis pigmentosa is a highly heterogenous disease with now over 200 known driver genes. With such high hetergeneity, RPGeNet, a web application tool, was created to help users find new potential driver genes of retinitis pigmentosa and help better visualize the complex interaction network of the retina. The interaction database is formed by the merger of self-curated <a target="_blank" href="https://thebiogrid.org/">BioGRID</a>, <a target="_blank" href="https://string-db.org/">STRING</a> and text-mining (<a href="https://compgen.bio.ub.edu/PPaxe/" target="_blank">PPaxe</a>) interaction data. The database is managed by <a target="_blank" href="https://neo4j.com/">neo4j</a> and the graph's visual display is created by <a target="_blank" href="http://js.cytoscape.org/">Cytoscape.js</a>.</p>
-    <p>Currently, RPGeNet counts with 275 driver genes, 18,707 total genes and 739,122 interactions. Further information is available on our <a href="{% url data %}">data</a> page and our <a target="_blank" href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0135307">published paper</a>.</p>
+    <p>Currently, RPGeNet counts with 275 driver genes, 19,416 total genes and 1,210,705 interactions. Further information is available on our <a href="{% url data %}">data</a> page and our <a target="_blank" href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0135307">published paper</a>.</p>
     <p>RPGeNet was created by <a target="_blank" href="https://compgen.bio.ub.edu/">Compgen Lab</a> and <a target="_blank" href="http://www.ub.edu/genetica/humana/marfany.htm">Marfany Laboratory</a> at the <a target="_blank" href="https://www.ub.edu/web/ub/en/index.html">University of Barcelona</a>.</p>
     <h3>Citing RPGeNet</h3>
     <hr>
@@ -53,6 +53,33 @@
         <br><i>PLoS ONE</i>, 2015, 10(8): e0135307
       </p>
     </blockquote>
+
+    <br>
+    <h3 id="update_notes">Link to Previous Versions</h3>
+    <hr>
+    <ul>
+      <li><a target="_blank" href="https://compgen.bio.ub.edu/RPGeNet.v1/">RPGeNet v1.0
+    </a></li>
+    </ul>
+    <br>
+    <h3 id="update_notes">Update Notes</h3>
+    <hr>
+    <h4> October 20th, 2018 - Version 2.0 </h4>
+    <ul>
+      <li>The number of driver genes has increased to 276 from the original 75 genes</li>
+      <li>RPGeNet has revised its network with updated interactions from
+        BioGRID and STRING but also new interactions text-mined using PPaxe.</li>
+      <li>RPGeNet now has 3,865 genes and 26,341 interactions in its skeleton;
+        with 18,707 genes and 739,122 interactions in the network overall.</li>
+      <li>A new graph-base database manager, neo4j, has been implemented.</li>
+    </ul>
+    <h4> April 29th - Version 2.0 </h4>
+    <ul>
+      <li>BioGRID data was updated to version 3.5.171</li>
+      <li>STRING data was updated to version 11.0</li>
+      <li>RPGeNet now has 4,086 genes and 34,077 interactions in its skeleton;
+        with 19,416 genes and 1,210,705 interactions in the network overall.</li>
+    </ul>
 
   </div>
 
@@ -91,7 +118,6 @@
       </div>
     </div>
   </div>
-
 
 <script src="{% static 'js/jquery-min.js' %}"></script>
 <script src="{% static 'js/bootstrap-min.js' %}"></script>

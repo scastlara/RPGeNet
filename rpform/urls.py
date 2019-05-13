@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^data_human$', views.data_human, name='data_human'),
     url(r'^data_mouse$', views.data_mouse, name='data_mouse'),
     url(r'^data_zebrafish$', views.data_zebrafish, name='data_zebrafish'),
-] + staticfiles_urlpatterns()
+] 
+#+ staticfiles_urlpatterns()

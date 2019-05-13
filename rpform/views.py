@@ -261,7 +261,6 @@ def tutorial(request):
     '''
     return render(request, 'rpform/tutorial.html')
 
-
 def data(request):
     '''
     Data view
@@ -272,6 +271,35 @@ def data(request):
     response['drivers'] = sorted(list(drivers.genes), key=lambda x: (x.gene_disease, x.identifier))
     return render(request, 'rpform/data.html', response)
 
+def data_human(request):
+    '''
+    Data Human view
+    '''
+    response = dict()
+    drivers = GraphCyt()
+    drivers.get_drivers()
+    response['drivers'] = sorted(list(drivers.genes), key=lambda x: (x.gene_disease, x.identifier))
+    return render(request, 'rpform/data_human.html', response)
+
+def data_mouse(request):
+    '''
+    Data Mouse view
+    '''
+    response = dict()
+    drivers = GraphCyt()
+    drivers.get_drivers()
+    response['drivers'] = sorted(list(drivers.genes), key=lambda x: (x.gene_disease, x.identifier))
+    return render(request, 'rpform/data_mouse.html', response)
+
+def data_zebrafish(request):
+    '''
+    Data Zebrafish view
+    '''
+    response = dict()
+    drivers = GraphCyt()
+    drivers.get_drivers()
+    response['drivers'] = sorted(list(drivers.genes), key=lambda x: (x.gene_disease, x.identifier))
+    return render(request, 'rpform/data_zebrafish.html', response)
 
 def about(request):
     '''

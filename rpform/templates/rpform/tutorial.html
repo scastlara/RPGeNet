@@ -43,10 +43,18 @@
     <h1>Tutorial</h1>
     <hr>
 
+    <div class="video-container">
+      <iframe class="video" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="801" height="450" type="text/html" src="https://www.youtube.com/embed/ESrPgfHYb_0?autoplay=0&fs=1&iv_load_policy=3&showinfo=1&rel=1&cc_load_policy=0&start=0&end=0&origin=https://youtubeembedcode.com"><div><small><a href="https://youtubeembedcode.com/de/">youtubeembedcode de</a></small></div><div><small><a href="http://directorioweblol.com">directorioweblol</a></small></div>
+      </iframe>
+    </div>
+    <br>
+    <br>
+
     <div class="toc">
       <h3>Table of Contents</h3>
 
       <ol>
+        <li><a href="#intro">Introduction</a></li>
         <li><a href="#network-explorer">Network Explorer</a></li>
           <ul>
             <li><a href="#network-explorer-form">Form Options</a></li>
@@ -79,15 +87,28 @@
       </ol>
     </div>
 
+  <h3 id="intro">Introduction</h3>
+  <hr>
+    <div class="center-text">
+      <a href="{% static 'Images/levels.png' %}" target="_blank">
+        <img class="tutorial-img-medium" src="{% static 'Images/levels.png' %}">
+      </a>
+    </div>
+    <p>
+    RPGeNet is a web application tool created to help users find new potential driver genes of retinitis pigmentosa and help better visualize the complex interaction network of the retina. The interaction database is formed by the merger of self-curated BioGRID, STRING and text-mining (PPaxe) interaction data. The driver genes are retrieved from the RetNet website. 
+    </p>
 
+    <p>
+    Once the data is gathered, a graph building program is implemented beginning with the construction of the skeleton – a graph made up of all the shortest interactions between the known driver genes of retinital dystrophies. The skeleton graph includes 4,071 nodes and 34,060 interactions. From the skeleton graph (level 0), the program builds higher levels that are an expansion in the network by adding children and parent nodes not already found in the network [see figure above]. Eventually the graph saturates at level 3 and only a few genes that do not connect with the interactions graph, but may interact with themselves or with genes that do not connect with the rest of the graph, are added in as part of the whole graph. The whole graph currently contains 19,233 genes and 1,210,779 interactions.
+    </p>
 
+    <p>
+    Researchers interested in finding candidate driver genes of retinal dystrophies would primarily be searching through the skeleton graph.
+    </p>
+    
 
   <h3 id="network-explorer">Network Explorer</h3>
   <hr>
-
-   <p>
-    The Network Explorer allows you to explore the different levels of the Retinitis Pigmentosa (RP) network by selecting one or several genes and retrieving all their interactions.
-   </p>
 
   <br>
   <h4 id="network-explorer-form">Form options</h4>

@@ -52,7 +52,7 @@ class Gene(Node):
         '''
         NEO.query_unalias(self)
 
-    def fill_attributes(self, genedict, prefix):
+    def fill_attributes(self, genedict, prefix=None):
         '''
         Fills the attributes of the object. Avoids querying db
         '''

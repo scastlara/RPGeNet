@@ -1326,3 +1326,13 @@ and (max-width: 1265px) {
 	width: 100%;
 	height: 100%;
 }
+.upset_column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+.upset_row::after {
+  content: "";
+  clear: both;
+  display: table;
+}

@@ -108,23 +108,26 @@ class NeoQueryFactory(object):
 
     def build_query_get_neighbours_dist(self, nodeobj, level, dist, exp_id):
         '''
-        Create query to retrieve neighbours by distance
+        Create query to retrieve neighbours by distance.
+
+        Returns three keys: (1) identifiers, (2) node_attributes, (3) relationship_attributes.
+        node_attributes contains list with following order: identifier, gene_diseases, inheritance_patterns and nvariants.
+        relationship_attributes contains list with following order: level, strength, biogrid, string, ppaxe, physical_interaction, genetic_interaction, unknown_interaction, biogrid_pubmedid, string_pubmedid, ppaxe_pubmedid, string_evidence, ppaxe_score
         '''
         n_attributes = nodeobj.__dict__.keys()
         e_attributes = Interaction().__dict__.keys()
         cypher = """
             MATCH  p=(node1:GENE)-[r:INTERACTS_WITH*1..%s]-(node2:GENE)
             WHERE  node1.identifier = '%s'
-            AND    ALL(rel IN rels(p) WHERE rel.level >= %s)
-            RETURN extract(nod IN nodes(p) | nod.identifier) AS identifiers,
-                extract(rel IN relationships(p) | toInt(rel.level)) AS level,
-                extract(rel IN relationships(p) | toInt(rel.gene_disease)) AS gene_diseases,
-                extract(rel IN relationships(p) | toInt(rel.inheritance_pattern)) AS inheritance_patterns
+            AND    ALL(rel IN rels(p) WHERE rel.level = %s)
+            RETURN extract(nod IN nodes(p) | [nod.identifier, toInt(nod.level), toInt(nod.gene_disease), toInt(nod.inheritance_pattern), toInt(nod.nvariants)]) AS node_attributes,
+                extract(rel IN relationships(p) | [toInt(rel.level), toInt(rel.strength), toInt(rel.biogrid), toInt(rel.string), toInt(rel.ppaxe), toInt(rel.physical_interaction), toInt(rel.genetic_interaction), toInt(rel.unknown_interaction), rel.biogrid_pubmedid, rel.string_pubmedid, rel.ppaxe_pubmedid, rel.string_evidence, rel.ppaxe_score]) AS relationship_attributes
         """ % (dist, nodeobj.identifier, level)
         #cypher += self._return_by_attributes('node1', n_attributes)
         #cypher += ", " + self._return_by_attributes('r', e_attributes)
         #cypher += ", " + self._return_by_attributes('node2', n_attributes)
         print(cypher)
+        
         return NeoQuery(self.driver, cypher)
 
     def build_query_path_to_level(self, nodeobj, level):
@@ -236,7 +239,7 @@ class NeoQueryFactory(object):
 
 class NeoQuery(object):
     '''
-    Class for Neo4j queries
+    Class for Neo4j queries 
     '''
     def __init__(self, driver, cypher):
         self.driver = driver
@@ -398,7 +401,49 @@ class NeoDriver(object):
                 raise Exception
         else:
             query = self.query_factory.build_query_get_neighbours_dist(nodeobj, level, dist, exp_id)
-            neighbour_graph.add_gene("CERKL")
+            neighbour_graph.add_gene(nodeobj)
+            results = query.get_results()
+            if results:
+                for row in results:
+                    node_attributes = row['node_attributes']
+                    relationship_attributes = row['relationship_attributes']
+                    identifiers_list = []
+                    for node_row in node_attributes:
+                        gene = Gene(node_row[0])
+                        gene_dict = {
+                            'level': node_row[1], 
+                            'gene_disease': node_row[2], 
+                            'inheritance_pattern': node_row[3], 
+                            'nvariants': node_row[4]
+                            }
+                        gene.fill_attributes(gene_dict)
+                        identifiers_list.append(gene)
+                        neighbour_graph.add_gene(gene)
+                    for idx in range(0,len(identifiers_list)):
+                        if (idx >= (len(identifiers_list)-1)):
+                            continue
+                        else:
+                            interactor1 = identifiers_list[idx]
+                            interactor2 = identifiers_list[idx+1]
+                            interaction_obj = Interaction(parent=interactor1, child=interactor2)
+                            int_attributes = relationship_attributes[idx]
+                            relationship_attribute_dict = {
+                                        'level': int_attributes[0],
+                                        'strength': int_attributes[1],
+                                        'biogrid': int_attributes[2],
+                                        'string': int_attributes[3],
+                                        'ppaxe': int_attributes[4],
+                                        'physical_interaction': int_attributes[5],
+                                        'genetic_interaction': int_attributes[6],
+                                        'unknown_interaction': int_attributes[7],
+                                        'biogrid_pubmedid': int_attributes[8],
+                                        'string_pubmedid': int_attributes[9],
+                                        'ppaxe_pubmedid': int_attributes[10],
+                                        'string_evidence': int_attributes[11],
+                                        'ppaxe_score': int_attributes[12]
+                                    }
+                            interaction_obj.fill_attributes(relationship_attribute_dict)
+                            neighbour_graph.add_interaction(interaction_obj)
             return neighbour_graph
 
     def query_path_to_level(self, nodeobj, level):

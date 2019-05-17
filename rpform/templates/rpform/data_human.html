@@ -134,13 +134,34 @@
 
     <h3 id="comparison">Comparison with previous version</h3>
     <hr>
-    <p>With an addition of 166 new driver genes now known, RPGeNet was in need of an update. The increase in the number of driver genes partially precipitated an early saturation in the number of levels from the skeleton. Our new network, however, does have less interactions and genes in comparison to the previous network. This is mainly due to the extensive filtering of STRING. The previous network included the predictions but the updated network only includes interactions with evidences.</p>
+    <p>With an addition of 166 new driver genes now known, RPGeNet was in need of an update. The increase in the number of driver genes partially precipitated an early saturation in the number of levels from the skeleton. Our new network, however, does have less non-redundant interactions and genes in comparison to the previous network. This is mainly due to the extensive filtering of STRING. The previous network included the predictions but the updated network only includes interactions with evidences.</p>
 
     <!--<img src="" alt="Comparitive Bar Graph"> -->
-    <a href="{% static 'Images/data/data_human/v1-x-v2_RPGeNet_wholegraph-nodes.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/v1-x-v2_RPGeNet_wholegraph-nodes.png' %}" alt="upset plot comparing the nodes in the previous version of RPGeNet with updated version"></a>
+    <h4>Comparison of Network Explorer Web Interface between versions 1 and 2</h4> 
+    <a href="{% static 'Images/data/data_human/Figure_neurod1_rpgenetv1.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/Figure_neurod1_rpgenetv1.png' %}" alt="NEUROD1 search in RPGeNet v.1"></a>
     <br>
-    <a href="{% static 'Images/data/data_human/v1-x-v2_RPGeNet_wholegraph-ints.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/v1-x-v2_RPGeNet_wholegraph-ints.png' %}" alt="upset plot comparing the interactions in the previous version of RPGeNet with updated version"></a>
+    <a href="{% static 'Images/data/data_human/Figure_neurod1_rpgenetv2.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/Figure_neurod1_rpgenetv2.png' %}" alt="NEUROD1 search in RPGeNet v.1"></a>
     <br>
+
+    <!--<h4>Upset graphs comparing number of nodes and interactions shared and unique, in the skeletons, between RPGeNet versions 1 and 2</h4> 
+    <div class="upset_row">
+      <div class="upset_column">
+        <a href="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr_skeleton-nodes.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr_skeleton-nodes.png' %}" alt="Upset Plot RPGeNet v1 vs v2 Skeleton Nodes"></a>
+      </div>
+      <div class="upset_column">
+        <a href="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr_skeleton-ints.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr_skeleton-ints.png' %}" alt="Upset Plot RPGeNet v1 vs v2 Skeleton Interactions"></a>
+      </div>
+    </div>-->
+
+    <h4>Upset graphs comparing number of nodes and interactions shared and unique, in the wholegraphs, between RPGeNet versions 1 and 2</h4> 
+    <div class="upset_row">
+      <div class="upset_column">
+        <a href="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr-nodes.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr-nodes.png' %}" alt="Upset Plot RPGeNet v1 vs v2 Whole Graph Nodes"></a>
+      </div>
+      <div class="upset_column">
+        <a href="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr-ints.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr-ints.png' %}" alt="Upset Plot RPGeNet v1 vs v2 Whole Graph Interactions"></a>
+      </div>
+    </div>
 
     <h3 id="expression">Expression analysis</h3>
     <hr>

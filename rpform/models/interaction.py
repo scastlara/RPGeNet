@@ -36,7 +36,7 @@ class Interaction(object):
         NEO.query_by_int(self)
         return self
 
-    def fill_attributes(self, interaction_dict, prefix):
+    def fill_attributes(self, interaction_dict, prefix=None):
         '''
         Fills the attributes of the interaction to avoid querying db
         '''

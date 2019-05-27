@@ -1,3 +1,5 @@
+[![Publication](https://img.shields.io/badge/Published-PLOS%20ONE-informational.svg)](https://doi.org/10.1371/journal.pone.0135307)
+
 <img src="https://compgen.bio.ub.edu/datasets/RPGeNet_v2_201806/static/Images/logo.png"> 
 
 # RPGeNet v2

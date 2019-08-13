@@ -1,5 +1,6 @@
 from py2neo import Graph, walk
 from exceptions import *
+import re
 
 class NeoQueryFactory(object):
     '''

@@ -108,8 +108,16 @@ def get_properties(request):
             interaction = request.GET['interaction']
             inta, intb, int_type = interaction.split('-')
             int_obj = Interaction(parent=Gene(inta), child=Gene(intb)).check()
-            int_obj.fix_string_evidences()
+            # int_obj.fix_string_evidences()
             template = 'rpform/int_properties.html'
+            # try:
+            int_obj.split_by_tilde()
+            # except Exception as RR:
+            #     print(RR)
+            #print("PPAXE\n%s" % int_obj.ppaxe_pubmedid)
+            #print("BGRID\n%s" % int_obj.biogrid_pubmedid)
+            #print("STRNG\n%s" % int_obj.string_pubmedid)
+            #print("SEVID\n%s" % int_obj.string_evidence)
             response['interaction'] = int_obj
         return render(request, template, response)
     else:

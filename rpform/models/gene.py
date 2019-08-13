@@ -6,7 +6,7 @@ class Gene(Node):
     '''
     Class for gene nodes on neo4j
     identifier: STRING
-    level: [ 0 | 1 | 2 | 3 | 4 | 5 ]
+    level: [ -1 | 0 | 1 | 2 | 3 | 4 | 5 ]
     nvariants: INT
     gene_disease: 
         0 (non-driver)

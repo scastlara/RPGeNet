@@ -16,7 +16,7 @@ class NeoQueryFactory(object):
         non_attributes = set([
             'label', 'parent',
             'child', 'expression',
-            'gos', 'int_type',
+            'gos', 'int_type', 'int_best',
             'aliases', 'color',
             'summary', 'summary_source'])
         return_clause = ", ".join(['%s.%s as %s_%s' % (elem_name, attr, elem_name, attr)
@@ -112,17 +112,37 @@ class NeoQueryFactory(object):
         Create query to retrieve neighbours by distance.
 
         Returns three keys: (1) identifiers, (2) node_attributes, (3) relationship_attributes.
-        node_attributes contains list with following order: identifier, gene_diseases, inheritance_patterns and nvariants.
-        relationship_attributes contains list with following order: level, strength, biogrid, string, ppaxe, physical_interaction, genetic_interaction, unknown_interaction, biogrid_pubmedid, string_pubmedid, ppaxe_pubmedid, string_evidence, ppaxe_score
+        node_attributes contains list with following order:
+            identifier.0, level.1, gene_disease.2, inheritance_pattern.3, nvariants.4.
+        relationship_attributes contains list with following order:
+            level.0, strength.1, biogrid.2, string.3, ppaxe.4, physical_interaction.5, genetic_interaction.6,
+            unknown_interaction.7, string_action.8, biogrid_evidences.9, string_evidences.10, ppaxe_evidences.11,
+            string_actions.12, ppaxe_score.13, string_score.14, string_scores.15
         '''
         n_attributes = nodeobj.__dict__.keys()
         e_attributes = Interaction().__dict__.keys()
         cypher = """
             MATCH  p=(node1:GENE)-[r:INTERACTS_WITH*1..%s]-(node2:GENE)
             WHERE  node1.identifier = '%s'
-            AND    ALL(rel IN rels(p) WHERE rel.level = %s)
-            RETURN extract(nod IN nodes(p) | [nod.identifier, toInt(nod.level), toInt(nod.gene_disease), toInt(nod.inheritance_pattern), toInt(nod.nvariants)]) AS node_attributes,
-                extract(rel IN relationships(p) | [toInt(rel.level), toInt(rel.strength), toInt(rel.biogrid), toInt(rel.string), toInt(rel.ppaxe), toInt(rel.physical_interaction), toInt(rel.genetic_interaction), toInt(rel.unknown_interaction), rel.biogrid_pubmedid, rel.string_pubmedid, rel.ppaxe_pubmedid, rel.string_evidence, rel.ppaxe_score]) AS relationship_attributes
+            AND    ALL(rel IN relationships(p)
+                   WHERE rel.level = %s)
+            RETURN extract(nod IN nodes(p) |
+                           [nod.identifier, toInteger(nod.level),
+                            toInteger(nod.gene_disease), toInteger(nod.inheritance_pattern),
+                            toInteger(nod.nvariants)]
+                           ) AS node_attributes,
+                   extract(rel IN relationships(p) |
+                           [toInteger(rel.level), toInteger(rel.strength),
+                            toInteger(rel.biogrid), toInteger(rel.string), toInteger(rel.ppaxe),
+                            toInteger(rel.physical_interaction), toInteger(rel.genetic_interaction),
+                            toInteger(rel.unknown_interaction), toInteger(rel.string_action),
+                            rel.biogrid_evidences, rel.string_evidences, rel.ppaxe_evidences,
+                            rel.string_actions, toInteger(rel.ppaxe_score),
+                            toInteger(rel.string_score), rel.string_scores]
+                           ) AS relationship_attributes,
+                   extract(rel IN relationships(p) |
+                           startNode(rel).identifier
+                           ) AS startnodes
         """ % (dist, nodeobj.identifier, level)
         #cypher += self._return_by_attributes('node1', n_attributes)
         #cypher += ", " + self._return_by_attributes('r', e_attributes)
@@ -402,12 +422,14 @@ class NeoDriver(object):
                 raise Exception
         else:
             query = self.query_factory.build_query_get_neighbours_dist(nodeobj, level, dist, exp_id)
+            #print(query)
             neighbour_graph.add_gene(nodeobj)
             results = query.get_results()
             if results:
                 for row in results:
                     node_attributes = row['node_attributes']
                     relationship_attributes = row['relationship_attributes']
+                    relationship_startnodes = row['startnodes']
                     identifiers_list = []
                     for node_row in node_attributes:
                         gene = Gene(node_row[0])
@@ -420,31 +442,46 @@ class NeoDriver(object):
                         gene.fill_attributes(gene_dict)
                         identifiers_list.append(gene)
                         neighbour_graph.add_gene(gene)
-                    for idx in range(0,len(identifiers_list)):
-                        if (idx >= (len(identifiers_list)-1)):
-                            continue
-                        else:
-                            interactor1 = identifiers_list[idx]
-                            interactor2 = identifiers_list[idx+1]
+                    # print(identifiers_list,len(identifiers_list))
+                    print(' : '.join(idx.identifier for idx in identifiers_list))
+                    idlistlen = len(identifiers_list) - 1
+                    if idlistlen < 0:
+                        continue
+                    for idx in range(0, idlistlen):
+                        ## if (idx >= (len(identifiers_list)-1)):
+                        ##    continue
+                        ## else:
+                        interactor1 = identifiers_list[idx]
+                        interactor2 = identifiers_list[idx+1]
+                        firstnode   = relationship_startnodes[idx]
+                        print(idx,interactor1.identifier,interactor2.identifier,firstnode)
+                        if interactor1.identifier == firstnode:
                             interaction_obj = Interaction(parent=interactor1, child=interactor2)
-                            int_attributes = relationship_attributes[idx]
-                            relationship_attribute_dict = {
-                                        'level': int_attributes[0],
-                                        'strength': int_attributes[1],
-                                        'biogrid': int_attributes[2],
-                                        'string': int_attributes[3],
-                                        'ppaxe': int_attributes[4],
-                                        'physical_interaction': int_attributes[5],
-                                        'genetic_interaction': int_attributes[6],
-                                        'unknown_interaction': int_attributes[7],
-                                        'biogrid_pubmedid': int_attributes[8],
-                                        'string_pubmedid': int_attributes[9],
-                                        'ppaxe_pubmedid': int_attributes[10],
-                                        'string_evidence': int_attributes[11],
-                                        'ppaxe_score': int_attributes[12]
-                                    }
-                            interaction_obj.fill_attributes(relationship_attribute_dict)
-                            neighbour_graph.add_interaction(interaction_obj)
+                        else:
+                            interaction_obj = Interaction(parent=interactor2, child=interactor1)
+                        int_attributes = relationship_attributes[idx]
+                        #if (interactor1.identifier in ['BRCA1', 'EIF3G']) or (interactor2.identifier in ['BRCA1', 'EIF3G']):
+                        #    print(idx,interactor1.identifier,interactor2.identifier,int_attributes[0])
+                        relationship_attribute_dict = {
+                                    'level': int_attributes[0],
+                                    'strength': int_attributes[1],
+                                    'biogrid': int_attributes[2],
+                                    'string': int_attributes[3],
+                                    'ppaxe': int_attributes[4],
+                                    'physical_interaction': int_attributes[5],
+                                    'genetic_interaction': int_attributes[6],
+                                    'unknown_interaction': int_attributes[7],
+                                    'string_action': int_attributes[8],
+                                    'biogrid_evidences': int_attributes[9],
+                                    'string_evidences': int_attributes[10],
+                                    'ppaxe_evidences': int_attributes[11],
+                                    'string_actions': int_attributes[12],
+                                    'ppaxe_score': int_attributes[13],
+                                    'string_score': int_attributes[14],
+                                    'string_scores': int_attributes[15]
+                                }
+                        interaction_obj.fill_attributes(relationship_attribute_dict)
+                        neighbour_graph.add_interaction(interaction_obj)
             return neighbour_graph
 
     def query_path_to_level(self, nodeobj, level):

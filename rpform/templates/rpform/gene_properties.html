@@ -2,7 +2,7 @@
 <html>
 
 <h2>{{ gene.identifier }} {% if gene.gene_disease > 0 %} <span class="driver-title">[driver]</span> {% endif %}</h2>
-<hr>
+<!-- hr / -->
 
 {% if gene.aliases %}
 	<div class="other-names">
@@ -13,8 +13,9 @@
 	</div>
 {% endif %}
 
+<br/>
 <h3>Summary</h3>
-<hr>
+<!-- hr / -->
 <div class="gene-summary">
 	<p>
 		{{ gene.summary }}
@@ -25,9 +26,9 @@
 {% endif %}
 
 
-<br>
+<br/>
 <h3>Gene Data</h3>
-<hr>
+<!-- hr / -->
 <table class="table table-bordered">
 	<tr>
 		<td><b>Type</b></td>
@@ -46,12 +47,14 @@
 		</td>
 	<tr>
 		<td><b>Level</b></td>
-		{% if gene.level == 0 %} 
-			<td>Skeleton</td>
+		{% if gene.level == -1 %} 
+			<td>Driver Gene</td>
+		{% elif gene.level == 0 %} 
+			<td>Gene in Skeleton</td>
 		{% elif gene.level == 5 %} 
-			<td>WholeGraph</td>
+			<td>Gene in WholeGraph</td>
 		{% else %} 
-			<td>{{ gene.level }}</td>
+			<td>Gene in Level {{ gene.level }}</td>
 		{% endif %} 
     </tr>
 	<tr>
@@ -61,9 +64,9 @@
 </table>
 
 
-<br>
+<br/>
 <h3>Expression Data</h3>
-<hr>
+<!-- hr / -->
 <table class="table table-bordered">
 	{% for exp, value in exp_data.items %}
 		<tr>
@@ -77,9 +80,9 @@
 	{% endfor %}
 </table>
 
-<br>
+<br/>
 <h3>Gene Ontology</h3>
-<hr>
+<!-- hr / -->
 <div class="table-go">
 	<table class="table table-bordered">
 		{% if not gene.gos %} None {% endif %}
@@ -93,9 +96,9 @@
 	</table>
 </div>
 
-<br>
+<br/>
 <h3>External links</h3>
-<hr>
+<!-- hr / -->
 <table class="table table-bordered">
 	<tr>
 		<td>

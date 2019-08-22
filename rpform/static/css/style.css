@@ -608,6 +608,7 @@ input[type=number]::-webkit-inner-spin-button {
 .card-overlay {
     display: none;
     height: 70%;
+    min-width: 500px;
     width: 45%;
     position: fixed;
     text-align: left;
@@ -626,7 +627,6 @@ input[type=number]::-webkit-inner-spin-button {
     box-shadow: 0px 0px 180px 120px rgba(0,0,0,0.75);
     color: #777777;
 }
-
 /* color: #777777 */
 
 .panel-form {
@@ -1346,4 +1346,122 @@ and (max-width: 1265px) {
 .verb {
     color: rgb(224, 82, 82);
     font-weight: bold !important;
+}
+
+/* Interaction card
+================================== */
+.card-int-nodeleft,
+.card-int-noderight {
+    padding: 10px 15px;
+    margin: 0px;
+    border: 2px solid #337AB7;
+    background-color: #FFFFFF;
+    color: #337AB7;
+    font-size: 25px;
+    border-radius: 8px;
+    vertical-align: middle;
+}
+.card-int-nodeleft {
+    margin-right: -15px;
+}
+.card-int-noderight {
+    margin-left: -10px;
+}
+/**/
+.card-int-none,
+.card-int-mixed,
+.card-int-physical,
+.card-int-genetic,
+.card-int-unknown {
+    font-size: 22px;
+    vertical-align: middle;
+}
+.card-int-none     { color: #FFFFFF; }
+.card-int-mixed    { color: #F5E5A5; }
+.card-int-physical { color: #FF8A8A; }
+.card-int-genetic  { color: #6885d0; }
+.card-int-unknown  { color: #5B5B5B; }
+/**/
+.negcard-int-none,
+.negcard-int-mixed,
+.negcard-int-physical,
+.negcard-int-genetic,
+.negcard-int-unknown {
+    padding: 5px 15px 5px 15px;
+    margin: 0px;
+    margin-left:  -15px;
+    margin-right: -12px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    font-size: 18px;
+    vertical-align: middle;
+}
+.negcard-int-none,     .negcol-int-none     { background-color: #FFFFFF; color: #000000; }
+.negcard-int-mixed,    .negcol-int-mixed    { background-color: #F5E5A5; color: #000000; }
+.negcard-int-physical, .negcol-int-physical { background-color: #FF8A8A; color: #FFFFFF; }
+.negcard-int-genetic,  .negcol-int-genetic  { background-color: #6885d0; color: #FFFFFF; }
+.negcard-int-unknown,  .negcol-int-unknown  { background-color: #5B5B5B; color: #FFFFFF; }
+.negcol-int-none,
+.negcol-int-mixed,
+.negcol-int-physical,
+.negcol-int-genetic,
+.negcol-int-unknown {
+    font-weight: bold;
+}
+
+@media screen and (min-width: 650px) and (max-width: 949px) {
+    .card-overlay {
+	width: 65%;
+	right: 17.5%;
+    }
+    #button-container {
+	right: 17.5%;
+    }
+    .card-int-nodeleft,
+    .card-int-noderight {
+	font-size: 20px;
+    }
+    .card-int-none,
+    .card-int-mixed,
+    .card-int-physical,
+    .card-int-genetic,
+    .card-int-unknown {
+	font-size: 17px;
+    }
+    .negcard-int-none,
+    .negcard-int-mixed,
+    .negcard-int-physical,
+    .negcard-int-genetic,
+    .negcard-int-unknown {
+        padding: 5px 12px 5px 12px;
+	font-size: 15px;
+    }
+}
+@media screen and (max-width: 649px) {
+    .card-overlay {
+	width: 85%;
+	right: 7.5%;
+    }
+    #button-container {
+	right: 7.5%;
+    }
+    .card-int-nodeleft,
+    .card-int-noderight {
+	font-size: 18px;
+    }
+    .card-int-none,
+    .card-int-mixed,
+    .card-int-physical,
+    .card-int-genetic,
+    .card-int-unknown {
+	font-size: 15px;
+    }
+    .negcard-int-none,
+    .negcard-int-mixed,
+    .negcard-int-physical,
+    .negcard-int-genetic,
+    .negcard-int-unknown {
+        padding: 5px 10px 5px 10px;
+	font-size: 12px;
+    }
 }

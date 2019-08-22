@@ -145,19 +145,19 @@
 			<fieldset>
 				<div class="switch-toggle switch-candy behaviour-div">
 					<form action="" id="behaviour-form">
-						<input id="radio-props" value="properties" name="behaviour" type="radio" checked>
-						<label class="behaviour-btn" for="radio-props" onclick="">
-							<span class="behaviour-btn-text">Show Properties</span>
-						</label>
-						<input id="radio-add" name="behaviour" type="radio" value="addition">
-						<label class="behaviour-btn" for="radio-add" onclick="">
-							<span class="behaviour-btn-text">Node Addition</span>
-						</label>
-						<input id="radio-delete" value="deletion" name="behaviour" type="radio">
-						<label class="behaviour-btn" for="radio-delete" onclick="">
-							<span class="behaviour-btn-text">Node Deletion</span>
-						</label>
-						<a></a>
+	 				  <input id="radio-props2" value="properties" name="behaviour" type="radio" checked>
+					  <label class="behaviour-btn" for="radio-props2" onclick="">
+					    <span class="behaviour-btn">Show</span> <span class="behaviour-btn">Properties</span>
+					  </label>
+					  <input id="radio-add2" name="behaviour" type="radio" value="addition">
+					  <label class="behaviour-btn" for="radio-add2" onclick="">
+					    <span class="behaviour-btn">Node</span> <span class="behaviour-btn">Addition</span>
+					  </label>
+					  <input id="radio-delete2" value="deletion" name="behaviour" type="radio">
+					  <label class="behaviour-btn" for="radio-delete2" onclick="">
+					    <span class="behaviour-btn">Node</span> <span class="behaviour-btn">Deletion</span>
+					  </label>
+					  <a></a>
 					</form>
 				</div>
 			</fieldset>
@@ -183,13 +183,13 @@
 		<!-- Change level -->
 		<div class="cyt-controls-block">
 			<div id="get-connections" class="btn btn-default"><img width="40px" src="{% static 'Images/connect-icon.png' %}"> Connect Genes</div>
-			<br><br>
+			<br /><br />
 			<div id="remove-unconnected" class="cyt-unconnected-btn btn btn-default"> Remove Unconnected</div>
 		</div>
 
 		<!-- Border size -->
 		<div class="cyt-controls-block">
-			<span class="cyt-controls-title">Border Size</span><br>
+			<span class="cyt-controls-title">Border Size</span><br />
 			<div class="row bsize-container-parent">
 				<div class="bsize-container col-sm-1"></div>
 				<div class="bsize-container col-sm-8">
@@ -198,14 +198,14 @@
 				<div class="bsize-container col-sm-2">
 					<output name="bsizeOutput" id="bsizeOutput">8</output>
 				</div>
-				<div class="bsize-container col-sm-1"></div>
+				<!-- div class="bsize-container col-sm-1"><br /></div -->
 			</div>
 		</div>
 
 
 		<!-- Disable width -->
-		<div class="cyt-controls-ndsz">
-			<span class="cyt-controls-title">Node Size</span><br>
+		<div class="cyt-controls-block"> {# <!-- class="cyt-controls-ndsz" --> #}
+			<span class="cyt-controls-title">Node Size</span><br />
 			<fieldset>
 				<div class="switch-toggle switch-candy node-size">
 					<form action="" id="node-size-form">
@@ -227,20 +227,20 @@
 		<!-- Additional Buttons -->
 		<div class="cyt-controls-block">
 			<span class="cyt-controls-title">Controls</span>
-			<br><br>
+			<br /><br />
 			<div class="gexplorer-row row">
 				<div class="gexplorer-col col-sm-3"> </div>
 				<div class="gexplorer-col col-sm-3">
 					<div id="fitscreen-btn" class="gexplorer-btn btn btn-default">
 						<span class="glyphicon glyphicon-fullscreen"></span>
-						<br><span class="gexplorer-btn-txt">Fit</span>
+						<br /><span class="gexplorer-btn-txt">Fit</span>
 					</div>
 				</div>
 				<div class="gexplorer-col col-sm-3">
 					<a href="#" id="save-image-link">
 						<div id="save-img" class="gexplorer-btn btn btn-default">
 							<span class="glyphicon glyphicon-picture"></span>
-							<br><span class="gexplorer-btn-txt">Image</span>
+							<br /><span class="gexplorer-btn-txt">Image</span>
 						</div>
 					</a>
 				</div>
@@ -251,13 +251,13 @@
 				<div class="gexplorer-col col-sm-3">
 					<div id="export-tbl" class="gexplorer-btn btn btn-default">
 						<span class="glyphicon glyphicon-download-alt"></span>
-						<br><span class="gexplorer-btn-txt">Export</span>
+						<br /><span class="gexplorer-btn-txt">Export</span>
 					</div>
 				</div>
 				<div class="gexplorer-col col-sm-3">
 					<div id="export-json" class="gexplorer-btn btn btn-default">
 						<span class="glyphicon glyphicon-floppy-disk"></span>
-						<br><span class="gexplorer-btn-txt">Save</span>
+						<br /><span class="gexplorer-btn-txt">Save</span>
 					</div>
 				</div>
 				<div class="gexplorer-col col-sm-3"> </div>
@@ -270,7 +270,7 @@
 						<!-- FILE UPLOAD -->
 						<label for="myfile" id="upload-json" class="gexplorer-btn btn btn-default ">
 							<span class="glyphicon glyphicon-cloud-upload"></span>
-							<br><span class="gexplorer-btn-txt">Upload</span>
+							<br /><span class="gexplorer-btn-txt">Upload</span>
 						</label>
 						<input style="display:none" type="file" onchange="this.form.submit()" name="myfile" id="myfile" class="upload" style="box-sizing:border-box;">
 						<input style="display:none" type="number" name="upload-level" id="upload-level" value="{{ level }}" min="0" max="5" step="1">
@@ -351,7 +351,7 @@
 					<li><img class="legend-img" src="{% static 'Images/lvl4.png' %}"> Level 4</li>
 					<li><img class="legend-img" src="{% static 'Images/lvl5.png' %}"> Level 5</li>
 				</ul>
-				<br><br>
+				<br /><br />
 			</div>
 			<div class="col-sm-7">
 				<ul>
@@ -380,18 +380,18 @@
 		<ul>
 			<li><img class="legend-img" src="{% static 'Images/edge-width.png' %}"> Interaction evidence</li>
 		</ul>
-		<br><br>
+		<br /><br />
 		</div>
 
 		<div class="col-sm-12">
 			<h4>Expression</h4>
 			<hr>
 			<img class="legend-img-large" src="{% static 'Images/expression-legend.png' %}">
-			<br><br><br>
+			<br /><br /><br />
 		</div>
 		<div class="col-sm-12 centered">
 			<a href="{% url tutorial %}" target="_blank">For more information, visit the tutorial.</a>
-			<br><br><br>
+			<br /><br /><br />
 		</div>
 	</div>
 

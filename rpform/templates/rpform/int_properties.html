@@ -1,134 +1,169 @@
 {% load staticfiles %}
 <html>
+  {# :django comment: how to set a default string if var empty: {{ item.somefield|default:"" }} #}
 
-<h2>Interaction 
-	{% for type in interaction.int_type %}
-		<span class="int-{{type}}">[{{type}}]</span> 
-	{% endfor %}
-</h2>
+<h2>Interaction</h2>
+<br />
+	{# % for type in interaction.int_type % #}
+	{#	<span class="int-{{type}}">[{{type|capfirst}}]</span>  #}
+	{# % endfor % #}
 
-<hr />
+<!-- hr / -->
 
-<table class="table table-bordered table-int">
-	<tr>
-		<td>{{ interaction.parent.identifier }}</td>
-		<td><img class="arrow" src="{% static 'Images/arrow.png' %}"></td>
-		<td>{{ interaction.child.identifier }}</td>
-	</tr>
-</table>
+<!-- table class="table" --> <!-- class="table table-bordered table-int" -->
+	<!-- tr style="font-size: 30px; font-weight: bold; padding: 10px; vertical-align: middle;" -->
+		<!-- td style="font-size:large;">{{ interaction.parent.identifier }}</td -->
+		<div style="width: 100%; text-align: center; font-size: 30px; font-weight: bold; padding: 10px;">
+		  <span class="card-int-nodeleft">{{ interaction.parent.identifier }}</span>
+		  <span class="glyphicon glyphicon-minus card-int-{{interaction.int_best}}"></span>
+		  <span class="negcard-int-{{interaction.int_best}}">{% if interaction.level == 0 %}Skeleton{% elif interaction.level == 5 %}WholeGraph{% else %}Level&nbsp;{{ interaction.level }}{% endif %}</span>
+		  <span class="glyphicon glyphicon-arrow-right card-int-{{interaction.int_best}}"></span>
+		  <span class="card-int-noderight">{{ interaction.child.identifier }}</span>
+		  <!-- img class="arrow" src="{% static 'Images/arrow.png' %}" -->
+		</div>
+		<!-- td style="font-size:large;">{{ interaction.child.identifier }}</td -->
+	<!-- /tr -->
+<!-- /table -->
 
-<br/>
+<br />
 
-<h3>Summary</h3>
-<hr/>
+<h2>Sources</h2>
 
-<table class="table table-bordered">
-	<tr>
-		<td><b>Level</b></td>
-		{% if interaction.level == 0 %} 
-			<td>Skeleton</td>
-		{% elif interaction.level == 5 %} 
-			<td>WholeGraph</td>
-		{% else %} 
-			<td>{{ interaction.level }}</td>
-		{% endif %} 
-	</tr>
-</table>
-
-<br/>
-
-<h3>Sources</h3>
-<hr/>
-
-<h4>Evidences Count</h4>
+<!-- hr / -->
 
   <table class="table table-bordered">
-    <tr>
-      <td><b>Genetic interaction evidences</b></td>
-      <td>{{ interaction.genetic_interaction  }}</td>
+     <th colspan="2">
+      <h4 style="float: left;">
+	Evidences Count
+      </h4>
     </tr>
     <tr>
-      <td><b>Physical interaction evidences</b></td>
-      <td>{{ interaction.physical_interaction }}</td>
+      <td><span class="glyphicon glyphicon-circle-arrow-right int-genetic"></span>&nbsp;
+	  <b>Genetic interaction evidences</b></td>
+      <td align="center" class="negcol-int-{{interaction.int_best}}">{{ interaction.genetic_interaction  }}</td>
     </tr>
     <tr>
-      <td><b>PPaxe interaction evidences</b></td>
-      <td>{{ interaction.unknown_interaction  }}</td>
+      <td><span class="glyphicon glyphicon-circle-arrow-right int-physical"></span>&nbsp;
+	  <b>Physical interaction evidences</b></td>
+      <td align="center" class="negcol-int-{{interaction.int_best}}">{{ interaction.physical_interaction }}</td>
+    </tr>
+    <tr>
+      <td><span class="glyphicon glyphicon-circle-arrow-right int-unknown"></span>&nbsp;
+	  <b>PPaxe interaction evidences</b></td>
+      <td align="center" class="negcol-int-{{interaction.int_best}}">{{ interaction.unknown_interaction  }}</td>
+    </tr>
+    <tr>
+      <td colspan="2" align="right">Most abundant interaction evidences: <i>{% if interaction.int_best == "unknown" %}Literature Mining{% else %}{{interaction.int_best|capfirst}}{% endif %}</i></td>
     </tr>
   </table>
 
   {% if interaction.biogrid %}
   <br/>
-  {# if interaction.biogrid_pubmedid and interaction.biogrid_pubmedid != "NA" #}
-  <table class="table table-bordered" width="100%">
+  {# if interaction.biogrid_evidences and interaction.biogrid_evidences != "NA" #}
+  <table class="table table-bordered" width="100%" style="font-size:small;">
     <tr>
-      <h4>
+     <th colspan="3">
+      <h4 style="float: left;">
 	<a href="https://thebiogrid.org/" target="_blank"> 
-          <img src="{% static 'Images/biogrid-logo.png' %}" class="source-logo"> BioGrid
+          <img src="{% static 'Images/biogrid-logo.png' %}" class="source-logo"> BioGRID
 	</a> <!-- emph>N={{ interaction.biogrid }}</emph -->
       </h4>
+      <div style="float: right; font-size: small;"><br />
+	<a href="https://thebiogrid.org/search.php?search={{ interaction.parent.identifier }}&organism=9606"  target="_blank">{{ interaction.parent.identifier }}</a>
+	<span class="glyphicon glyphicon-arrow-right"></span>
+ 	<a href="https://thebiogrid.org/search.php?search={{ interaction.child.identifier }}&organism=9606"  target="_blank">{{ interaction.child.identifier }}</a>
+      </div>
       <!-- th colspan="2">PubMed References</th -->
+     </th>
+    </tr>
+    <tr>
+      <th align="center">PubMed ID</th>
+      <th align="center">Type</th>
+      <th width="60%">Description <a href="https://wiki.thebiogrid.org/doku.php/experimental_systems" title="BioGrid Evidence Type Description" target="_blank"><span class="glyphicon glyphicon-share"></span></a></th>
+    </tr>
+    {% for bpmid in interaction.biogrid_evidences %}
+      {% if bpmid != "NA" %}
+      <tr>
+        <td align="center"> {{ bpmid.0|safe }} </td>
+        <td align="center">
+	  <span class="glyphicon glyphicon-circle-arrow-right card-int-{% if bpmid.3 == 'P' %}physical{% elif bpmid.3 == 'G' %}genetic{% else %}unknown{% endif %}"></span>&nbsp;
+	  {% if bpmid.3 == 'P' %}Physical{% elif bpmid.3 == 'G' %}Genetic{% else %}Unknown{% endif %}
+	</td>
+        <td> {{ bpmid.2 }} </td>
       </tr>
-	<tr style="font-size:small;">
-	  <th>PubMed ID</th> <th>Description <a href="https://wiki.thebiogrid.org/doku.php/experimental_systems" title="BioGrid Evidence Type Description" target="_blank"><span class="glyphicon glyphicon-share"></span></a></th>
-	</tr>
-      {% for bpmid in interaction.biogrid_pubmedid %}
-        {% if bpmid != "NA" %}
-        <tr>
-	  <td>
-	    <a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ bpmid.0 }}" target="_blank">{{ bpmid.0 }}</a>
-	  </td>
-	  <td>
-	    {{ bpmid.1 }}</a>
-	  </td>
-	</tr>
-	{% endif %}
-      {% endfor %}
-    </table>
+      {% endif %}
+    {% endfor %}
+  </table>
   {% endif %}
 
   {% if interaction.string %}
   <br/>
-  <table class="table table-bordered" width="100%">
+  <table class="table table-bordered" width="100%" style="font-size:small;">
     <tr>
-      <h4>
+     <th colspan="2">
+      <h4 style="float: left;">
     	<a href="https://string-db.org/" target="_blank">
     	  <img src="{% static 'Images/string-logo.png' %}" class="source-logo"> STRING
     	</a> <!-- emph>N={{ interaction.string }}</emph -->
       </h4>
-      <!-- th colspan="2">STRING Evidences</th -->
+      <div style="float: right; font-size: small;"><br />
+	<a href="https://string-db.org/cgi/network.pl?identifiers={{ interaction.parent.identifier }}\%0d{{ interaction.child.identifier }}&species=9606"  target="_blank">
+	  {{ interaction.parent.identifier }} <span class="glyphicon glyphicon-arrow-right"></span> {{ interaction.child.identifier }}
+	</a>
+      </div>
+     </th>
+     <!-- th colspan="2">STRING Evidences</th -->
     </tr>
-    {% if interaction.string_evidence and interaction.string_evidence != "NA" %}
-	<tr style="font-size:small;">
-	  <th>DB Code</th> <th>Description <a href="https://string-db.org/help/getting_started/#evidence" title="STRING Evidence Type Description" target="_blank"><span class="glyphicon glyphicon-share"></span></a></th>
-	</tr>
-        {% for ev in interaction.string_evidence %}
-	  {% if ev != "NA" %}
-	  <tr>
-	    <td> {{ ev.0 }} </td>
-	    <td> {{ ev.1 }} </td>
+    {# STRING SCORES TABLE #}
+    {% if interaction.string_scores and interaction.string_scores != "NA" %}
+    <tr>
+      <th colspan="2"><h4 style="float: right; margin: 0px; padding: 5px 0px 0px 5px;">Scores Summary</h4></th>
+    </tr>
+    <tr>
+      <th align="center">Score</th>
+      <th width="80%">Description <a href="https://string-db.org/help/getting_started/#evidence" title="STRING Evidence Type Description" target="_blank"><span class="glyphicon glyphicon-share"></span></a></th>
+    </tr>
+    <tr><td align="center"> {{ interaction.string_scores.0 }}  </td><td> <b>Combined</b> </td></tr>
+    <tr><td align="center"> {{ interaction.string_scores.1 }}  </td><td> Experimental    </td></tr>
+    <tr><td align="center"> {{ interaction.string_scores.2 }}  </td><td> Database        </td></tr>
+    <tr><td align="center"> {{ interaction.string_scores.3 }}  </td><td> Text Mining     </td></tr>
+    <tr><td align="center"> {{ interaction.string_scores.4 }}  </td><td> Co-Expression   </td></tr>
+    <tr><td align="center"> {{ interaction.string_scores.5 }}  </td><td> Neighborhood    </td></tr>
+    <tr><td align="center"> {{ interaction.string_scores.6 }}  </td><td> Fusion          </td></tr>
+    <tr><td align="center"> {{ interaction.string_scores.7 }}  </td><td> Co-Occurence    </td></tr>
+    {% endif %}
+    {# STRING ACTIONS TABLE #}
+    {% if interaction.string_actions and interaction.string_actions != "NA" %}
+    <tr>
+      <th colspan="2"><h4 style="float: right; margin: 0px; padding: 5px 0px 0px 5px;">Actions</h4></th>
+    </tr>
+    <tr>
+      <th align="center">Score</th>
+      <th width="80%">Description</th>
+    </tr>
+        {% for thyaction in interaction.string_actions %}
+	  {% if thyaction != "NA" %}
+          <tr>
+            <td align="center"> {{ thyaction.1 }} </td>
+            <td> {% if thyaction.2 == "ptmod" %}Post-Translational modification (ptmod){% else %}{{ thyaction.2|capfirst }}{% endif %} </td>
 	  </tr>
 	  {% endif %}
 	{% endfor %}
-      <!-- /table -->
     {% endif %}
-    {% if interaction.string_pubmedid and interaction.string_pubmedid != "NA" %}
-      <!-- table class="table table-bordered table-right" with="100%" -->
-	<tr>
-	  <th colspan="2">PubMed References
-	    <a href="https://string-db.org/help/getting_started/#evidence" target="_blank"></a></th>
-	</tr>
-	<tr style="font-size:small;">
-	  <th>PubMed ID</th> <th>Source Description</th>
-	</tr>
-	{% for spmid in interaction.string_pubmedid %}
+    {# STRING RAW EVIDENCES TABLE #}
+    {% if interaction.string_evidences and interaction.string_evidences != "NA" %}
+    <tr>
+      <th colspan="2"><h4 style="float: right; margin: 0px; padding: 5px 0px 0px 5px;">Raw Evidences</h4></th>
+    </tr>
+    <tr>
+      <th align="center">Class</th>
+      <th width="80%">Supported by</th>
+    </tr>
+	{% for spmid in interaction.string_evidences %}
 	  {% if spmid != "NA" %}
 	  <tr>
-	    <td>
-	      <a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ spmid.0 }}" target="_blank">{{ spmid.0 }}</a>
-	      {# :django comment: how to set a default string if var empty: {{ item.somefield|default:"" }} #}
-	    </td>
-	    <td> {{ spmid.1 }} </td>
+	    <td align="center"> <tt>{{ spmid.2 }}</tt> </td>
+	    <td> {{ spmid.0|safe }} </td>
 	  </tr>
 	  {% endif %}
 	{% endfor %}
@@ -138,7 +173,7 @@
       
   {% if interaction.ppaxe %}
   <br/>
-  <table class="table table-bordered" width="100%">
+  <table class="table table-bordered" width="100%" style="font-size:small;">
     <tr>
       <th colspan="3">
   	<h4>
@@ -148,15 +183,17 @@
   	</h4>
       </th>
     </tr>
-    <tr style="font-size:small;">
-      <th>PubMed ID</th> <th>PPaxe Score</th> <th>Source sentence</th>
+    <tr>
+      <th align="center">PubMed ID</th>
+      <th align="center">Score</th>
+      <th>Source sentence</th>
     </tr>
-    {% for pmid in interaction.ppaxe_pubmedid %}
+    {% for pmid in interaction.ppaxe_evidences %}
       {% if pmid != "NA" %}
       <tr>
-	<td><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ pmid.0 }}" target="_blank">{{ pmid.0 }}</a></td>
-	<td>{{ pmid.1 }}</td>
-	<td width="60%">{{ pmid.2|safe }}</td>
+	<td align="center">{{ pmid.0|safe }}</td>
+	<td align="center">{{ pmid.1 }}</td>
+	<td width="70%">{{ pmid.2|safe }}</td>
       </tr>
       {% endif %}
     {% endfor %}

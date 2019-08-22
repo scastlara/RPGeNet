@@ -111,6 +111,7 @@ def get_properties(request):
             # int_obj.fix_string_evidences()
             template = 'rpform/int_properties.html'
             # try:
+            int_obj.check_string_scores()
             int_obj.split_by_tilde()
             # except Exception as RR:
             #     print(RR)

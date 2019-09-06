@@ -8,10 +8,10 @@ Complete rewrite of the [Retinitis Pigmentosa Gene Interaction Network (RPGeNet)
 
 ## Citation
 
-- For the new [RPGeNet version 2.0](https://compgen.bio.ub.edu/RPGeNet):
+- For the new [RPGeNet version 2.0](https://compgen.bio.ub.edu/RPGeNet):<br>
 Submitted, under review...
 
-- For the former [RPGeNet version 1.0](https://compgen.bio.ub.edu/RPGeNet.v1/):
+- For the former [RPGeNet version 1.0](https://compgen.bio.ub.edu/RPGeNet.v1/):<br>
 [Distilling a Visual Network of Retinitis Pigmentosa Gene-Protein Interactions to Uncover New Disease Candidates.](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0135307)<br>
 Daniel Boloc, Sergio Castillo-Lara, Gemma Marfany, Roser Gonzàlez-Duarte, Josep F. Abril<br>
 PLoS ONE, 2015, 10(8): e0135307.

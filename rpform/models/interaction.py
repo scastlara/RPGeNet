@@ -125,13 +125,19 @@ class Interaction(object):
         '''
         thyurls = {
             'PMID':       '<a href="https://www.ncbi.nlm.nih.gov/pubmed/%s" title="PubMed ID" target="_blank">%s</a>',
-            'RCTM':       '<a href="https://reactome.org/" title="REACTOME ID" alt="%s" target="_blank">%s</a>',
-            'PROTEOMEHD': '<a href="https://www.proteomehd.net/" title="ProteomeHD ID" alt="%s" target="_blank">ProtHD%s</a>',
             'GO':         '<a href="http://amigo.geneontology.org/amigo/medial_search?q=GO%%3A%s&searchtype=all" title="Gene Ontology ID" target="_blank">GO:%s</a>',
             'PDB':        '<a href="https://www.rcsb.org/structure/%s" title="PDB ID" target="_blank">%s</a>',
             'INTACT':     '<a href="https://www.ebi.ac.uk/intact/interaction/%s" title="INTACT ID" target="_blank">%s</a>',
-            'IMEX':       '<a href="https://www.ebi.ac.uk/intact/cv/%s" title="IMEX ID" target="_blank">%s</a>',
+            #'IMEX':       '<a href="https://www.ebi.ac.uk/intact/cv/%s" title="IMEX ID" target="_blank">%s</a>',
+            'IMEX':      '<a href="https://www.ebi.ac.uk/intact/imex/main.xhtml?query=%s#" title="IMEX ID" target="_blank">%s</a>',
             'KEGG':       '<a href="https://www.kegg.jp/kegg-bin/show_pathway?%s" title="KEGG ID" target="_blank">%s</a>',
+            #
+            # those below do not have a proper search URL to build a query link
+            'RCTM':       '<a href="https://reactome.org/" title="REACTOME ID" alt="%s" target="_blank">%s</a>',
+            'PROTEOMEHD': '<a href="https://www.proteomehd.net/" title="ProteomeHD ID" alt="%s" target="_blank">ProtHD%s</a>',
+            'BCRT':       '<a href="https://cgap.nci.nih.gov/Pathways/BioCarta_Pathways" title="BioCarta ID" alt="%s" target="_blank">%s</a>',
+            'DIP':        '<a href="https://dip.doe-mbi.ucla.edu/dip/Main.cgi" title="Database of Interacting Proteins ID" alt="%s" target="_blank">%s</a>',
+            'EFO':        '<a href="https://www.ebi.ac.uk/efo/" title="Experimental Factor Ontology ID" alt="%s" target="_blank">EFO:%s</a>',
         }
         evidsarg = list()
         if type(evids) in (list, ):
@@ -140,6 +146,11 @@ class Interaction(object):
             evidsarg.append(evids)
         aryofevs = list()
         for thyevid in evidsarg:
+            if re.search(r'^DIP-', thyevid):
+                thyevid = ("DIP:%s" % thyevid) # a patch for some DIP IDs
+            if re.search(r'^efo:', thyevid):
+                thyevid = re.sub(r'^efo:', '', thyevid)
+                thyevid = re.sub(r'\'', '', thyevid) # a patch for some EFO IDs
             refchunks = thyevid.split(':')
             # print("E: %s  I: %s  T: %s" % \
             #      (thyevid, refchunks[0], (refchunks[1] if len(refchunks) > 1 else "NA")))

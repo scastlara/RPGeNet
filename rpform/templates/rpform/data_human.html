@@ -88,27 +88,26 @@
         {% endfor %}
       </select>
 
-    <!-- RODRIGOOOO! -->
+    {# -- RODRIGOOOO! -- #}
     <h3 id="sources">Sources</h3>
     <hr>
-    <p>RPGeNet is a curated network built from the interaction databases: BioGRID and STRING, as well as, the protein interaction text-mining tool, PPaxe.</p>
+    <p><tt>RPGeNet</tt> is a curated network built from interactions gathered from two interaction databases, <a target="_blank" href="https://thebiogrid.org/"><tt>BioGRID</tt></a> and <a target="_blank" href="https://string-db.org/"><tt>STRING</tt></a>, as well as, from the protein interaction text-mining tool, <a href="https://compgen.bio.ub.edu/PPaxe/" target="_blank"><tt>PPaxe</tt></a>.</p>
 
-    <p>BioGRID is a genetic and protein interaction database that contains experimentally verified interactions for a plethora of species. STRING is only a protein interaction database that contains both verified interactions and non-verifed predictions. The databases were filterd by species to ensure only human interactions were included in the network. STRING, containing many non-experimentally verified predictions, had all interactions with no evidence filtered out.</p>
+    <p><tt>BioGRID</tt> is a genetic and protein interaction database that contains experimentally verified interactions for a plethora of species. <tt>STRING</tt> is only a protein interaction database that contains both verified interactions and non-verifed predictions. The databases were filterd by species to ensure only human interactions were included in the network (two species hybrid interactions were also discarded). <tt>STRING</tt>, containing many non-experimentally verified predictions, had all interactions with no evidence filtered out.</p>
 
     <a href="{% static 'Images/data/data_human/sfigure1-string_evidence_plot.png' %}" target="_blank"><img class="data-img string_graph" src="{% static 'Images/data/data_human/sfigure1-string_evidence_plot.png' %}" alt="STRING Evidence Distribution"></a>
 
-    <p>STRINGdb offers a large range of sources of evidences for experimentally validated and predicted protein-to-protein interactions. RPGeNet only includes experimentally validated and no predicted interactions. The graph above shows the proportions of each source found of the experimentally validated interactions used in RPGeNet.</p>
+    <p><tt>STRING</tt> database offers a large range of sources of evidences for experimentally validated and predicted protein-to-protein interactions. <tt>RPGeNet</tt> only includes experimentally validated and no predicted interactions. The graph above shows the proportions of each source found of the experimentally validated interactions used in <tt>RPGeNet</tt>.</p>
 
     <a href="{% static 'Images/data/data_human/ppaxe_filter_cutoff_plots.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/ppaxe_filter_cutoff_plots.png' %}" alt="PPaxe Score Distribution"></a>
 
-    <p>The graph shows the distribution of the PPaxe score given to the interactions detected, the number of PPaxe interactions and the average score depending on the cutoff score chosen. In an attempt to optimize the number interactions while reducing false positive interactions and increasing false-negatives, the cutoff score chosen was 0.65.</p>
+    <p>The previous figure shows the distribution of the <tt>PPaxe</tt> scores given to the interactions detected, the number of <tt>PPaxe</tt> interactions and the average score depending on the cutoff score chosen. In an attempt to optimize the number interactions while reducing false positive interactions and increasing false-negatives, the cutoff score chosen was 0.65.</p>
 
     <h3 id="network">Network</h3>
     <hr>
-    <p>To build the complete network, it was first needed to create the skeleton: a graph network that connects all the driver genes through their shortest paths between them. There are levels above the skeleton that are an extension of the graph. The first level is an extension of the skeleton with the addition of parents and children genes that connect to the skeleton but are not themselves within the skeleton. The next level includes parents and children of the genes found within the first level that are not already in the skeleton and level one. The same pattern continues until there is a saturation (no more higher levels) except for the wholegraph that includes genes that do not connect with the network.</p>
+    <p>To build the complete core network, it was first needed to create the skeleton: a graph network that connects all the driver genes through their shortest paths between them. There are further subgraph levels above the skeleton (level 0 subgraph) that are an extension of that initial graph. The first level is an extension of the skeleton with the addition of parents and children genes that connect to the skeleton but are not themselves within the skeleton. The next level includes parents and children of the genes found within the first level that are not already in the skeleton and level one. The same pattern continues until there is a saturation (no more higher levels can be derived as there are no parent/child edges left to expand the last level), except for the wholegraph defining the complete core network that includes genes that still do not connect with the last network level.</p>
 
     <a href="{% static 'Images/data/data_human/RPgenes-x-alldbs_graph_allpaths.dot.geneconnections.circos2018.s.png' %}" target="_blank"><img class="data-img circos_graph" src="{% static 'Images/data/data_human/RPgenes-x-alldbs_graph_allpaths.dot.geneconnections.circos2018.s.png' %}" alt="Circos Graph"></a>
-
     <!-- Level        Node    Interactions -->
     <!-- Wholegraph   19416   1210705      -->
     <!-- Skeleton     4071    34060        -->
@@ -116,16 +115,107 @@
     <!-- Two          19392   1210045      -->
     <!-- Three        19416   1210705      -->
 
-    <h3 id="topology">Graph Topology</h3>
-    <hr>
+    <p>The contribution of evidences from each source to <tt>RPGeNet</tt> build 2.0.2 is described on the following table:</p>
+    
     <div class="table-responsive">
       <table class="table table-bordered table-data data-genename">
-      <tr class="table-data-header"><th>Graph</th><th>Total Nodes</th><th>Total Edges</th><th>Avg Degree</th><th>Avg Between Centrality</th><th>Avg Diameter</th><th>Avg Clustering Coefficient</th><th>Avg Path Length</th>
-      <tr><th class="th-gene">Skeleton</th><td>4071</td><td>34060</td><td>8.344</td><td>10730.09</td><td>8</td><td>0.071</td><td>3.660</td>
-      <tr><th class="th-gene">Level 1</th><td>18775</td><td>918419</td><td>48.894</td><td>33358.00</td><td>6</td><td>0.257</td><td>2.881</td>
-      <tr><th class="th-gene">Level 2</th><td>19392</td><td>1210045</td><td>62.370</td><td>34607.50</td><td>6</td><td>0.249</td><td>2.893</td>
-      <tr><th class="th-gene">Level 3</th><td>19402</td><td>1210690</td><td>62.371</td><td>34650.50</td><td>8</td><td>0.249</td><td>2.894</td>
-      <tr><th class="th-gene">Whole Graph</th><td>19416</td><td>1210705</td><td>62.371</td><td>34650.50</td><td>8</td><td>0.249</td><td>2.894</td>
+      <tr class="table-data-header" style="font-size: larger !important; font-weight: bold;">
+          <th width="200px" class="th-lgC"> SUBGRAPH LEVEL </th>
+	                                                      <th>   Skeleton </th><th>    Level1 </th><th>     Level2 </th><th>     Level3 </th><th> WholeGraph </th></tr>
+      <tr><th class="th-dkL">NODES SUMMARY               </th><td colspan="5"></td></tr>    		     		          		       			    	
+      <tr><th class="th-lgL">Total UNIQUE NODES          </th><td>      4 018 </td><td>    17 851 </td><td>     18 512 </td><td>     18 527 </td><td>     18 542 </td></tr>
+      <tr><th class="th-lgR">             Adjacent Nodes </th><td>      4 002 </td><td>    17 836 </td><td>     18 497 </td><td>     18 512 </td><td>     18 527 </td></tr>
+      <tr><th class="th-lgR">             Isolated Nodes </th><td>         16 </td><td>        15 </td><td>         15 </td><td>         15 </td><td>         15 </td></tr>
+      <tr><th class="th-lgL">NODES by Source             </th><td colspan="5"></td></tr>
+      <tr><th class="th-lgR">                    BioGRID </th><td>      3 677 </td><td>    14 831 </td><td>     15 132 </td><td>     15 136 </td><td>     15 139 </td></tr>
+      <tr><th class="th-lgR">                     STRING </th><td>      3 580 </td><td>    12 864 </td><td>     13 253 </td><td>     13 263 </td><td>     13 269 </td></tr>
+      <tr><th class="th-lgR">                      PPaxe </th><td>      1 407 </td><td>     3 016 </td><td>      3 054 </td><td>      3 056 </td><td>      3 062 </td></tr>
+      <tr><th class="th-lgR">                      TOTAL </th><td>      8 664 </td><td>    30 711 </td><td>     31 439 </td><td>     31 455 </td><td>     31 470 </td></tr>
+      <tr><th class="th-lgR">  Nodes source "redundancy" </th><td>    215.63% </td><td>   172.04% </td><td>    169.83% </td><td>    169.78% </td><td>    169.72% </td></tr>
+      <!-- -->                 										            	                 	              		           
+      <tr><th class="th-dkL">EDGES SUMMARY               </th><td colspan="5"></td></tr>    		     		          		       			    	
+      <tr><th class="th-lgL">Total DIRECTED EDGES        </th><td>     35 528 </td><td>   932 340 </td><td>  1 217 902 </td><td>  1 218 017 </td><td>  1 218 032 </td></tr>
+      <tr><th class="th-lgR">               Mutual [A⇌B] </th><td>      9 601 </td><td>   462 988 </td><td>    604 652 </td><td>    604 707 </td><td>    604 713 </td></tr>
+      <tr><th class="th-lgR">           Assymetric [A⇀B] </th><td>     16 326 </td><td>     5 074 </td><td>      5 931 </td><td>      5 931 </td><td>      5 931 </td></tr>
+      <tr><th class="th-lgR">            Self-loop [A⇀A] </th><td>          0 </td><td>     1 290 </td><td>      2 667 </td><td>      2 672 </td><td>      2 675 </td></tr>
+      <tr><th class="th-lgR">        Total Non-Redundant </th><td>     25 927 </td><td>   469 352 </td><td>    613 250 </td><td>    613 310 </td><td>    613 319 </td></tr>
+      <tr><th class="th-lgR">Directed edges "redundancy" </th><td>    137.03% </td><td>   198.64% </td><td>    198.60% </td><td>    198.60% </td><td>    198.60% </td></tr>
+      <tr><th class="th-lgL">EDGES by Source             </th><td colspan="5"></td></tr>
+      <tr><th class="th-lgR">                BioGRID all </th><td>     22 914 </td><td>   518 478 </td><td>    623 643 </td><td>    623 656 </td><td>    623 659 </td></tr>
+      <tr><th class="th-lgR">               BioGRID only </th><td>     21 334 </td><td>   483 667 </td><td>    579 207 </td><td>    579 220 </td><td>    579 220 </td></tr>
+      <tr><th class="th-lgR">                 STRING all </th><td>     12 563 </td><td>   440 111 </td><td>    629 167 </td><td>    629 265 </td><td>    629 271 </td></tr>
+      <tr><th class="th-lgR">                STRING only </th><td>     10 599 </td><td>   402 920 </td><td>    582 094 </td><td>    582 190 </td><td>    582 190 </td></tr>
+      <tr><th class="th-lgR">                  PPaxe all </th><td>      2 277 </td><td>    12 282 </td><td>     13 572 </td><td>     13 578 </td><td>     13 584 </td></tr>
+      <tr><th class="th-lgR">                 PPaxe only </th><td>      1 534 </td><td>     8 049 </td><td>      8 984 </td><td>      8 988 </td><td>      8 988 </td></tr>
+      <tr><th class="th-lgR">                      TOTAL </th><td>     37 754 </td><td>   970 871 </td><td>  1 266 382 </td><td>  1 266 499 </td><td>  1 266 514 </td></tr>
+      <tr><th class="th-lgR">  Edges source "redundancy" </th><td>    145.62% </td><td>   206.85% </td><td>    206.50% </td><td>    206.50% </td><td>    206.50% </td></tr>
+      <!-- -->                
+      <tr class="table-data-header" style="font-size: larger !important; font-weight: bold;">
+          <th class="th-dkL"> EVIDENCE SUMMARY           </th><th>   Skeleton </th><th>    Level1 </th><th>     Level2 </th><th>     Level3 </th><th> WholeGraph </th></tr>
+      <tr><th class="th-lgL">TOTAL EVIDENCES             </th><td>     75 447 </td><td> 2 371 305 </td><td>  3 209 677 </td><td>  3 209 856 </td><td>  3 209 871 </td></tr>
+      <tr><th class="th-lgL">By Class                    </th><td colspan="5"></td></tr>    		     		          		       			    	
+      <tr><th class="th-lgR">          Genetic evidences </th><td>        257 </td><td>     6 018 </td><td>      7 062 </td><td>      7 063 </td><td>      7 063 </td></tr>
+      <tr><th class="th-lgR"> Avg. evids x directed edge </th><td>      0.007 </td><td>     0.006 </td><td>      0.006 </td><td>      0.006 </td><td>      0.006 </td></tr>
+      <tr><th class="th-lgR">         Physical evidences </th><td>     70 561 </td><td> 2 342 154 </td><td>  3 177 567 </td><td>  3 177 739 </td><td>  3 177 748 </td></tr>
+      <tr><th class="th-lgR"> Avg. evids x directed edge </th><td>      1.986 </td><td>     2.512 </td><td>      2.609 </td><td>      2.609 </td><td>      2.609 </td></tr>
+      <tr><th class="th-lgR">      Unknown evids (PPaxe) </th><td>      4 629 </td><td>    23 133 </td><td>     25 048 </td><td>     25 054 </td><td>     25 060 </td></tr>
+      <tr><th class="th-lgR"> Avg. evids x directed edge </th><td>      0.130 </td><td>     0.025 </td><td>      0.021 </td><td>      0.021 </td><td>      0.021 </td></tr>
+      <tr><th class="th-lgL">By Source                   </th><td colspan="5"></td></tr>    		     		          		       			    	
+      <tr><th class="th-lgR">                    BioGRID </th><td>     31 726 </td><td>   705 485 </td><td>    842 798 </td><td>    842 815 </td><td>    842 818 </td></tr>
+      <tr><th class="th-lgR">      Physical interactions </th><td>     31 469 </td><td>   699 467 </td><td>    835 736 </td><td>    835 752 </td><td>    835 755 </td></tr>
+      <tr><th class="th-lgR">       Genetic Interactions </th><td>        257 </td><td>     6 018 </td><td>      7 062 </td><td>      7 063 </td><td>      7 063 </td></tr>
+      <tr><th class="th-lgR"> Avg. evids x directed edge </th><td>      0.893 </td><td>     0.757 </td><td>      0.692 </td><td>      0.692 </td><td>      0.692 </td></tr>
+      <tr><th class="th-lgR">                     STRING </th><td>     39 092 </td><td> 1 642 687 </td><td>  2 341 831 </td><td>  2 341 987 </td><td>  2 341 993 </td></tr>
+      <tr><th class="th-lgR"> Avg. evids x directed edge </th><td>      1.100 </td><td>     1.762 </td><td>      1.923 </td><td>      1.923 </td><td>      1.923 </td></tr>
+      <tr><th class="th-lgR">                      PPaxe </th><td>      4 629 </td><td>    23 133 </td><td>     25 048 </td><td>     25 054 </td><td>     25 060 </td></tr>
+      <tr><th class="th-lgR"> Avg. evids x directed edge </th><td>      0.130 </td><td>     0.025 </td><td>      0.021 </td><td>      0.021 </td><td>      0.021 </td></tr>
+       <!-- -->
+      <tr class="table-data-header" style="font-size: larger !important; font-weight: bold;">
+	  <th class="th-dkL"> EDGES with STRING score    </th><th>   Skeleton </th><th>    Level1 </th><th>     Level2 </th><th>     Level3 </th><th> WholeGraph </th></tr>                                   
+      <tr><th class="th-lgL">      With any STRING score </th><td>     12 563 </td><td>   440 111 </td><td>    629 167 </td><td>    629 265 </td><td>    629 271 </td></tr>
+      <tr><th class="th-lgR">  With "experimental" score </th><td>      2 696 </td><td>    75 075 </td><td>    109 191 </td><td>    109 231 </td><td>    109 235 </td></tr>
+      <tr><th class="th-lgR">      With "database" score </th><td>      9 112 </td><td>   371 666 </td><td>    541 032 </td><td>    541 082 </td><td>    541 084 </td></tr>
+      <tr><th class="th-lgR">   With "text-mining" score </th><td>      8 803 </td><td>   248 133 </td><td>    345 610 </td><td>    345 682 </td><td>    345 686 </td></tr>
+      <tr><th class="th-lgR"> With "co-expression" score </th><td>      2 227 </td><td>   107 246 </td><td>    157 974 </td><td>    158 008 </td><td>    158 010 </td></tr>
+      <tr><th class="th-lgR">  With "neighborhood" score </th><td>          0 </td><td>         0 </td><td>          0 </td><td>          0 </td><td>          0 </td></tr>
+      <tr><th class="th-lgR">   With gene-"fusion" score </th><td>         16 </td><td>     1 136 </td><td>      2 384 </td><td>      2 384 </td><td>      2 384 </td></tr>
+      <tr><th class="th-lgR">  With "co-occurence" score </th><td>        124 </td><td>     6 320 </td><td>      8 749 </td><td>      8 755 </td><td>      8 757 </td></tr>
+      </table>
+    </div>
+    
+    <h3 id="topology">Graph Topology</h3>
+    <hr>
+    <p>A summary of graph statistics for <tt>RPGeNet</tt> build 2.0.2 at each of the subgraph levels derived from the initial skeleton graph (level 0 subgraph) can be found on the table below:</p>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered table-data data-genename">
+      <tr class="table-data-header" style="font-size: larger !important; font-weight: bold;">
+          <th width="250px" class="th-lgC"> SUBGRAPH LEVEL </th>
+	                                                 <th>    Skeleton </th><th>    Level1 </th><th>    Level2 </th><th>    Level3 </th><th>WholeGraph </th></tr>
+      <tr><th class="th-dkL">NODES SUMMARY          </th><td colspan="5"></td></tr>    		     		          		       			    	
+      <tr><th class="th-lgR">          Total #Nodes </th><td>       4 018 </td><td>    17 851 </td><td>    18 512 </td><td>    18 527 </td><td>    18 542 </td></tr>
+      <tr><th class="th-lgR">        Isolated Nodes </th><td>          16 </td><td>        15 </td><td>        15 </td><td>        15 </td><td>        15 </td></tr>
+      <tr><th class="th-lgR"> Adjacent Driver Genes </th><td style="text-align:center;"> 260 of 276 </td><td colspan="4" style="text-align:center;"> 261 of 276 </td></tr>
+      <!-- -->
+      <tr><th class="th-dkL">EDGES SUMMARY          </th><td colspan="5"></td></tr>    		     		          		       			    	
+      <tr><th class="th-lgR">  Total Directed Edges </th><td>      35 528 </td><td>   932 340 </td><td> 1 217 902 </td><td> 1 218 017 </td><td> 1 218 032 </td></tr>
+      <tr><th class="th-lgR">          Mutual [A⇌B] </th><td>       9 601 </td><td>   462 988 </td><td>   604 652 </td><td>   604 707 </td><td>   604 713 </td></tr>
+      <tr><th class="th-lgR">      Assymetric [A⇀B] </th><td>      16 326 </td><td>     5 074 </td><td>     5 931 </td><td>     5 931 </td><td>     5 931 </td></tr>
+      <tr><th class="th-lgR">       Self-loop [A⇀A] </th><td>           0 </td><td>     1 290 </td><td>     2 667 </td><td>     2 672 </td><td>     2 675 </td></tr>
+      <tr><th class="th-lgR">   Total Non-redundant </th><td>      25 927 </td><td>   469 352 </td><td>   613 250 </td><td>   613 310 </td><td>   613 319 </td></tr>
+      <!-- -->
+      <tr><th class="th-dkL">GRAPH STATS            </th><td colspan="5"></td></tr>    		     		          		       			    	
+      <tr><th class="th-lgR">         Graph Density </th><td>      0.0022 </td><td>    0.0029 </td><td>    0.0036 </td><td>    0.0035 </td><td>    0.0035 </td></tr>
+      <tr><th class="th-lgR"> Avg. Clustering Coef. </th><td>      0.0613 </td><td>    0.1449 </td><td>    0.2331 </td><td>    0.2331 </td><td>    0.2331 </td></tr>
+      <tr><th class="th-lgR">        Graph Diameter </th><td>           8 </td><td>         6 </td><td>         7 </td><td>         8 </td><td>         8 </td></tr>
+      <tr><th class="th-lgR">     Graph Reciprocity </th><td>      0.5405 </td><td>    0.9946 </td><td>    0.9951 </td><td>    0.9951 </td><td>    0.9951 </td></tr>
+      <tr><th class="th-lgR">           Avg. Degree </th><td>     17.6844 </td><td>  104.4580 </td><td>  131.5797 </td><td>  131.4856 </td><td>  131.3809 </td></tr>
+      <tr><th class="th-lgR">        Avg. Closeness </th><td>       0.052 </td><td>    0.0529 </td><td>    0.0529 </td><td>    0.0529 </td><td>    0.0295 </td></tr>
+      <tr><th class="th-lgR">           Betweenness </th><td>   10 423.13 </td><td> 33 430.86 </td><td> 34 988.77 </td><td> 35 073.29 </td><td> 35 044.91 </td></tr>
+      <tr><th class="th-lgR"> Avg. Edge Betweenness </th><td>    1 629.48 </td><td>    980.37 </td><td>    812.19 </td><td>    814.28 </td><td>    814.27 </td></tr>
+      <tr><th class="th-lgR">         Avg. Coreness </th><td>      9.1309 </td><td>   54.8258 </td><td>   77.0557 </td><td>   77.0063 </td><td>   76.9456 </td></tr>
+      <tr><th class="th-lgR">     Avg. Eccentricity </th><td>      5.6904 </td><td>    4.5666 </td><td>    4.9552 </td><td>    5.8732 </td><td>    5.8691 </td></tr>
+      <tr><th class="th-lgR">      Avg. Path Length </th><td>      3.6155 </td><td>    2.8810 </td><td>    2.8969 </td><td>    2.9000 </td><td>    2.9000 </td></tr>
       </table>
     </div>
     
@@ -134,16 +224,19 @@
 
     <h3 id="comparison">Comparison with previous version</h3>
     <hr>
-    <p>With an addition of 166 new driver genes now known, RPGeNet was in need of an update. The increase in the number of driver genes partially precipitated an early saturation in the number of levels from the skeleton. Our new network, however, does have less non-redundant interactions and genes in comparison to the previous network. This is mainly due to the extensive filtering of STRING. The previous network included the predictions but the updated network only includes interactions with evidences.</p>
+    <p>With an addition of 166 new driver genes now known, <tt>RPGeNet</tt> was in need of an update. The increase in the number of driver genes partially precipitated an early saturation in the number of levels from the skeleton. Our new network, however, does have less non-redundant interactions and genes in comparison to the previous network. This is mainly due to the extensive filtering of STRING. The previous network included the predictions but the updated network only includes interactions with evidences.</p>
 
     <!--<img src="" alt="Comparitive Bar Graph"> -->
-    <h4>Comparison of Network Explorer Web Interface between versions 1 and 2</h4> 
-    <a href="{% static 'Images/data/data_human/Figure_neurod1_rpgenetv1.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/Figure_neurod1_rpgenetv1.png' %}" alt="NEUROD1 search in RPGeNet v.1"></a>
+    <h4>Network Explorer Interface</h4>
+    <p> Here we have an example of the result of an initial query for <i>CERKL</i> on <tt>RPGeNet.v1</tt> and <tt>v2</tt> on screenshots below (top and bottom respectively), to illustrate design changes of Network Explorer web interface but also new functionalities.</p>
+    <a href="{% static 'Images/data/data_human/Figure_cerkl_rpgenetv1.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/Figure_cerkl_rpgenetv1.png' %}" alt="CERKL search in RPGeNet v.1"></a>
     <br>
-    <a href="{% static 'Images/data/data_human/Figure_neurod1_rpgenetv2.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/Figure_neurod1_rpgenetv2.png' %}" alt="NEUROD1 search in RPGeNet v.1"></a>
+    <a href="{% static 'Images/data/data_human/Figure_cerkl_rpgenetv2.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/Figure_cerkl_rpgenetv2.png' %}" alt="CERKL search in RPGeNet v.2"></a>
+    <br>
+    <p> You can <a href="{% static 'Images/data/data_human/Figure_cerkl_rpgenetv2_graph-export.json' %}" target="_blank" alt="Saved CERKL graph layout from RPGeNet v.2">download the <tt>JSON</tt> file containing the saved graph layout</a> to reproduce the <tt>CERKL</tt> network on <tt>RPGeNet.v2</tt> example from the above screenshot. </p>
     <br>
 
-    <!--<h4>Upset graphs comparing number of nodes and interactions shared and unique, in the skeletons, between RPGeNet versions 1 and 2</h4> 
+    <!--<h4>Upset graphs comparing number of nodes and interactions shared and unique, in the skeletons, between <tt>RPGeNet</tt> versions 1 and 2</h4> 
     <div class="upset_row">
       <div class="upset_column">
         <a href="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr_skeleton-nodes.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr_skeleton-nodes.png' %}" alt="Upset Plot RPGeNet v1 vs v2 Skeleton Nodes"></a>
@@ -153,24 +246,52 @@
       </div>
     </div>-->
 
-    <h4>Upset graphs comparing number of nodes and interactions shared and unique, in the wholegraphs, between RPGeNet versions 1 and 2</h4> 
-    <div class="upset_row">
-      <div class="upset_column">
-        <a href="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr-nodes.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr-nodes.png' %}" alt="Upset Plot RPGeNet v1 vs v2 Whole Graph Nodes"></a>
-      </div>
-      <div class="upset_column">
-        <a href="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr-ints.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr-ints.png' %}" alt="Upset Plot RPGeNet v1 vs v2 Whole Graph Interactions"></a>
-      </div>
+    <h4>Graph Comparison</h4>
+        
+    <div class="table-responsive">
+      <table class="table table-bordered table-data data-genename">
+	<tr class="table-data-header" style="font-size: larger !important; font-weight: bold;">
+	  <th width="150px" class="th-lgR"> VERSION </th>
+          <th colspan="2" class="th-dkC"><tt>RPGeNet v1</tt></th>
+	  <th colspan="2" class="th-dkC"><tt>RPGeNet v2</tt></th></tr>
+          
+      <tr><th class="th-dkL">NODES SUMMARY          </th><!-- td colspan="4">  </td></tr -->
+	                                                 <th class="th-lgC" width="80px">     Skeleton </th><th class="th-lgC" width="80px"> WholeGraph </th>
+                                                         <th class="th-lgC" width="80px">     Skeleton </th><th class="th-lgC" width="80px"> WholeGraph </th></tr>
+      <tr><th class="th-lgR">          Total #Nodes </th><td>        1 294 </td><td>     22 372 </td><td>        4 018 </td><td>     18 542 </td></tr>
+      <tr><th class="th-lgR">        Isolated Nodes </th><td>            7 </td><td>          7 </td><td>           16 </td><td>         15 </td></tr>
+      <tr><th class="th-lgR"> Adjacent Driver Genes </th><td>      103/110 </td><td>    103/110 </td><td>      260/276 </td><td>    261/276 </td></tr>
+      <!-- -->
+      <tr><th class="th-dkL">EDGES SUMMARY          </th><!-- td colspan="4">  </td></tr -->    		     		          		       			    	
+	                                                 <th class="th-lgC" width="80px">     Skeleton </th><th class="th-lgC" width="80px"> WholeGraph </th>
+                                                         <th class="th-lgC" width="80px">     Skeleton </th><th class="th-lgC" width="80px"> WholeGraph </th></tr>
+      <tr><th class="th-lgR">  Total Directed Edges </th><td>        5 883 </td><td>     752 062 </td><td>      35 528 </td><td>  1 218 032 </td></tr>
+      <tr><th class="th-lgR">          Mutual [A⇌B] </th><td>        1 082 </td><td>     319 928 </td><td>       9 601 </td><td>    604 713 </td></tr>
+      <tr><th class="th-lgR">      Assymetric [A⇀B] </th><td>        3 719 </td><td>     106 907 </td><td>      16 326 </td><td>      5 931 </td></tr>
+      <tr><th class="th-lgR">       Self-loop [A⇀A] </th><td>            0 </td><td>       5 299 </td><td>           0 </td><td>      2 675 </td></tr>
+      <tr><th class="th-lgR">   Total Non-redundant </th><td>        4 801 </td><td>     432 134 </td><td>      25 927 </td><td>    613 319 </td></tr>
+      </table>
     </div>
+
+    <!-- <p><tt>UpsetR</tt> graphs comparing number of nodes and interactions shared and unique, in the wholegraphs, between <tt>RPGeNet v1</tt> and <tt>2</tt>.</p> --> 
+
+    <!-- <div class="upset_row"> -->
+    <!--   <div class="upset_column"> -->
+    <!--     <a href="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr-nodes.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr-nodes.png' %}" alt="Upset Plot RPGeNet v1 vs v2 Whole Graph Nodes"></a> -->
+    <!--   </div> -->
+    <!--   <div class="upset_column"> -->
+    <!--     <a href="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr-ints.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/rpgenetv1_vs_v2_upsetr-ints.png' %}" alt="Upset Plot RPGeNet v1 vs v2 Whole Graph Interactions"></a> -->
+    <!--   </div> -->
+    <!-- </div> -->
 
     <h3 id="expression">Expression analysis</h3>
     <hr>
-    <p>Unfortunately, there are few multitissue microarray expression experiments that include retina within their list of tissues. We had to rely on a relatively old microarray experiment (GSE7905) that includes thirty-two different tissues including the retina, liver, brain, skeletal muscle and others. Although the experiment is not recent, the expression values are still useful in finding potentially important pathways associated with retinitis pigmentosa by looking to see if the genes in a pathway all express within the retina. We hope to soon be able to have an updated multitissue expression experiment to use.</p>
+    <p>Unfortunately, there are few multi-tissue microarray expression experiments that include retina within their list of tissues. We had to rely on a relatively old microarray experiment (GSE7905) that includes thirty-two different tissues including the retina, liver, brain, skeletal muscle and others. Although the experiment is not recent, the expression values are still useful in finding potentially important pathways associated with retinitis pigmentosa by looking to see if the genes in a pathway all express within the retina. We hope to soon be able to have an updated multitissue expression experiment to use.</p>
 
-    <p>Volcano chart</p>
+    <h4>Volcano chart</h4>
     <a href="{% static 'Images/data/data_human/volcano_plot_RPGeNet_rt-all.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/volcano_plot_RPGeNet_rt-all.png' %}" alt="Distribution Matrix"></a>
     <br>
-    <p>Heatmap</p>
+    <h4>Heatmap</h4>
     <a href="{% static 'Images/data/data_human/GSE7905_gea.sampledistmatrix.png' %}" target="_blank"><img class="data-img ppaxe_graph" src="{% static 'Images/data/data_human/GSE7905_gea.sampledistmatrix.png' %}" alt="Distribution Matrix"></a>
 
     <p>Top twenty relatively overexpressed genes in retina in comparison to all tissues:</p>

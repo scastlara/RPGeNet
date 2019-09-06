@@ -1136,6 +1136,36 @@ table.data-genename tr td {
 	color: #000000;
 	background-color: #FFFFFF;
 }
+table.data-genename tr th.th-dkL {
+	text-align: left;
+	background-color: #4C4C4C;
+	color: #FFFFFF;
+}
+table.data-genename tr th.th-lgL {
+	text-align: left;
+	background-color: #7C7C7C;
+	color: #FFFFFF;
+}
+table.data-genename tr th.th-dkR {
+	text-align: right;
+	background-color: #4C4C4C;
+	color: #FFFFFF;
+}
+table.data-genename tr th.th-lgR {
+	text-align: right;
+	background-color: #7C7C7C;
+	color: #FFFFFF;
+}
+table.data-genename tr th.th-dkC {
+	text-align: center;
+	background-color: #4C4C4C;
+	color: #FFFFFF;
+}
+table.data-genename tr th.th-lgC {
+	text-align: center;
+	background-color: #7C7C7C;
+	color: #FFFFFF;
+}
 
 .string_graph {
 	width: 60%;

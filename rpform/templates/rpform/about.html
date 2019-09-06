@@ -42,8 +42,8 @@
   <div class="body-card">
     <h1>About</h1>
     <hr>
-    <p>Retinitis pigmentosa is a highly heterogenous disease with now over 200 known driver genes. With such high hetergeneity, RPGeNet, a web application tool, was created to help users find new potential driver genes of retinitis pigmentosa and help better visualize the complex interaction network of the retina. The interaction database is formed by the merger of self-curated <a target="_blank" href="https://thebiogrid.org/">BioGRID</a>, <a target="_blank" href="https://string-db.org/">STRING</a> and text-mining (<a href="https://compgen.bio.ub.edu/PPaxe/" target="_blank">PPaxe</a>) interaction data. The database is managed by <a target="_blank" href="https://neo4j.com/">neo4j</a> and the graph's visual display is created by <a target="_blank" href="http://js.cytoscape.org/">Cytoscape.js</a>.</p>
-    <p>Currently, RPGeNet counts with 275 driver genes, 19,416 total genes and 1,210,705 interactions. Further information is available on our <a href="{% url data %}">data</a> page and our <a target="_blank" href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0135307">published paper</a>.</p>
+    <p>Retinitis pigmentosa is a highly heterogenous disease with now over 200 known driver genes. With such high hetergeneity, <tt>RPGeNet</tt>, a web application tool, was created to help users find new potential driver genes of retinitis pigmentosa and help better visualize the complex interaction network of the retina. The interaction database is formed by the merger of self-curated <a target="_blank" href="https://thebiogrid.org/"><tt>BioGRID</tt></a>, <a target="_blank" href="https://string-db.org/"><tt>STRING</tt></a> and text-mining (<a href="https://compgen.bio.ub.edu/PPaxe/" target="_blank"><tt>PPaxe</tt></a>) interaction data. The database is managed by <a target="_blank" href="https://neo4j.com/">neo4j</a>, the graph's visual display is created by <a target="_blank" href="http://js.cytoscape.org/"><tt>Cytoscape.js</tt></a>, and the web interface is implemented on a <a target="_blank" href="https://www.djangoproject.com"><tt>django</tt></a> framework.</p>
+    <p>Currently, <tt>RPGeNet</tt> counts with 276 driver genes, 18,542 total nodes (genes/proteins), and 1,218,032 total directed edges (interactions, defining 613,319 non-redundant edges), derived from 3,209,871 total evidences gathered from the three aforementioned sources. Further information is available on our <a href="{% url data %}">data</a> page and our <a target="_blank" href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0135307">published paper</a>.</p>
     <p>RPGeNet was created by <a target="_blank" href="https://compgen.bio.ub.edu/">Compgen Lab</a> and <a target="_blank" href="http://www.ub.edu/genetica/humana/marfany.htm">Marfany Laboratory</a> at the <a target="_blank" href="https://www.ub.edu/web/ub/en/index.html">University of Barcelona</a>.</p>
     <h3>Citing RPGeNet</h3>
     <hr>
@@ -64,6 +64,16 @@
     <br>
     <h3 id="update_notes">Update Notes</h3>
     <hr>
+    <h4> September 5th, 2019 - Version 2.0.2 </h4>
+    <ul>
+      <li>Improved interaction information cards, the new layout now displays
+	further details about the suppporting evidences on each interaction and
+	provides more links to external references. </li>
+      <li>Fixed a bug where some synonim identifiers were mapped as standard symbols,
+	which duplicated some nodes in the core network. </li>
+      <li>RPGeNet now has 4,018 genes and 35,528 interactions in its skeleton;
+        with 18,542 genes and 1,218,032 interactions in the network overall.</li>
+    </ul>
     <h4> April 29th, 2019 - Version 2.0.1 </h4>
     <ul>
       <li>BioGRID data was updated to version 3.5.171</li>
